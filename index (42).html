@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E1830">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="أزمنة المضارع">
+<title>أزمنة المضارع — دليلي اليومي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Deep-blue default: no white surfaces anywhere */
+  --bg:#0E1830; --bg2:#13224A; --surface:#16264A; --surface2:#1C2F58; --ink:#E4EBF8; --muted:#9DAECD; --line:#2C4170;
+  --accent:#3E73E8; --on-accent:#FFFFFF;
+  --simple:#4FD1C5; --cont:#86AEFF; --perf:#F2C25B; --pc:#F08DBE; --ok:#55D08A; --bad:#FF7B70;
+  --simple-bg:#163E4A; --cont-bg:#1E3368; --perf-bg:#3D3420; --pc-bg:#43254A;
+  --ar:"Amiri", "Traditional Arabic", "Times New Roman", serif;
+  --en:"Literata", Georgia, "Times New Roman", serif;
+  --ease:cubic-bezier(.22,.8,.24,1);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  color-scheme:dark;
+}
+/* Alternative: softer dusk blue (still no white) */
+:root[data-theme="dusk"]{
+  --bg:#22355A; --bg2:#2B4370; --surface:#2C4472; --surface2:#34507F; --ink:#EEF2FA; --muted:#B5C3DD; --line:#46608F;
+  --accent:#5A8BF2; --simple-bg:#245563; --cont-bg:#2E4A8A; --perf-bg:#54482A; --pc-bg:#5A3561;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{background:radial-gradient(120% 60% at 100% 0%,var(--bg2),transparent 60%),var(--bg);background-attachment:fixed;color:var(--ink);font-family:var(--ar);font-size:18px;line-height:1.75;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+button:focus-visible,.chip:focus-visible{outline:2px solid var(--cont);outline-offset:2px;border-radius:10px}
+.en{font-family:var(--en);direction:ltr;unicode-bidi:isolate;text-align:left}
+.app{max-width:560px;margin:0 auto;min-height:100%;perspective:1400px;perspective-origin:50% 30%;padding:0 16px calc(96px + env(safe-area-inset-bottom,0px))}
+
+/* top bar */
+.top{display:flex;align-items:center;justify-content:space-between;padding:18px 2px 8px}
+.top h1{font-size:1.05rem;margin:0;font-weight:700}
+.top small{display:block;color:var(--muted);font-size:.8rem;font-weight:500}
+.icon-btn[hidden]{display:none}
+.icon-btn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--surface);border:1px solid var(--line)}
+
+/* pages */
+.page{display:none}
+.page.active{display:block;animation:pageIn .38s var(--ease);transform-style:preserve-3d}
+.page.active.in-fwd{animation:cubeFwd .55s var(--ease) both}
+.page.active.in-back{animation:cubeBack .55s var(--ease) both}
+@keyframes cubeFwd{from{opacity:0;transform:translateZ(-180px) rotateY(-55deg);transform-origin:0% 50%}to{opacity:1;transform:none;transform-origin:0% 50%}}
+@keyframes cubeBack{from{opacity:0;transform:translateZ(-180px) rotateY(55deg);transform-origin:100% 50%}to{opacity:1;transform:none;transform-origin:100% 50%}}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.page-title{display:none;font-size:1.5rem;font-weight:700;margin:6px 0 2px;line-height:1.35}
+.page-sub{color:var(--muted);margin:0 0 16px;font-size:.95rem}
+
+/* hero timeline */
+.hero{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px 16px 14px;margin:6px 0 18px}
+.hero h2{margin:0 0 4px;font-size:1.25rem;line-height:1.4}
+.hero p{margin:0;color:var(--muted);font-size:.92rem}
+.big-line{margin-top:14px}
+.big-line svg{width:100%;height:auto;display:block}
+
+/* tense cards */
+.tense-list{display:grid;gap:12px}
+.tcard{display:grid;grid-template-columns:1fr 112px;gap:10px;align-items:center;text-align:right;width:100%;
+  background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:14px 16px;position:relative;overflow:hidden;
+  transition:transform .25s var(--ease),box-shadow .25s;transform-style:preserve-3d;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.tcard:active{transform:perspective(700px) rotateX(8deg) translateZ(-14px);box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.tcard::before{content:"";position:absolute;inset-inline-start:0;top:14px;bottom:14px;width:4px;border-radius:4px;background:var(--c)}
+.tcard .name{font-family:var(--en);font-weight:700;font-size:1.08rem;color:var(--c);direction:ltr;text-align:right}
+.tcard .ar{font-weight:600;font-size:.98rem}
+.tcard .use{color:var(--muted);font-size:.85rem;line-height:1.55;margin-top:2px}
+.tcard .formula{margin-top:8px;font-size:.82rem;background:var(--cbg);color:var(--c);display:inline-block;padding:3px 10px;border-radius:8px;font-weight:600}
+.glyph{width:112px;height:44px;color:var(--c)}
+.t-simple{--c:var(--simple);--cbg:var(--simple-bg)} .t-cont{--c:var(--cont);--cbg:var(--cont-bg)}
+.t-perf{--c:var(--perf);--cbg:var(--perf-bg)} .t-pc{--c:var(--pc);--cbg:var(--pc-bg)}
+
+.cta{display:flex;align-items:center;gap:12px;width:100%;text-align:right;margin-top:18px;background:linear-gradient(135deg,var(--accent),#2A4FB0);color:var(--on-accent);border-radius:18px;padding:16px}
+.cta b{display:block;font-size:1.02rem}
+.cta span{font-size:.85rem;opacity:.8}
+.cta .q{font-size:1.6rem;width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.14);flex:none}
+
+.section-h{font-size:1.05rem;font-weight:700;margin:26px 0 10px}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(4,8,20,.6);opacity:0;pointer-events:none;transition:opacity .3s var(--ease);z-index:40}
+.scrim.show{opacity:1;pointer-events:auto}
+.sheet{position:fixed;inset-inline:0;bottom:0;margin:0 auto;max-width:560px;height:92%;background:var(--bg);z-index:50;
+  border-radius:24px 24px 0 0;transform:perspective(1400px) translateY(105%) rotateX(22deg);transform-origin:50% 100%;transition:transform .5s var(--ease);display:flex;flex-direction:column;box-shadow:0 -8px 40px rgba(0,0,0,.18)}
+.sheet.show{transform:perspective(1400px) translateY(0) rotateX(0)}
+.sheet.dragging{transition:none}
+.sheet-head{padding:8px 16px 10px;border-bottom:1px solid var(--line);flex:none;touch-action:none}
+.handle{width:42px;height:5px;border-radius:5px;background:var(--line);margin:4px auto 10px}
+.sheet-head-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sheet-body{overflow-y:auto;padding:16px 16px calc(28px + env(safe-area-inset-bottom,0px));-webkit-overflow-scrolling:touch;overscroll-behavior:contain;flex:1}
+.sheet h2{margin:0;font-family:var(--en);color:var(--c);font-size:1.3rem;direction:ltr;text-align:right}
+.sheet .sub-ar{color:var(--muted);font-size:.9rem}
+
+.block{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px}
+.block h3{margin:0 0 8px;font-size:.98rem}
+.uses{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.uses li{display:grid;gap:2px}
+.uses .u{font-weight:600;font-size:.93rem}
+.uses .x{font-size:.95rem;color:var(--muted)}
+.uses .x.en{color:var(--ink)}
+
+/* accordion forms */
+.form{border:1px solid var(--line);border-radius:14px;margin-bottom:8px;background:var(--surface2);overflow:hidden}
+.form-btn{display:flex;align-items:center;gap:10px;width:100%;padding:12px;text-align:right}
+.sign{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-weight:700;flex:none;background:var(--cbg);color:var(--c);font-family:var(--en)}
+.form-btn .lbl{font-size:.8rem;color:var(--muted)}
+.form-btn .fx{font-family:var(--en);font-size:.85rem;font-weight:600;direction:ltr;text-align:left;flex:1}
+.chev{transition:transform .3s var(--ease);color:var(--muted);flex:none}
+.form.open .chev{transform:rotate(180deg)}
+.acc{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s var(--ease)}
+.form.open .acc,.acc.open{grid-template-rows:1fr}
+.acc>div{overflow:hidden;perspective:900px}
+.acc>div>*{transform:rotateX(-80deg);transform-origin:50% 0;opacity:0;transition:transform .45s var(--ease),opacity .3s}
+.form.open .acc>div>*,.acc.open>div>*,.rule-acc.open .acc>div>*{transform:none;opacity:1}
+.acc-in{padding:0 12px 12px;font-size:.92rem}
+.ex{background:var(--surface);border-radius:10px;padding:8px 10px;margin-top:8px;border:1px solid var(--line)}
+.ex .en{font-size:1rem}
+.ex small{display:block;color:var(--muted);font-size:.82rem}
+.warn{margin-top:8px;font-size:.88rem;color:var(--bad)}
+mark{background:none;color:var(--c);font-weight:700}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:.85rem}
+.chip.en{font-size:.88rem}
+.chip.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.chip.static{background:var(--cbg);color:var(--c);border-color:transparent;font-weight:600}
+
+.compare{border-inline-start:3px solid var(--c);padding-inline-start:10px;font-size:.92rem}
+
+/* builder */
+.builder-out{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px 16px;margin-bottom:14px;position:sticky;top:calc(8px + env(safe-area-inset-top,0px));z-index:5}
+.sentence{font-family:var(--en);font-size:1.32rem;line-height:1.5;direction:ltr;text-align:left;min-height:2.2em}
+.sentence span{transition:color .2s}
+.p-sub{color:var(--ink);font-weight:600}
+.p-aux{color:var(--c);font-weight:700;background:var(--cbg);border-radius:6px;padding:0 4px}
+.p-end{color:var(--c);font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.p-adv{color:var(--muted);font-style:italic}
+.p-rest{color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.78rem;color:var(--muted);margin-top:10px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--c);margin-inline-end:4px;vertical-align:middle}
+.meaning{margin-top:8px;font-size:.88rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px}
+.ctrl{margin-bottom:14px}
+.ctrl label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:6px;font-weight:600}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.seg button{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 4px;font-size:.8rem;line-height:1.3}
+.seg button.on{background:var(--cbg);border-color:var(--c);color:var(--c);font-weight:700}
+.seg3{grid-template-columns:repeat(3,1fr)}
+.all-btn{width:100%;border:1px dashed var(--line);border-radius:14px;padding:11px;margin-top:4px;font-weight:600;font-size:.9rem;background:var(--surface)}
+.grid-table{display:grid;gap:8px;margin-top:10px}
+.grid-row{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.grid-row b{font-family:var(--en);color:var(--c);font-size:.85rem;display:block;direction:ltr;text-align:right}
+.grid-row .en{font-size:.96rem;line-height:1.6}
+
+/* decision */
+.dec-step{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px 16px;animation:pageIn .35s var(--ease)}
+.dec-q{font-size:1.15rem;font-weight:700;line-height:1.5;margin:0 0 4px}
+.dec-hint{color:var(--muted);font-size:.88rem;margin:0 0 14px}
+.dec-opts{display:grid;gap:8px}
+.dec-opt{border:1px solid var(--line);border-radius:14px;padding:12px 14px;text-align:right;background:var(--surface2)}
+.dec-opt b{display:block;font-size:.98rem}
+.dec-opt span{font-size:.84rem;color:var(--muted)}
+.dec-trail{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;font-size:.8rem;color:var(--muted)}
+.dec-result{border-radius:20px;padding:18px 16px;background:var(--cbg);border:1px solid var(--c)}
+.dec-result h3{margin:0;font-family:var(--en);color:var(--c);font-size:1.3rem;direction:ltr;text-align:right}
+
+/* quiz */
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px 16px}
+.qbar{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin-bottom:14px}
+.qbar i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s var(--ease)}
+.qmeta{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted);margin-bottom:8px}
+.qtext{font-family:var(--en);font-size:1.22rem;line-height:1.55;direction:ltr;text-align:left;margin-bottom:6px}
+.qtext .gap{display:inline-block;min-width:70px;border-bottom:2px solid var(--muted);text-align:center;color:var(--cont);font-weight:700}
+.qhint{color:var(--muted);font-size:.86rem;margin-bottom:14px}
+.qopts{display:grid;gap:8px}
+.qopt{border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-family:var(--en);font-size:1.05rem;direction:ltr;text-align:left;background:var(--surface2);transition:background .2s,border-color .2s}
+.qopt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--surface))}
+.qopt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,var(--surface))}
+.qexp{margin-top:12px;font-size:.92rem;padding:10px 12px;border-radius:12px;background:var(--surface2)}
+.primary{width:100%;margin-top:14px;background:var(--accent);color:var(--on-accent);border-radius:14px;padding:13px;font-weight:700}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px}
+.stat b{font-size:1.4rem;display:block;font-family:var(--en)}
+.stat span{font-size:.8rem;color:var(--muted)}
+
+/* mistakes */
+.mis{background:var(--surface);border:1px solid var(--line);border-radius:16px;margin-bottom:10px;overflow:hidden}
+.mis-btn{width:100%;text-align:left;padding:12px 14px;display:flex;align-items:center;gap:10px;direction:ltr}
+.mis-btn .en{flex:1;font-size:1.02rem;text-decoration:line-through;text-decoration-color:var(--bad);text-decoration-thickness:2px}
+.x-badge{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad);font-weight:700;font-size:.8rem;flex:none}
+.ok-badge{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.mis .fix{display:flex;gap:10px;align-items:flex-start;direction:ltr;padding:0 14px}
+.mis .fix .en{font-size:1.02rem;font-weight:600}
+.mis .why{padding:6px 14px 14px;font-size:.9rem;color:var(--muted)}
+.tap-note{font-size:.8rem;color:var(--muted);text-align:center;margin:-6px 0 12px}
+
+/* rules */
+.rule-acc{background:var(--surface);border:1px solid var(--line);border-radius:16px;margin-bottom:10px;overflow:hidden}
+.rule-acc>button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px;text-align:right;font-weight:700}
+.rule-acc>button small{display:block;font-weight:400;color:var(--muted);font-size:.82rem}
+.rule-acc.open .chev{transform:rotate(180deg)}
+.rule-acc.open .acc{grid-template-rows:1fr}
+.tbl-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.8rem}
+td.en,th.en{font-family:var(--en)}
+.rtbl td{text-align:right}
+
+/* bottom nav */
+.nav{position:fixed;bottom:0;inset-inline:0;z-index:30;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.nav-in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 0 8px;font-size:.72rem;color:var(--muted);font-weight:600}
+.nav button svg{width:23px;height:23px}
+.nav button.on{color:var(--cont)}
+.nav button.on svg{filter:drop-shadow(0 0 6px color-mix(in srgb,var(--cont) 60%,transparent))}
+.nav button.on svg{stroke-width:2.3}
+
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;background:var(--accent);color:var(--on-accent);padding:8px 16px;border-radius:12px;font-size:.88rem;transition:.3s var(--ease);z-index:60;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="icon-btn" id="backBtn" aria-label="الرجوع للرئيسية" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      <div><h1 id="topTitle">أزمنة المضارع</h1><small id="topSub">دليلي اليومي للكلام الصحيح</small></div>
+    </div>
+    <button class="icon-btn" id="themeBtn" aria-label="تبديل درجة الأزرق">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+  </header>
+
+  <!-- HOME -->
+  <section class="page active" id="p-home">
+    <div class="hero">
+      <h2>كل زمن له شكل على خط الوقت</h2>
+      <p>انظر أين يقع الحدث بالنسبة لـ «الآن» — هذا وحده يحسم 80% من اختيارك.</p>
+      <div class="big-line" aria-hidden="true">
+        <svg viewBox="0 0 340 110" fill="none" stroke-linecap="round">
+          <line x1="10" y1="90" x2="330" y2="90" stroke="var(--line)" stroke-width="2"/>
+          <line x1="250" y1="12" x2="250" y2="100" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="3 4"/>
+          <text x="250" y="108" text-anchor="middle" font-size="10" fill="var(--ink)" font-family="Literata,serif" font-weight="700">NOW</text>
+          <text x="20" y="108" font-size="10" fill="var(--muted)" font-family="Literata,serif">past</text>
+          <text x="320" y="108" text-anchor="end" font-size="10" fill="var(--muted)" font-family="Literata,serif">future</text>
+          <g fill="var(--simple)"><circle cx="40" cy="22" r="4"/><circle cx="100" cy="22" r="4"/><circle cx="160" cy="22" r="4"/><circle cx="220" cy="22" r="4"/><circle cx="280" cy="22" r="4"/></g>
+          <path d="M228 42 q5-7 10 0 t10 0 t10 0 t10 0 t10 0" stroke="var(--cont)" stroke-width="2.5"/>
+          <circle cx="150" cy="62" r="5" fill="var(--perf)"/><path d="M156 62 Q200 50 244 62" stroke="var(--perf)" stroke-width="2.2" stroke-dasharray="4 4"/><path d="M238 57 l7 5 -7 5" stroke="var(--perf)" stroke-width="2.2"/>
+          <line x1="110" y1="78" x2="248" y2="78" stroke="var(--pc)" stroke-width="6"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="tense-list" id="tenseList"></div>
+
+    <button class="cta" data-go="decide">
+      <span class="q">؟</span>
+      <span><b>أي زمن أستخدم الآن؟</b><span>أجب عن سؤالين وتعرف الزمن الصحيح لجملتك</span></span>
+    </button>
+
+    <h3 class="section-h">لماذا تتغير الحروف؟</h3>
+    <div class="block">
+      <ul class="uses">
+        <li><span class="u">‎-s‎ = علامة «هو/هي» في المضارع البسيط فقط</span><span class="x">تسقط فوراً مع <span class="en">does / doesn't</span> لأن does أخذت العلامة.</span></li>
+        <li><span class="u">‎-ing‎ = الحدث جارٍ / ممتد</span><span class="x">لا تقف وحدها أبداً: تحتاج <span class="en">am/is/are</span> أو <span class="en">have/has been</span>.</span></li>
+        <li><span class="u">التصريف الثالث (V3) = الحدث اكتمل</span><span class="x"><span class="en">have/has</span> تربطه بالآن ← النتيجة موجودة الآن.</span></li>
+        <li><span class="u">‎been‎ = الجسر</span><span class="x">يربط التام (have) بالاستمرار (-ing): <span class="en">have been working</span>.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- BUILDER -->
+  <section class="page" id="p-build">
+    <h2 class="page-title">مُركِّب الجمل</h2>
+    <p class="page-sub">غيّر الفاعل أو الزمن أو الصيغة، وراقب أي جزء يتغير في الجملة.</p>
+    <div class="builder-out" id="bOut">
+      <div class="sentence" id="bSentence"></div>
+      <div class="legend"><span><i></i>الفعل المساعد</span><span><i style="background:none;border-bottom:2px solid var(--c);border-radius:0"></i>التغيير في الفعل</span></div>
+      <div class="meaning" id="bMeaning"></div>
+    </div>
+    <div class="ctrl"><label>الزمن</label><div class="seg" id="bTense"></div></div>
+    <div class="ctrl"><label>الصيغة</label><div class="seg seg3" id="bForm"></div></div>
+    <div class="ctrl"><label>الفاعل</label><div class="chips" id="bSubj"></div></div>
+    <div class="ctrl"><label>الفعل</label><div class="chips" id="bVerb"></div></div>
+    <button class="all-btn" id="bAllBtn">اعرض هذا الفعل في الأزمنة الأربعة</button>
+    <div class="acc" id="bAllAcc"><div><div class="grid-table" id="bAll"></div></div></div>
+  </section>
+
+  <!-- DECIDE -->
+  <section class="page" id="p-decide">
+    <h2 class="page-title">أي زمن أستخدم؟</h2>
+    <p class="page-sub">فكّر في الجملة التي تريد قولها، ثم أجب.</p>
+    <div id="decBox"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="page" id="p-quiz">
+    <h2 class="page-title">تمرّن</h2>
+    <p class="page-sub">10 أسئلة في كل جولة، مع سبب كل إجابة.</p>
+    <div class="stats"><div class="stat"><b id="sBest">0/10</b><span>أفضل نتيجة</span></div><div class="stat"><b id="sRounds">0</b><span>جولات مكتملة</span></div></div>
+    <div id="quizBox"></div>
+  </section>
+
+  <!-- MISTAKES + RULES -->
+  <section class="page" id="p-fix">
+    <h2 class="page-title">أخطاء وقواعد</h2>
+    <p class="page-sub">أكثر ما يكسر الجملة عند الكلام — وكيف تصلحه.</p>
+    <p class="tap-note">اضغط على الجملة الخاطئة لترى التصحيح</p>
+    <div id="misList"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center"><h3 class="section-h">قواعد سريعة</h3><button class="chip" id="rulesAll">فتح الكل</button></div>
+    <div id="rulesList"></div>
+  </section>
+</div>
+
+<nav class="nav" aria-label="التنقل">
+  <div class="nav-in">
+    <button data-go="home" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M7 8v8M12 6v12M17 9v6"/></svg>الأزمنة</button>
+    <button data-go="build"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="7" rx="2"/><rect x="14" y="4" width="7" height="7" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/></svg>المُركِّب</button>
+    <button data-go="decide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="12" r="2"/><path d="M6 7v10M6 12h4a4 4 0 0 0 4-4V8M16 12h-2"/></svg>القرار</button>
+    <button data-go="quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 5-6"/></svg>تمرّن</button>
+    <button data-go="fix"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>الأخطاء</button>
+  </div>
+</nav>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <div class="sheet-head" id="sheetHead">
+    <div class="handle"></div>
+    <div class="sheet-head-row">
+      <div><h2 id="shTitle"></h2><div class="sub-ar" id="shSub"></div></div>
+      <button class="icon-btn" id="shClose" aria-label="إغلاق"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+  </div>
+  <div class="sheet-body" id="shBody"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= DATA ================= */
+const GLYPH = {
+  simple:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><g fill="currentColor"><circle cx="14" cy="20" r="3.5"/><circle cx="36" cy="20" r="3.5"/><circle cx="58" cy="20" r="3.5"/><circle cx="80" cy="20" r="3.5"/><circle cx="102" cy="20" r="3.5"/></g></svg>',
+  cont:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><path d="M58 20 q5.5-8 11 0 t11 0 t11 0 t11 0" stroke="currentColor" stroke-width="3"/></svg>',
+  perf:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><circle cx="30" cy="22" r="5" fill="currentColor"/><path d="M36 21 Q56 10 76 20" stroke="currentColor" stroke-width="2.4" stroke-dasharray="4 4"/><path d="M70 15 l7 5 -8 4" stroke="currentColor" stroke-width="2.4"/></svg>',
+  pc:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><line x1="18" y1="20" x2="80" y2="20" stroke="currentColor" stroke-width="7"/><path d="M84 20 h8" stroke="currentColor" stroke-width="3" stroke-dasharray="2 3"/></svg>'
+};
+
+const TENSES = [
+ {id:'simple', en:'Present Simple', ar:'المضارع البسيط', short:'Simple',
+  use:'عادات وروتين، حقائق ثابتة، جداول مواعيد', formula:'S + V / V-s',
+  uses:[
+   {u:'عادة أو روتين متكرر', x:'I <mark>drink</mark> coffee every morning.'},
+   {u:'حقيقة علمية أو أمر دائم', x:'Water <mark>boils</mark> at 100°C.'},
+   {u:'جدول مواعيد ثابت (حتى لو في المستقبل)', x:'The train <mark>leaves</mark> at 7:30 tomorrow.'},
+   {u:'أفعال الحالة (أعرف، أحب، أريد...) حتى لو «الآن»', x:'I <mark>know</mark> the answer now.'}
+  ],
+  forms:[
+   {s:'+', l:'إثبات', fx:'S + V (he/she/it + V-s)', note:'مع <b>he / she / it</b> أو اسم مفرد نضيف <b>s</b> للفعل. مع <b>I / you / we / they</b> يبقى الفعل كما هو.',
+    ex:[['The Sun\'s gravity <mark>holds</mark> the solar system together.','مثال الشريحة — gravity مفرد ← holds'],['They <mark>hold</mark> regular meetings.','they جمع ← بدون s']]},
+   {s:'−', l:'نفي', fx:'S + don\'t / doesn\'t + V', note:'<b>doesn\'t</b> للمفرد الغائب و<b>don\'t</b> لغيره. الفعل يرجع لأصله لأن does أخذت الـ s.',
+    ex:[['The sun <mark>doesn\'t orbit</mark> the planets.','مثال الشريحة'],['Planets <mark>don\'t emit</mark> light.','planets جمع ← don\'t']], warn:'✕ doesn\'t orbits — وجود doesn\'t يحذف الـ s.'},
+   {s:'?', l:'سؤال', fx:'Do / Does + S + V ?', note:'ابدأ بـ <b>Does</b> للمفرد الغائب، و<b>Do</b> لغيره. الفعل بدون s.',
+    ex:[['<mark>Do</mark> the planets <mark>orbit</mark> the sun?','planets جمع ← Do'],['<mark>Does</mark> the sun <mark>give</mark> us heat?','sun مفرد ← Does']], warn:'جواب قصير: Yes, it does. / No, they don\'t.'}
+  ],
+  signals:['always','usually','often','sometimes','rarely','never','every day / week','on Mondays','once a week'],
+  compare:'<b>Simple ضد Continuous:</b> <span class="en">I work in Dubai.</span> (دائم) ← <span class="en">I\'m working in Dubai this month.</span> (مؤقت)'
+ },
+ {id:'cont', en:'Present Continuous', ar:'المضارع المستمر', short:'Continuous',
+  use:'يحدث الآن، وضع مؤقت، خطة مؤكدة قريبة', formula:'S + am/is/are + V-ing',
+  uses:[
+   {u:'يحدث الآن في هذه اللحظة', x:'Look! It <mark>is raining</mark>.'},
+   {u:'وضع مؤقت «هذه الأيام»', x:'I <mark>am studying</mark> English this term.'},
+   {u:'خطة مرتّبة في المستقبل القريب', x:'I <mark>am meeting</mark> my manager tomorrow.'},
+   {u:'شيء يتغيّر تدريجياً', x:'Prices <mark>are going</mark> up.'}
+  ],
+  forms:[
+   {s:'+', l:'إثبات', fx:'S + am / is / are + V-ing', note:'<b>am</b> مع I، <b>is</b> مع he/she/it، <b>are</b> مع you/we/they.',
+    ex:[['They <mark>are paying</mark> attention.','مثال الشريحة'],['He <mark>is paying</mark> attention.','he ← is']], warn:'✕ I paying — الـ ing لا تقف بدون am/is/are.'},
+   {s:'−', l:'نفي', fx:'S + am not / isn\'t / aren\'t + V-ing', note:'NOT بعد الفعل المساعد مباشرة، والـ ing تبقى.',
+    ex:[['The dog <mark>isn\'t running</mark>.','مثال الشريحة'],['The dogs <mark>aren\'t running</mark>.','جمع ← aren\'t']]},
+   {s:'?', l:'سؤال', fx:'Am / Is / Are + S + V-ing ?', note:'قدّم am/is/are قبل الفاعل فقط.',
+    ex:[['<mark>Are</mark> they <mark>having</mark> fun?','مثال الشريحة'],['<mark>Is</mark> he <mark>having</mark> fun?','he ← Is']]}
+  ],
+  signals:['now','right now','at the moment','currently','these days','this week','Look!','Listen!','tonight (plan)'],
+  compare:'<b>لا تستخدمه مع أفعال الحالة:</b> know, like, love, want, need, believe, understand, own. قل <span class="en">I want</span> وليس <span class="en">I\'m wanting</span>.'
+ },
+ {id:'perf', en:'Present Perfect', ar:'المضارع التام', short:'Perfect',
+  use:'حدث في الماضي ونتيجته موجودة الآن، أو تجربة', formula:'S + have/has + V3',
+  uses:[
+   {u:'نتيجة موجودة الآن (الوقت غير مهم)', x:'Barney <mark>has bought</mark> a new car.'},
+   {u:'تجربة في حياتك (ever / never)', x:'<mark>Have</mark> you ever <mark>been</mark> to Japan?'},
+   {u:'حدث للتو (just)', x:'I <mark>have just finished</mark> my lesson.'},
+   {u:'حالة بدأت في الماضي ومستمرة (مع for/since)', x:'I <mark>have known</mark> him for ten years.'}
+  ],
+  forms:[
+   {s:'+', l:'إثبات', fx:'S + have / has + V3', note:'<b>has</b> مع he/she/it أو اسم مفرد، <b>have</b> مع I/you/we/they + التصريف الثالث.',
+    ex:[['Barney <mark>has bought</mark> a new car.','مثال الشريحة — السيارة معه الآن'],['They <mark>have bought</mark> a new car.','they ← have']]},
+   {s:'−', l:'نفي', fx:'S + haven\'t / hasn\'t + V3 (+ yet)', note:'<b>yet</b> في آخر الجملة = «حتى الآن».',
+    ex:[['He <mark>hasn\'t driven</mark> it yet.','مثال الشريحة'],['We <mark>haven\'t driven</mark> it yet.','we ← haven\'t']]},
+   {s:'?', l:'سؤال', fx:'Have / Has + S + V3 ?', note:'Barney and Ted = اثنان ← Have.',
+    ex:[['<mark>Have</mark> Barney and Ted <mark>picked</mark> Tracy up?','مثال الشريحة'],['<mark>Has</mark> Barney <mark>picked</mark> Tracy up?','واحد ← Has']]}
+  ],
+  signals:['already (+)','just','yet (− ?)','ever (?)','never','so far','recently','for','since'],
+  compare:'<b>أهم قاعدة:</b> لا تستخدمه مع وقت ماضٍ محدد ومنتهي (yesterday, last week, in 2020, ago). قل <span class="en">I saw him yesterday</span> وليس <span class="en">I have seen him yesterday</span>.'
+ },
+ {id:'pc', en:'Present Perfect Continuous', ar:'المضارع التام المستمر', short:'Perf. Cont.',
+  use:'بدأ في الماضي ومستمر حتى الآن — التركيز على المدة والجهد', formula:'S + have/has been + V-ing',
+  uses:[
+   {u:'نشاط بدأ ولا يزال مستمراً (كم المدة؟)', x:'He <mark>has been waiting</mark> for ages.'},
+   {u:'نشاط انتهى للتو وأثره ظاهر', x:'I\'m tired. I <mark>have been running</mark>.'},
+   {u:'سؤال «منذ متى؟»', x:'How long <mark>have</mark> you <mark>been learning</mark> English?'}
+  ],
+  forms:[
+   {s:'+', l:'إثبات', fx:'S + have / has + been + V-ing', note:'<b>been</b> ثابتة لا تتغير أبداً، هي الجسر بين have والـ ing.',
+    ex:[['He <mark>has been waiting</mark> for ages.','مثال الشريحة'],['They <mark>have been waiting</mark> for ages.','they ← have']]},
+   {s:'−', l:'نفي', fx:'S + haven\'t / hasn\'t + been + V-ing', note:'NOT بعد have/has فقط.',
+    ex:[['He <mark>hasn\'t been doing</mark> anything important.','مثال الشريحة'],['We <mark>haven\'t been sleeping</mark> well.','we ← haven\'t']]},
+   {s:'?', l:'سؤال', fx:'Have / Has + S + been + V-ing ?', note:'الفاعل يقع بين have/has و been.',
+    ex:[['<mark>Have</mark> they <mark>been calling</mark> you?','مثال الشريحة'],['<mark>Has</mark> she <mark>been studying</mark> all night?','she ← Has']]}
+  ],
+  signals:['for two hours','since 9 a.m.','all day','all morning','How long...?','lately','recently'],
+  compare:'<b>Perfect ضد Perf. Cont.:</b> <span class="en">I\'ve written three emails.</span> (النتيجة: العدد) ← <span class="en">I\'ve been writing emails all morning.</span> (المدة والجهد)'
+ }
+];
+
+const SUBJ = {
+  'I':   {be:'am', beN:'am not', have:'have', haveN:"haven't", do:'do', doN:"don't", third:false},
+  'You': {be:'are',beN:"aren't",have:'have',haveN:"haven't",do:'do',doN:"don't",third:false},
+  'He':  {be:'is', beN:"isn't", have:'has', haveN:"hasn't", do:'does',doN:"doesn't",third:true},
+  'She': {be:'is', beN:"isn't", have:'has', haveN:"hasn't", do:'does',doN:"doesn't",third:true},
+  'We':  {be:'are',beN:"aren't",have:'have',haveN:"haven't",do:'do',doN:"don't",third:false},
+  'They':{be:'are',beN:"aren't",have:'have',haveN:"haven't",do:'do',doN:"don't",third:false}
+};
+
+const VERBS = [
+ {b:'drink', s:'drinks', ing:'drinking', pp:'drunk', ar:'يشرب', r:{simple:'coffee every morning', cont:'coffee right now', perf:'two cups of coffee', pc:'coffee since 7 a.m.'}},
+ {b:'write', s:'writes', ing:'writing', pp:'written', ar:'يكتب', r:{simple:'emails every day', cont:'an email right now', perf:'the report', pc:'emails all morning'}},
+ {b:'study', s:'studies', ing:'studying', pp:'studied', ar:'يدرس', r:{simple:'English every evening', cont:'for the exam right now', perf:'chapter five', pc:'English for two years'}},
+ {b:'go', s:'goes', ing:'going', pp:'gone', ar:'يذهب', r:{simple:'to the gym every day', cont:'to the gym right now', perf:'to the gym', pc:'to the gym for three months'}},
+ {b:'watch', s:'watches', ing:'watching', pp:'watched', ar:'يشاهد', r:{simple:'the news every night', cont:'a film right now', perf:'that film', pc:'TV for three hours'}},
+ {b:'make', s:'makes', ing:'making', pp:'made', ar:'يحضّر', r:{simple:'dinner on Fridays', cont:'dinner right now', perf:'dinner', pc:'dinner since 6 o\'clock'}},
+ {b:'run', s:'runs', ing:'running', pp:'run', ar:'يجري', r:{simple:'in the park every morning', cont:'in the park right now', perf:'5 km', pc:'for half an hour'}},
+ {b:'speak', s:'speaks', ing:'speaking', pp:'spoken', ar:'يتحدث', r:{simple:'English at work', cont:'to the manager right now', perf:'to the manager', pc:'to the manager for an hour'}},
+ {b:'eat', s:'eats', ing:'eating', pp:'eaten', ar:'يأكل', r:{simple:'breakfast at 7', cont:'breakfast right now', perf:'breakfast', pc:'a lot of sweets lately'}},
+ {b:'clean', s:'cleans', ing:'cleaning', pp:'cleaned', ar:'ينظّف', r:{simple:'the house every Friday', cont:'the kitchen right now', perf:'the kitchen', pc:'the house all morning'}},
+ {b:'drive', s:'drives', ing:'driving', pp:'driven', ar:'يقود', r:{simple:'to work every day', cont:'to work right now', perf:'the new car', pc:'for five hours'}}
+];
+
+const MEANING = {
+  simple:{'+':'عادة متكررة أو حقيقة ثابتة.','−':'نفي العادة: هذا ليس من روتينه.','?':'سؤال عن العادة أو الروتين.'},
+  cont:{'+':'يحدث الآن في هذه اللحظة.','−':'لا يحدث الآن (قد يحدث في وقت آخر).','?':'سؤال عمّا يحدث الآن.'},
+  perf:{'+':'تم الحدث والنتيجة موجودة الآن — الوقت غير مهم.','−':'لم يتم حتى هذه اللحظة (yet).','?':'هل تم حتى الآن؟'},
+  pc:{'+':'بدأ في الماضي وما زال مستمراً — التركيز على المدة.','−':'لم يكن مستمراً في هذه الفترة.','?':'سؤال عن استمرار النشاط ومدته.'}
+};
+
+const QUIZ = [
+ {q:'She ___ to work by bus every day.', o:['goes','is going','go'], a:0, e:'every day = عادة ← Simple، و she ← goes.'},
+ {q:'Listen! The baby ___.', o:['is crying','cries','has cried'], a:0, e:'Listen! = يحدث الآن ← Continuous.'},
+ {q:'I ___ my keys. I can\'t open the door.', o:['have lost','am losing','lose'], a:0, e:'النتيجة الآن (لا أستطيع فتح الباب) ← Present Perfect.'},
+ {q:'They ___ for the bus for 40 minutes.', o:['have been waiting','are waiting','wait'], a:0, e:'for 40 minutes + ما زالوا ينتظرون ← Perfect Continuous.'},
+ {q:'He doesn\'t ___ coffee.', o:['drink','drinks','drinking'], a:0, e:'doesn\'t تأخذ الـ s، فالفعل يرجع لأصله.'},
+ {q:'___ you ever ___ sushi?', o:['Have … eaten','Do … eat','Are … eating'], a:0, e:'ever = تجربة في الحياة ← Have + V3.'},
+ {q:'I ___ the answer now.', o:['understand','am understanding','have been understanding'], a:0, e:'understand فعل حالة ← لا يأخذ ing حتى مع now.'},
+ {q:'We ___ here since 2019.', o:['have lived','live','are living'], a:0, e:'since + حالة مستمرة من الماضي ← have lived (وليس live).'},
+ {q:'Water ___ at 100°C.', o:['boils','is boiling','has boiled'], a:0, e:'حقيقة علمية ← Simple.'},
+ {q:'I\'m tired because I ___ all day.', o:['have been working','work','am work'], a:0, e:'أثر ظاهر (التعب) + all day ← Perfect Continuous.'},
+ {q:'___ she ___ English at work?', o:['Does … speak','Does … speaks','Is … speak'], a:0, e:'Does أخذت الـ s ← speak بدون s.'},
+ {q:'I ___ my friend tomorrow at 6. It\'s planned.', o:['am meeting','meet','have met'], a:0, e:'خطة مرتّبة في المستقبل القريب ← Continuous.'},
+ {q:'She ___ three emails so far.', o:['has written','has been writing','writes'], a:0, e:'عدد/نتيجة (three emails) ← Present Perfect، وليس المستمر.'},
+ {q:'Look! It ___.', o:['is snowing','snows','has been snow'], a:0, e:'Look! ← يحدث الآن.'},
+ {q:'They haven\'t finished it ___.', o:['yet','already','since'], a:0, e:'yet مع النفي والسؤال، already مع الإثبات.'},
+ {q:'I\'ve known him ___ ten years.', o:['for','since','ago'], a:0, e:'for + مدة (ten years)، since + نقطة بداية (2015).'},
+ {q:'I ___ him yesterday.', o:['saw','have seen','am seeing'], a:0, e:'yesterday وقت منتهٍ ← Past Simple، وليس Present Perfect.'},
+ {q:'How long ___ you ___ English?', o:['have … been studying','are … studying','do … study'], a:0, e:'How long + نشاط مستمر ← have been + ing.'},
+ {q:'He ___ his homework, so now he can play.', o:['has done','does','is doing'], a:0, e:'انتهى والنتيجة الآن (يستطيع اللعب) ← Present Perfect.'},
+ {q:'The train ___ at 7:30 tomorrow.', o:['leaves','has left','has been leaving'], a:0, e:'جدول مواعيد ثابت ← Simple حتى للمستقبل.'},
+ {q:'She ___ the answer.', o:['knows','is knowing','has been knowing'], a:0, e:'know فعل حالة ← Simple.'},
+ {q:'My brother ___ in Dubai. It\'s his permanent job.', o:['works','is working','has been working'], a:0, e:'وضع دائم ← Simple. (is working = مؤقت).'},
+ {q:'We ___ a new house. We moved in last week.', o:['have bought','are buying','buy'], a:0, e:'النتيجة: البيت معنا الآن ← Present Perfect.'},
+ {q:'___ he ___ right now?', o:['Is … sleeping','Does … sleep','Has … slept'], a:0, e:'right now ← Is + ing.'}
+];
+
+const MISTAKES = [
+ ['He work in a bank.','He work<b>s</b> in a bank.','he في المضارع البسيط ← الفعل يأخذ s.'],
+ ['I writing an email right now.','I <b>am</b> writing an email right now.','الـ ing تحتاج am/is/are قبلها.'],
+ ['He doesn\'t works on Fridays.','He doesn\'t <b>work</b> on Fridays.','doesn\'t تحذف الـ s.'],
+ ['Does she likes tea?','Does she <b>like</b> tea?','Does أخذت الـ s ← الفعل بدونها.'],
+ ['Are you agree?','<b>Do</b> you agree?','agree فعل عادي وليس صفة ← نستخدم Do.'],
+ ['I already finish my lesson.','I <b>have already finished</b> my lesson.','already مع الإنجاز ← have + V3.'],
+ ['I have seen him yesterday.','I <b>saw</b> him yesterday.','وقت ماضٍ محدد ← Past Simple.'],
+ ['I live here since 2020.','I <b>have lived</b> here since 2020.','since/for + حالة مستمرة ← Present Perfect.'],
+ ['I am working here for 5 years.','I <b>have been working</b> here for 5 years.','for + مدة حتى الآن ← have been + ing.'],
+ ['How long are you waiting?','How long <b>have</b> you <b>been</b> waiting?','How long ← Perfect Continuous.'],
+ ['I am knowing the answer.','I <b>know</b> the answer.','know فعل حالة ← لا يأخذ ing.'],
+ ['She has went home.','She has <b>gone</b> home.','بعد has يأتي V3 (gone) وليس V2 (went).'],
+ ['He studys every night.','He stud<b>ies</b> every night.','حرف ساكن + y ← ies.'],
+ ['She is come now.','She <b>is coming</b> now.','بعد is في المستمر ← V-ing.']
+];
+
+const RULES = [
+ {t:'كتابة الـ -s مع he/she/it', d:'متى تصبح es أو ies؟', h:`<table class="rtbl"><tr><th>القاعدة</th><th class="en">مثال</th></tr>
+  <tr><td>أغلب الأفعال + s</td><td class="en">work → works</td></tr>
+  <tr><td>ينتهي بـ s, sh, ch, x, o ← es</td><td class="en">watch → watches, go → goes</td></tr>
+  <tr><td>ساكن + y ← ies</td><td class="en">study → studies</td></tr>
+  <tr><td>متحرك + y ← s فقط</td><td class="en">play → plays</td></tr>
+  <tr><td>شاذ</td><td class="en">have → has</td></tr></table>`},
+ {t:'كتابة الـ -ing', d:'حذف e ومضاعفة الحرف', h:`<table class="rtbl"><tr><th>القاعدة</th><th class="en">مثال</th></tr>
+  <tr><td>أغلب الأفعال + ing</td><td class="en">work → working</td></tr>
+  <tr><td>ينتهي بـ e صامتة ← احذفها</td><td class="en">make → making</td></tr>
+  <tr><td>مقطع واحد: ساكن-متحرك-ساكن ← ضاعف</td><td class="en">run → running, sit → sitting</td></tr>
+  <tr><td>ie ← y</td><td class="en">lie → lying</td></tr></table>`},
+ {t:'أفعال لا تأخذ -ing (أفعال الحالة)', d:'أشهر سبب لأخطاء المستمر', h:`<p>تصف حالة أو شعوراً أو امتلاكاً، لا حركة. استخدم معها Simple (وPerfect بدل Perf. Cont.):</p>
+  <div class="chips">${['know','understand','believe','like','love','hate','want','need','prefer','own','belong','seem','mean','remember','agree'].map(v=>`<span class="chip en">${v}</span>`).join('')}</div>
+  <p style="margin-bottom:0"><span class="en">I have known her for years.</span> ✔ — <span class="en">I have been knowing her</span> ✕</p>`},
+ {t:'for أم since؟', d:'مدة أم نقطة بداية', h:`<table class="rtbl"><tr><th></th><th>الاستخدام</th><th class="en">أمثلة</th></tr>
+  <tr><td class="en"><b>for</b></td><td>طول المدة</td><td class="en">for 2 hours, for ages, for a week</td></tr>
+  <tr><td class="en"><b>since</b></td><td>نقطة البداية</td><td class="en">since 9 a.m., since Monday, since 2019</td></tr></table>`},
+ {t:'already / just / yet / ever', d:'مكانها في الجملة', h:`<table class="rtbl"><tr><th class="en">الكلمة</th><th>المكان</th><th class="en">مثال</th></tr>
+  <tr><td class="en">already</td><td>إثبات، بين have و V3</td><td class="en">I've already eaten.</td></tr>
+  <tr><td class="en">just</td><td>بين have و V3</td><td class="en">She's just left.</td></tr>
+  <tr><td class="en">yet</td><td>نفي وسؤال، آخر الجملة</td><td class="en">Have you finished yet?</td></tr>
+  <tr><td class="en">ever</td><td>سؤال، قبل V3</td><td class="en">Have you ever tried it?</td></tr></table>`},
+ {t:'been أم gone؟', d:'ذهب ورجع أم ما زال هناك', h:`<p style="margin-top:0"><span class="en"><b>He has been to Paris.</b></span> ذهب ورجع (تجربة).</p><p style="margin-bottom:0"><span class="en"><b>He has gone to Paris.</b></span> ذهب وهو هناك الآن.</p>`},
+ {t:'التصريف الثالث (V3) لأشهر الأفعال الشاذة', d:'تحتاجه في Present Perfect', h:`<div class="tbl-wrap"><table><tr><th class="en">V1</th><th class="en">V2</th><th class="en">V3</th><th style="text-align:right">المعنى</th></tr>${
+  [['be','was/were','been','يكون'],['go','went','gone','يذهب'],['do','did','done','يفعل'],['have','had','had','يملك'],['make','made','made','يصنع'],['get','got','got / gotten','يحصل'],['see','saw','seen','يرى'],['take','took','taken','يأخذ'],['come','came','come','يأتي'],['know','knew','known','يعرف'],['give','gave','given','يعطي'],['find','found','found','يجد'],['think','thought','thought','يفكر'],['tell','told','told','يخبر'],['say','said','said','يقول'],['buy','bought','bought','يشتري'],['bring','brought','brought','يحضر'],['write','wrote','written','يكتب'],['speak','spoke','spoken','يتحدث'],['eat','ate','eaten','يأكل'],['drink','drank','drunk','يشرب'],['drive','drove','driven','يقود'],['begin','began','begun','يبدأ'],['leave','left','left','يغادر'],['meet','met','met','يقابل'],['read','read','read','يقرأ'],['run','ran','run','يجري'],['send','sent','sent','يرسل'],['forget','forgot','forgotten','ينسى'],['lose','lost','lost','يفقد']]
+  .map(r=>`<tr><td class="en">${r[0]}</td><td class="en">${r[1]}</td><td class="en"><b>${r[2]}</b></td><td style="text-align:right">${r[3]}</td></tr>`).join('')}</table></div>`},
+ {t:'الأجوبة القصيرة', d:'Yes, I do / No, he hasn\'t', h:`<table class="rtbl"><tr><th>الزمن</th><th class="en">مثال</th></tr>
+  <tr><td>Simple</td><td class="en">Do you smoke? — No, I don't.</td></tr>
+  <tr><td>Continuous</td><td class="en">Is she working? — Yes, she is.</td></tr>
+  <tr><td>Perfect</td><td class="en">Have they arrived? — No, they haven't.</td></tr>
+  <tr><td>Perf. Cont.</td><td class="en">Has it been raining? — Yes, it has.</td></tr></table>`}
+];
+
+/* ================= STORAGE (safe) ================= */
+const store = {
+  get(k,d){try{const v=localStorage.getItem('pt_'+k);return v===null?d:JSON.parse(v)}catch(e){return d}},
+  set(k,v){try{localStorage.setItem('pt_'+k,JSON.stringify(v))}catch(e){}}
+};
+
+/* ================= HELPERS ================= */
+const $ = s=>document.querySelector(s);
+const chevSVG = '<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>';
+const T = id => TENSES.find(t=>t.id===id);
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1600)}
+
+/* ================= NAV ================= */
+const ORDER=['home','build','decide','quiz','fix'];
+const TITLES={home:['أزمنة المضارع','دليلي اليومي للكلام الصحيح'],build:['مُركِّب الجمل','ابنِ الجملة وراقب التغيير'],decide:['أي زمن أستخدم؟','سؤالان يحسمان اختيارك'],quiz:['تمرّن','10 أسئلة في كل جولة'],fix:['أخطاء وقواعد','صحّح نفسك قبل الكلام']};
+let cur='home';
+function show(page){
+  if(page===cur)return;
+  const fwd=ORDER.indexOf(page)>ORDER.indexOf(cur);
+  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active','in-fwd','in-back');if(p.id==='p-'+page){void p.offsetWidth;p.classList.add('active',fwd?'in-fwd':'in-back')}});
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===page));
+  $('#backBtn').hidden=page==='home';
+  $('#topTitle').textContent=TITLES[page][0];$('#topSub').textContent=TITLES[page][1];
+  window.scrollTo({top:0,behavior:'instant'});
+  cur=page; store.set('page',page);
+}
+/* history: home is the base; any other page sits one step above it, so phone "back" always returns home */
+function go(page){
+  if(page===cur)return;
+  if(page==='home'){ if(history.state&&history.state.page&&history.state.page!=='home') history.back(); else show('home'); return; }
+  if(cur==='home') history.pushState({page},''); else history.replaceState({page},'');
+  show(page);
+}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(g.dataset.go)});
+$('#backBtn').onclick=()=>go('home');
+
+/* ================= HOME ================= */
+$('#tenseList').innerHTML = TENSES.map(t=>`
+  <button class="tcard t-${t.id}" data-tense="${t.id}">
+    <span><span class="name">${t.en}</span><span class="ar" style="display:block">${t.ar}</span>
+    <span class="use" style="display:block">${t.use}</span>
+    <span class="formula en">${t.formula}</span></span>
+    ${GLYPH[t.id]}
+  </button>`).join('');
+$('#tenseList').addEventListener('click',e=>{const c=e.target.closest('[data-tense]');if(c)openSheet(c.dataset.tense)});
+
+/* ================= SHEET ================= */
+const sheet=$('#sheet'), scrim=$('#scrim');
+function openSheet(id){
+  const t=T(id);
+  sheet.className='sheet t-'+id;
+  $('#shTitle').textContent=t.en; $('#shSub').textContent=t.ar+' — '+t.use;
+  $('#shBody').innerHTML=`
+   <div class="block"><h3>متى أستخدمه؟</h3><ul class="uses">${t.uses.map(u=>`<li><span class="u">${u.u}</span><span class="x en">${u.x}</span></li>`).join('')}</ul></div>
+   <div class="block"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px"><h3 style="margin:0">التركيب — اضغط على أي صيغة</h3><button class="chip" data-allforms>فتح الكل</button></div>
+    ${t.forms.map((f,i)=>`<div class="form${i===0?' open':''}">
+      <button class="form-btn" aria-expanded="${i===0}"><span class="sign">${f.s}</span><span style="display:flex;flex-direction:column;flex:1;min-width:0"><span class="lbl">${f.l}</span><span class="fx">${f.fx}</span></span>${chevSVG}</button>
+      <div class="acc"><div><div class="acc-in">${f.note}
+        ${f.ex.map(x=>`<div class="ex"><div class="en">${x[0]}</div><small>${x[1]}</small></div>`).join('')}
+        ${f.warn?`<div class="warn">${f.warn}</div>`:''}</div></div></div></div>`).join('')}
+   </div>
+   <div class="block"><h3>كلمات تدلك عليه</h3><div class="chips">${t.signals.map(s=>`<span class="chip static en">${s}</span>`).join('')}</div></div>
+   <div class="block"><div class="compare">${t.compare}</div></div>
+   <button class="primary" data-try="${id}">جرّبه في المُركِّب</button>`;
+  $('#shBody').scrollTop=0;
+  scrim.classList.add('show'); sheet.classList.add('show');
+  document.body.style.overflow='hidden';
+  history.pushState({sheet:1,page:cur},'');
+}
+function hideSheetUI(){sheet.classList.remove('show'); scrim.classList.remove('show'); sheet.style.transform=''; document.body.style.overflow=''}
+function closeSheet(fromPop){
+  if(!sheet.classList.contains('show'))return;
+  hideSheetUI();
+  if(!fromPop && history.state && history.state.sheet) history.back();
+}
+window.addEventListener('popstate',e=>{
+  if(sheet.classList.contains('show')){hideSheetUI();return}
+  show((e.state&&e.state.page)||'home');
+});
+$('#shClose').onclick=()=>closeSheet(); scrim.onclick=()=>closeSheet();
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
+$('#shBody').addEventListener('click',e=>{
+  const fb=e.target.closest('.form-btn');
+  if(fb){const f=fb.parentElement;f.classList.toggle('open');fb.setAttribute('aria-expanded',f.classList.contains('open'))}
+  const tr=e.target.closest('[data-try]');
+  if(tr){bs.tense=tr.dataset.try;renderBuilder();hideSheetUI();history.replaceState({page:'build'},'');show('build')}
+  const al=e.target.closest('[data-allforms]');
+  if(al){const fs=[...$('#shBody').querySelectorAll('.form')];const open=!fs.every(f=>f.classList.contains('open'));fs.forEach(f=>f.classList.toggle('open',open));al.textContent=open?'طي الكل':'فتح الكل'}
+});
+/* swipe down to close */
+(function(){
+  let y0=null,dy=0;const head=$('#sheetHead');
+  head.addEventListener('touchstart',e=>{y0=e.touches[0].clientY;dy=0;sheet.classList.add('dragging')},{passive:true});
+  head.addEventListener('touchmove',e=>{if(y0===null)return;dy=Math.max(0,e.touches[0].clientY-y0);sheet.style.transform=`perspective(1400px) translateY(${dy}px) rotateX(${Math.min(dy/12,14)}deg)`},{passive:true});
+  head.addEventListener('touchend',()=>{sheet.classList.remove('dragging');if(dy>110)closeSheet();else sheet.style.transform='';y0=null});
+})();
+
+/* ================= BUILDER ================= */
+const bs = Object.assign({tense:'simple',form:'+',subj:'He',verb:'drink'}, store.get('builder',{}));
+function suffixSplit(base,form){
+  let i=0;while(i<base.length&&i<form.length&&base[i]===form[i])i++;
+  if(i===form.length) return [form,''];
+  return [form.slice(0,i),form.slice(i)];
+}
+function vw(base,form){const [a,b]=suffixSplit(base,form);return `<span>${a}</span>${b?`<span class="p-end">${b}</span>`:''}`}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+function subjQ(s){return s==='I'?'I':s.toLowerCase()}
+function build(tense,form,subj,v){
+  const S=SUBJ[subj], r=v.r[tense], sub=`<span class="p-sub">${form==='?'?subjQ(subj):subj}</span>`;
+  const aux=x=>`<span class="p-aux">${x}</span>`, rest=x=>`<span class="p-rest">${x}</span>`;
+  const end = form==='?'?'?':'.';
+  let p=[];
+  if(tense==='simple'){
+    if(form==='+') p=[sub, S.third?vw(v.b,v.s):v.b, rest(r)];
+    if(form==='−') p=[sub, aux(S.doN), v.b, rest(r)];
+    if(form==='?') p=[aux(cap(S.do)), sub, v.b, rest(r)];
+  }
+  if(tense==='cont'){
+    if(form==='+') p=[sub, aux(S.be), vw(v.b,v.ing), rest(r)];
+    if(form==='−') p=[sub, aux(S.beN), vw(v.b,v.ing), rest(r)];
+    if(form==='?') p=[aux(cap(S.be)), sub, vw(v.b,v.ing), rest(r)];
+  }
+  if(tense==='perf'){
+    if(form==='+') p=[sub, aux(S.have), '<span class="p-adv">already</span>', vw(v.b,v.pp), rest(r)];
+    if(form==='−') p=[sub, aux(S.haveN), vw(v.b,v.pp), rest(r), '<span class="p-adv">yet</span>'];
+    if(form==='?') p=[aux(cap(S.have)), sub, vw(v.b,v.pp), rest(r), '<span class="p-adv">yet</span>'];
+  }
+  if(tense==='pc'){
+    if(form==='+') p=[sub, aux(S.have+' been'), vw(v.b,v.ing), rest(r)];
+    if(form==='−') p=[sub, aux(S.haveN+' been'), vw(v.b,v.ing), rest(r)];
+    if(form==='?') p=[aux(cap(S.have)), sub, aux('been'), vw(v.b,v.ing), rest(r)];
+  }
+  return p.join(' ')+end;
+}
+function seg(el,items,key){
+  el.innerHTML=items.map(([v,l])=>`<button data-v="${v}" class="${bs[key]===v?'on':''}">${l}</button>`).join('');
+  el.onclick=e=>{const b=e.target.closest('button');if(!b)return;bs[key]=b.dataset.v;renderBuilder()};
+}
+function chips(el,items,key){
+  el.innerHTML=items.map(([v,l])=>`<button class="chip ${bs[key]===v?'on':''}" data-v="${v}">${l}</button>`).join('');
+  el.onclick=e=>{const b=e.target.closest('button');if(!b)return;bs[key]=b.dataset.v;renderBuilder()};
+}
+function renderBuilder(){
+  const page=$('#p-build'); page.className='page'+(page.classList.contains('active')?' active':'')+' t-'+bs.tense;
+  page.classList.add('t-'+bs.tense);
+  seg($('#bTense'),TENSES.map(t=>[t.id,`<span class="en" style="text-align:center;display:block">${t.short}</span>`]),'tense');
+  seg($('#bForm'),[['+','+ إثبات'],['−','− نفي'],['?','? سؤال']],'form');
+  chips($('#bSubj'),Object.keys(SUBJ).map(s=>[s,`<span class="en">${s}</span>`]),'subj');
+  chips($('#bVerb'),VERBS.map(v=>[v.b,`<span class="en">${v.b}</span> ${v.ar}`]),'verb');
+  const v=VERBS.find(x=>x.b===bs.verb)||VERBS[0];
+  $('#bSentence').innerHTML=build(bs.tense,bs.form,bs.subj,v);
+  $('#bMeaning').innerHTML=`<b>${T(bs.tense).ar}:</b> ${MEANING[bs.tense][bs.form]}`;
+  $('#bAll').innerHTML=TENSES.map(t=>`<div class="grid-row t-${t.id}"><b>${t.en}</b>
+    <div class="en">${build(t.id,'+',bs.subj,v)}</div><div class="en">${build(t.id,'−',bs.subj,v)}</div><div class="en">${build(t.id,'?',bs.subj,v)}</div>
+    <small style="color:var(--muted)">${MEANING[t.id]['+']}</small></div>`).join('');
+  store.set('builder',bs);
+}
+$('#bAllBtn').onclick=()=>{const a=$('#bAllAcc');a.classList.toggle('open');$('#bAllBtn').textContent=a.classList.contains('open')?'إخفاء المقارنة':'اعرض هذا الفعل في الأزمنة الأربعة'};
+
+/* ================= DECISION ================= */
+const DEC = {
+  start:{q:'هل للحدث علاقة بالماضي؟', h:'بدأ قبل الآن، أو حدث قبل الآن ونتيجته باقية.', o:[
+    {b:'لا — أتكلم عن الحاضر فقط',s:'عادة، حقيقة، أو شيء يحدث الآن',n:'present'},
+    {b:'نعم — بدأ أو حدث قبل الآن',s:'وما زال مرتبطاً باللحظة الحالية',n:'past'}]},
+  present:{q:'هل يحدث في هذه اللحظة أو مؤقتاً؟', h:'تخيّل أنك تصف ما تراه أمامك الآن.', o:[
+    {b:'نعم — الآن / هذه الأيام / خطة قريبة',s:'Look! … / this week / tomorrow (مرتّب)',n:'stative'},
+    {b:'لا — عادة أو حقيقة دائمة',s:'every day / always / حقيقة علمية / جدول',r:'simple'}]},
+  stative:{q:'هل الفعل يصف حالة لا حركة؟', h:'مثل: know, like, want, need, understand, own.', o:[
+    {b:'نعم — فعل حالة',s:'لا يأخذ ing',r:'simple',why:'أفعال الحالة تبقى في Simple حتى لو كان المعنى «الآن».'},
+    {b:'لا — فعل حركة أو نشاط',s:'work, write, run, eat…',r:'cont'}]},
+  past:{q:'هل وقت الحدث محدد ومنتهٍ؟', h:'مثل: yesterday, last week, in 2020, two days ago.', o:[
+    {b:'نعم — ذكرت وقتاً منتهياً',s:'yesterday / ago / last…',r:'past'},
+    {b:'لا — الوقت غير مهم أو مستمر حتى الآن',s:'already / ever / for / since',n:'focus'}]},
+  focus:{q:'على ماذا تركّز؟', h:'السؤال المفتاحي بين التام والتام المستمر.', o:[
+    {b:'النتيجة / العدد / التجربة',s:'ماذا أنجزت؟ كم مرة؟ هل جربت؟',r:'perf'},
+    {b:'المدة / الاستمرار / التعب',s:'منذ متى؟ طوال اليوم…',n:'stative2'}]},
+  stative2:{q:'هل الفعل يصف حالة لا حركة؟', h:'know, have (يملك), like, believe…', o:[
+    {b:'نعم — فعل حالة',s:'I have known him for years',r:'perf',why:'أفعال الحالة لا تأخذ ing ← نستخدم Present Perfect مع for/since.'},
+    {b:'لا — نشاط',s:'I have been working all day',r:'pc'}]}
+};
+let decPath=[];
+function renderDec(node='start',why){
+  const box=$('#decBox');
+  const trail = decPath.length?`<div class="dec-trail">${decPath.map(p=>`<span class="chip">${p}</span>`).join('')}</div>`:'';
+  if(node.startsWith('R:')){
+    const id=node.slice(2);
+    if(id==='past'){
+      box.innerHTML=trail+`<div class="dec-result" style="--c:var(--muted);--cbg:var(--surface)"><h3>Past Simple</h3>
+      <p style="margin:6px 0">هذا ليس من أزمنة المضارع. مع وقت منتهٍ محدد استخدم الماضي البسيط:</p>
+      <div class="en" style="font-size:1.05rem">I <b>saw</b> him yesterday. ✔ &nbsp;—&nbsp; I have seen him yesterday ✕</div></div>
+      <button class="primary" id="decReset">ابدأ من جديد</button>`;
+    } else {
+      const t=T(id), ex=t.uses[0].x;
+      box.innerHTML=trail+`<div class="dec-result t-${id}"><h3>${t.en}</h3><div style="font-weight:600">${t.ar}</div>
+       ${why?`<p style="margin:6px 0 0;font-size:.92rem">${why}</p>`:''}
+       <div class="en" style="font-size:1.1rem;margin-top:10px">${ex}</div>
+       <div class="en" style="margin-top:6px;font-weight:700;color:var(--c)">${t.formula}</div></div>
+       <button class="primary" data-open="${id}">افتح بطاقة الزمن</button>
+       <button class="all-btn" id="decReset" style="margin-top:8px">ابدأ من جديد</button>`;
+    }
+    $('#decReset').onclick=()=>{decPath=[];renderDec()};
+    const o=box.querySelector('[data-open]'); if(o)o.onclick=()=>openSheet(o.dataset.open);
+    return;
+  }
+  const n=DEC[node];
+  box.innerHTML=trail+`<div class="dec-step"><p class="dec-q">${n.q}</p><p class="dec-hint">${n.h}</p><div class="dec-opts">
+   ${n.o.map((o,i)=>`<button class="dec-opt" data-i="${i}"><b>${o.b}</b><span>${o.s}</span></button>`).join('')}</div>
+   ${decPath.length?'<button class="all-btn" id="decBack" style="margin-top:12px">رجوع خطوة</button>':''}</div>`;
+  box.querySelectorAll('.dec-opt').forEach(b=>b.onclick=()=>{
+    const o=n.o[b.dataset.i]; decPath.push(o.b.split(' — ')[0]); decHist.push(node);
+    renderDec(o.r?'R:'+o.r:o.n, o.why);
+  });
+  const bk=$('#decBack'); if(bk) bk.onclick=()=>{decPath.pop();renderDec(decHist.pop())};
+}
+let decHist=[];
+
+/* ================= QUIZ ================= */
+let qz=null;
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function updateStats(){$('#sBest').textContent=store.get('best',0)+'/10';$('#sRounds').textContent=store.get('rounds',0)}
+function startQuiz(){qz={items:shuffle(QUIZ).slice(0,10).map(q=>{const order=shuffle([0,1,2]);return {...q,order}}),i:0,score:0};renderQ()}
+function renderQ(){
+  const box=$('#quizBox');
+  if(!qz){box.innerHTML=`<div class="qcard"><p style="margin:0 0 4px;font-weight:700">جولة جديدة</p><p style="margin:0;color:var(--muted);font-size:.92rem">اختر الزمن الصحيح في كل جملة. ستظهر لك القاعدة بعد كل إجابة.</p><button class="primary" id="qStart">ابدأ</button></div>`;$('#qStart').onclick=startQuiz;return}
+  if(qz.i>=qz.items.length){
+    const best=Math.max(store.get('best',0),qz.score);store.set('best',best);store.set('rounds',store.get('rounds',0)+1);updateStats();
+    const msg=qz.score>=9?'ممتاز — جاهز للكلام.':qz.score>=7?'جيد — راجع الأسئلة التي أخطأت فيها.':'راجع بطاقات الأزمنة ثم أعد المحاولة.';
+    box.innerHTML=`<div class="qcard"><div class="qbar"><i style="width:100%"></i></div><p style="font-size:2rem;font-weight:700;margin:0" class="en">${qz.score}/10</p><p style="margin:4px 0 0">${msg}</p><button class="primary" id="qAgain">جولة أخرى</button></div>`;
+    $('#qAgain').onclick=startQuiz;return;
+  }
+  const q=qz.items[qz.i];
+  box.innerHTML=`<div class="qcard"><div class="qbar"><i style="width:${qz.i*10}%"></i></div>
+   <div class="qmeta"><span>سؤال ${qz.i+1} من 10</span><span>النتيجة ${qz.score}</span></div>
+   <div class="qtext">${q.q.replace('___','<span class="gap">?</span>')}</div>
+   <div class="qopts">${q.order.map(k=>`<button class="qopt" data-k="${k}">${q.o[k]}</button>`).join('')}</div>
+   <div id="qAfter"></div></div>`;
+  box.querySelectorAll('.qopt').forEach(b=>b.onclick=()=>{
+    if(q.done)return;q.done=true;const k=+b.dataset.k, ok=k===q.a;
+    if(ok)qz.score++;
+    box.querySelectorAll('.qopt').forEach(x=>{if(+x.dataset.k===q.a)x.classList.add('right');else if(x===b)x.classList.add('wrong')});
+    if(navigator.vibrate)navigator.vibrate(ok?15:[30,40,30]);
+    $('#qAfter').innerHTML=`<div class="qexp"><b style="color:${ok?'var(--ok)':'var(--bad)'}">${ok?'صحيح.':'ليس هذا.'}</b> ${q.e}</div><button class="primary" id="qNext">${qz.i===9?'النتيجة':'التالي'}</button>`;
+    $('#qNext').onclick=()=>{qz.i++;renderQ()};
+  });
+}
+
+/* ================= MISTAKES & RULES ================= */
+$('#misList').innerHTML=MISTAKES.map(m=>`<div class="mis"><button class="mis-btn"><span class="x-badge">✕</span><span class="en">${m[0]}</span>${chevSVG}</button>
+  <div class="acc"><div><div class="fix"><span class="x-badge ok-badge">✓</span><span class="en">${m[1]}</span></div><div class="why">${m[2]}</div></div></div></div>`).join('');
+$('#misList').addEventListener('click',e=>{const b=e.target.closest('.mis-btn');if(!b)return;const a=b.nextElementSibling;a.classList.toggle('open');b.querySelector('.chev').style.transform=a.classList.contains('open')?'rotate(180deg)':''});
+$('#rulesList').innerHTML=RULES.map(r=>`<div class="rule-acc"><button><span>${r.t}<small>${r.d}</small></span>${chevSVG}</button><div class="acc"><div><div class="acc-in">${r.h}</div></div></div></div>`).join('');
+$('#rulesList').addEventListener('click',e=>{const b=e.target.closest('.rule-acc>button');if(b)b.parentElement.classList.toggle('open')});
+$('#rulesAll').onclick=()=>{const rs=[...document.querySelectorAll('.rule-acc')];const open=!rs.every(r=>r.classList.contains('open'));rs.forEach(r=>r.classList.toggle('open',open));$('#rulesAll').textContent=open?'طي الكل':'فتح الكل'};
+
+/* ================= THEME ================= */
+(function(){
+  const saved=store.get('theme','deep'); if(saved==='dusk')document.documentElement.dataset.theme='dusk';
+  $('#themeBtn').onclick=()=>{
+    const next=document.documentElement.dataset.theme==='dusk'?'deep':'dusk';
+    if(next==='dusk')document.documentElement.dataset.theme='dusk'; else delete document.documentElement.dataset.theme;
+    store.set('theme',next); toast(next==='dusk'?'أزرق هادئ':'أزرق داكن');
+  };
+})();
+
+/* ================= INIT ================= */
+renderBuilder(); renderDec(); updateStats(); renderQ();
+history.replaceState({page:'home'},'');
+const lastPage=store.get('page','home'); if(ORDER.includes(lastPage)&&lastPage!=='home')go(lastPage);
+</script>
+</body>
+</html>
