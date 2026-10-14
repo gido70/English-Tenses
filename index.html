@@ -3,19 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0E1830">
+<meta name="theme-color" content="#101A3A">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="أزمنة المضارع">
-<title>أزمنة المضارع — دليلي اليومي</title>
+<meta name="apple-mobile-web-app-title" content="English Tense">
+<meta name="application-name" content="English Tense">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>English Tense</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&display=swap" rel="stylesheet">
 <style>
 :root{
   /* Deep-blue default: no white surfaces anywhere */
-  --bg:#0E1830; --bg2:#13224A; --surface:#16264A; --surface2:#1C2F58; --ink:#E4EBF8; --muted:#9DAECD; --line:#2C4170;
-  --accent:#3E73E8; --on-accent:#FFFFFF;
+  --bg:#101A3A; --bg2:#13224A; --surface:#18264D; --surface2:#1E2F5C; --ink:#EAF0FB; --muted:#A3B3D3; --line:#2E4277;
+  --accent:#4C7DF0; --violet:#8B6CF0; --coral:#FF8A6B; --on-accent:#FFFFFF;
   --simple:#4FD1C5; --cont:#86AEFF; --perf:#F2C25B; --pc:#F08DBE; --ok:#55D08A; --bad:#FF7B70;
   --simple-bg:#163E4A; --cont-bg:#1E3368; --perf-bg:#3D3420; --pc-bg:#43254A;
   --ar:"Amiri", "Traditional Arabic", "Times New Roman", serif;
@@ -228,6 +233,48 @@ td.en,th.en{font-family:var(--en)}
 .toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;background:var(--accent);color:var(--on-accent);padding:8px 16px;border-radius:12px;font-size:.88rem;transition:.3s var(--ease);z-index:60;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
+
+/* ===== Color layer ===== */
+body{background:
+  radial-gradient(70% 45% at 100% 0%, rgba(79,209,197,.20), transparent 70%),
+  radial-gradient(60% 40% at 0% 35%, rgba(139,108,240,.22), transparent 70%),
+  radial-gradient(70% 45% at 100% 100%, rgba(240,141,190,.14), transparent 70%),
+  linear-gradient(180deg,#101A3A 0%,#141B44 55%,#1A1840 100%);background-attachment:fixed}
+:root[data-theme="dusk"] body{background:
+  radial-gradient(70% 45% at 100% 0%, rgba(79,209,197,.25), transparent 70%),
+  radial-gradient(60% 40% at 0% 40%, rgba(139,108,240,.28), transparent 70%),
+  linear-gradient(180deg,#22355A,#2A3466);background-attachment:fixed}
+body{--pagec:var(--simple)}
+body[data-page="build"]{--pagec:var(--cont)} body[data-page="decide"]{--pagec:var(--perf)}
+body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--coral)}
+.top h1{background:linear-gradient(90deg,var(--pagec),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent;font-size:1.2rem}
+.nav button.on{color:var(--pagec)}
+.nav button.on svg{filter:drop-shadow(0 0 7px var(--pagec))}
+.nav{background:rgba(16,24,58,.82)}
+.nav button.on::after{content:"";width:18px;height:3px;border-radius:3px;background:var(--pagec);margin-top:2px}
+.hero{background:linear-gradient(140deg,rgba(139,108,240,.22),rgba(79,209,197,.12) 60%,rgba(24,38,77,.6));border-color:rgba(139,108,240,.35)}
+.tcard{background:linear-gradient(120deg,var(--cbg) 0%,var(--surface) 75%);border-color:color-mix(in srgb,var(--c) 40%,transparent)}
+.tcard .formula{background:color-mix(in srgb,var(--c) 22%,transparent)}
+.cta{background:linear-gradient(120deg,#7A5CE8,#4C7DF0 55%,#2FB5B0)}
+.block{background:linear-gradient(160deg,color-mix(in srgb,var(--c,var(--violet)) 10%,var(--surface)),var(--surface))}
+.sheet{background:linear-gradient(180deg,color-mix(in srgb,var(--c) 14%,#101A3A),#111B3C 40%)}
+.sheet-head{border-bottom-color:color-mix(in srgb,var(--c) 35%,transparent)}
+.builder-out{background:linear-gradient(140deg,var(--cbg),var(--surface) 80%);border-color:color-mix(in srgb,var(--c) 45%,transparent)}
+.primary{background:linear-gradient(120deg,var(--violet),var(--accent))}
+#p-quiz .primary{background:linear-gradient(120deg,#2FAE6A,#2FB5B0)}
+.stat:first-child{background:linear-gradient(140deg,rgba(242,194,91,.22),var(--surface))}
+.stat:last-child{background:linear-gradient(140deg,rgba(79,209,197,.2),var(--surface))}
+.qcard,.dec-step{background:linear-gradient(160deg,color-mix(in srgb,var(--pagec) 12%,var(--surface)),var(--surface))}
+.dec-opt:active,.qopt:active{transform:scale(.98)}
+.mis{background:linear-gradient(120deg,rgba(255,123,112,.10),var(--surface) 60%)}
+.rule-acc{background:linear-gradient(120deg,rgba(139,108,240,.14),var(--surface) 60%)}
+.rule-acc:nth-child(4n+2){background:linear-gradient(120deg,rgba(79,209,197,.13),var(--surface) 60%)}
+.rule-acc:nth-child(4n+3){background:linear-gradient(120deg,rgba(242,194,91,.13),var(--surface) 60%)}
+.rule-acc:nth-child(4n){background:linear-gradient(120deg,rgba(240,141,190,.13),var(--surface) 60%)}
+.chip.on{background:linear-gradient(120deg,var(--violet),var(--accent));border-color:transparent}
+.toast{background:linear-gradient(120deg,var(--violet),var(--accent))}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img{width:38px;height:38px;border-radius:11px;box-shadow:0 4px 14px rgba(76,125,240,.45)}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -236,7 +283,7 @@ td.en,th.en{font-family:var(--en)}
   <header class="top">
     <div style="display:flex;align-items:center;gap:10px">
       <button class="icon-btn" id="backBtn" aria-label="الرجوع للرئيسية" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
-      <div><h1 id="topTitle">أزمنة المضارع</h1><small id="topSub">دليلي اليومي للكلام الصحيح</small></div>
+      <div class="brand"><img src="icon-192.png" alt="" id="topLogo"><div><h1 id="topTitle">English Tense</h1><small id="topSub">دليلي اليومي للكلام الصحيح</small></div></div>
     </div>
     <button class="icon-btn" id="themeBtn" aria-label="تبديل درجة الأزرق">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
@@ -249,7 +296,7 @@ td.en,th.en{font-family:var(--en)}
       <h2>كل زمن له شكل على خط الوقت</h2>
       <p>انظر أين يقع الحدث بالنسبة لـ «الآن» — هذا وحده يحسم 80% من اختيارك.</p>
       <div class="big-line" aria-hidden="true">
-        <svg viewBox="0 0 340 110" fill="none" stroke-linecap="round">
+        <svg viewBox="0 0 340 110" fill="none" stroke-linecap="round" direction="ltr">
           <line x1="10" y1="90" x2="330" y2="90" stroke="var(--line)" stroke-width="2"/>
           <line x1="250" y1="12" x2="250" y2="100" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="3 4"/>
           <text x="250" y="108" text-anchor="middle" font-size="10" fill="var(--ink)" font-family="Literata,serif" font-weight="700">NOW</text>
@@ -556,7 +603,7 @@ function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show'
 
 /* ================= NAV ================= */
 const ORDER=['home','build','decide','quiz','fix'];
-const TITLES={home:['أزمنة المضارع','دليلي اليومي للكلام الصحيح'],build:['مُركِّب الجمل','ابنِ الجملة وراقب التغيير'],decide:['أي زمن أستخدم؟','سؤالان يحسمان اختيارك'],quiz:['تمرّن','10 أسئلة في كل جولة'],fix:['أخطاء وقواعد','صحّح نفسك قبل الكلام']};
+const TITLES={home:['English Tense','دليلي اليومي للكلام الصحيح'],build:['مُركِّب الجمل','ابنِ الجملة وراقب التغيير'],decide:['أي زمن أستخدم؟','سؤالان يحسمان اختيارك'],quiz:['تمرّن','10 أسئلة في كل جولة'],fix:['أخطاء وقواعد','صحّح نفسك قبل الكلام']};
 let cur='home';
 function show(page){
   if(page===cur)return;
@@ -566,6 +613,7 @@ function show(page){
   $('#backBtn').hidden=page==='home';
   $('#topTitle').textContent=TITLES[page][0];$('#topSub').textContent=TITLES[page][1];
   window.scrollTo({top:0,behavior:'instant'});
+  document.body.dataset.page=page; $('#topLogo').style.display=page==='home'?'':'none';
   cur=page; store.set('page',page);
 }
 /* history: home is the base; any other page sits one step above it, so phone "back" always returns home */
