@@ -448,6 +448,7 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
   <!-- DICTIONARY -->
   <section class="page" id="p-dict">
     <p class="page-sub">كل كلمة تضغط عليها وتحفظها تأتي هنا. راجعها يومياً وستثبت في ذاكرتك.</p>
+    <div class="hint-card" style="margin:0 0 14px;border-color:var(--pc)"><span style="font-size:1.2rem">📱</span><span><b>تذكير:</b> القاموس محفوظ على <b>هذا الجهاز فقط</b>. الكلمات التي تحفظها في الهاتف لن تظهر في الكمبيوتر، والعكس. لنقلها: «حفظ نسخة» هنا ثم «استرجاع نسخة» في الجهاز الآخر.</span></div>
     <div class="stats" style="grid-template-columns:1fr 1fr 1fr"><div class="stat"><b id="dTotal">0</b><span>كلمة محفوظة</span></div><div class="stat"><b id="dDue">0</b><span>للمراجعة اليوم</span></div><div class="stat"><b id="dDone">0</b><span>أتقنتها</span></div></div>
     <div id="dReview"></div>
     <div class="block" style="--c:var(--accent)"><h3>أضف كلمة بنفسك</h3>
@@ -468,6 +469,7 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
     <div id="misList"></div>
     <div style="display:flex;justify-content:space-between;align-items:center"><h3 class="section-h">قواعد سريعة</h3><button class="chip" id="rulesAll">فتح الكل</button></div>
     <div id="rulesList"></div>
+    <p style="text-align:center;color:var(--muted);font-size:.8rem;margin-top:24px">English Tense · الإصدار <span class="en" id="appVer"></span></p>
   </section>
 </div>
 
@@ -502,6 +504,7 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
 </div>
 
 <script>
+const APP_VERSION='1.6';
 /* ================= DATA ================= */
 const GLYPH = {
   simple:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><g fill="currentColor"><circle cx="14" cy="20" r="3.5"/><circle cx="36" cy="20" r="3.5"/><circle cx="58" cy="20" r="3.5"/><circle cx="80" cy="20" r="3.5"/><circle cx="102" cy="20" r="3.5"/></g></svg>',
@@ -1363,7 +1366,7 @@ isolateLatin(document.body);
 })();
 
 /* ================= INIT ================= */
-renderHome(); renderBuilder(); renderDec(); updateStats(); renderQ(); updateDictUI();
+renderHome(); renderBuilder(); renderDec(); updateStats(); renderQ(); updateDictUI(); $('#appVer').textContent=APP_VERSION;
 history.replaceState({page:'home'},'');
 const lastPage=store.get('page','home'); if(ORDER.includes(lastPage)&&lastPage!=='home')go(lastPage);
 </script>
