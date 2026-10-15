@@ -34,7 +34,7 @@
   --bg:#ECE6DA; --bg2:#E2E8EE; --surface:#F6F2E9; --surface2:#EFE9DD; --ink:#1F3442; --muted:#5E6B70; --line:#D8CEBB;
   --accent:#036564; --accent2:#8A6A2B; --on-accent:#F6F2E9; --violet:#8A6A2B; --coral:#B4553F;
   --simple:#2E7A58; --cont:#2A6C8C; --perf:#946F12; --pc:#B0523C; --ok:#2E7A58; --bad:#B4483C;
-  --simple-bg:#DCEADF; --cont-bg:#D8E6EE; --perf-bg:#F0E4C3; --pc-bg:#F3DDD4;
+  --simple-bg:#DCEADF; --cont-bg:#D8E6EE; --perf-bg:#F0E4C3; --pc-bg:#F3DDD4; --goto:#6A5A93; --goto-bg:#E4DEF0;
   --page-grad:linear-gradient(180deg,#E6ECF0 0%,#ECE6DA 45%,#E9E1D2 100%);
   --nav-bg:rgba(246,242,233,.94);
   --ar:"Amiri", "Traditional Arabic", "Times New Roman", serif;
@@ -50,7 +50,7 @@
   --bg:#031634; --bg2:#033649; --surface:#0A2A47; --surface2:#0F3452; --ink:#E8DDCB; --muted:#A9B4B0; --line:#1D4A63;
   --accent:#036564; --accent2:#CDB380; --on-accent:#F4EEE2; --violet:#CDB380; --coral:#E08E79;
   --simple:#79BD9A; --cont:#7FC7D9; --perf:#DDBF6A; --pc:#E08E79; --ok:#8CC9A1; --bad:#E58A80;
-  --simple-bg:#12403F; --cont-bg:#103F55; --perf-bg:#3A3826; --pc-bg:#3E2E32;
+  --simple-bg:#12403F; --cont-bg:#103F55; --perf-bg:#3A3826; --pc-bg:#3E2E32; --goto:#B6A8DE; --goto-bg:#2E2B4A;
   --page-grad:linear-gradient(180deg,#031634 0%,#04203F 60%,#033649 100%);
   --nav-bg:rgba(3,22,52,.92);
   color-scheme:dark;
@@ -256,6 +256,24 @@ td.en,th.en{font-family:var(--en)}
 
 
 /* ===== Calm color layer ===== */
+.t-psimple,.t-will{--c:var(--simple);--cbg:var(--simple-bg)} .t-pcont,.t-fcont{--c:var(--cont);--cbg:var(--cont-bg)}
+.t-pperf,.t-fperf{--c:var(--perf);--cbg:var(--perf-bg)} .t-ppc,.t-fpc{--c:var(--pc);--cbg:var(--pc-bg)}
+.t-goto{--c:var(--goto);--cbg:var(--goto-bg)}
+.grp{margin-bottom:14px}
+.grp-head{width:100%;display:flex;align-items:center;gap:10px;text-align:right;padding:12px 14px;border-radius:16px;background:var(--surface2);border:1px solid var(--line)}
+.grp-head .gt{flex:1;display:flex;flex-direction:column}
+.grp-head b{font-size:1.12rem}
+.grp-head .gt span{font-size:.82rem;color:var(--muted)}
+.grp-head .en{font-weight:700;color:var(--accent2);font-size:.9rem;text-align:right}
+.grp.open .grp-head{border-radius:16px 16px 6px 6px}
+.grp.open .chev{transform:rotate(180deg)}
+.grp.open .acc{grid-template-rows:1fr}
+.grp.open .acc>div>*{transform:none;opacity:1}
+.grp .tense-list{padding-top:10px}
+.lock{font-size:.78rem;padding:3px 10px;border-radius:999px;background:var(--perf-bg);color:var(--perf);font-weight:700;white-space:nowrap}
+.relock{display:block;margin:10px auto 0;font-size:.82rem;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.seg{grid-template-columns:repeat(auto-fit,minmax(64px,1fr))}
+.seg3{grid-template-columns:repeat(3,1fr)}
 .lesson-practice{border-color:color-mix(in srgb,var(--c) 45%,var(--line))}
 .lp-badge{position:absolute;top:10px;left:12px;font-family:var(--en);font-size:.75rem;font-weight:700;color:var(--c);background:var(--cbg);padding:1px 8px;border-radius:999px}
 body{background:var(--page-grad);background-attachment:fixed}
@@ -352,11 +370,12 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
       <div class="legend"><span><i></i>الفعل المساعد</span><span><i style="background:none;border-bottom:2px solid var(--c);border-radius:0"></i>التغيير في الفعل</span></div>
       <div class="meaning" id="bMeaning"></div>
     </div>
+    <div class="ctrl" id="bGroupWrap"><label>المجموعة</label><div class="seg seg3" id="bGroup"></div></div>
     <div class="ctrl"><label>الزمن</label><div class="seg" id="bTense"></div></div>
     <div class="ctrl"><label>الصيغة</label><div class="seg seg3" id="bForm"></div></div>
     <div class="ctrl"><label>الفاعل</label><div class="chips" id="bSubj"></div></div>
     <div class="ctrl"><label>الفعل</label><div class="chips" id="bVerb"></div></div>
-    <button class="all-btn" id="bAllBtn">اعرض هذا الفعل في الأزمنة الأربعة</button>
+    <button class="all-btn" id="bAllBtn">اعرض هذا الفعل في كل أزمنة المجموعة</button>
     <div class="acc" id="bAllAcc"><div><div class="grid-table" id="bAll"></div></div></div>
   </section>
 
@@ -370,7 +389,7 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
   <!-- QUIZ -->
   <section class="page" id="p-quiz">
     <h2 class="page-title">تمرّن</h2>
-    <p class="page-sub">10 أسئلة في كل جولة، مع سبب كل إجابة.</p>
+    <p class="page-sub">10 أسئلة في كل جولة من الأقسام المفتوحة فقط، مع سبب كل إجابة.</p>
     <div class="stats"><div class="stat"><b id="sBest">0/10</b><span>أفضل نتيجة</span></div><div class="stat"><b id="sRounds">0</b><span>جولات مكتملة</span></div></div>
     <div id="quizBox"></div>
   </section>
@@ -680,6 +699,47 @@ function markHome(){
   });
 }
 
+/* ===== PAST & FUTURE (added) ===== */
+TENSES.forEach(t=>t.g="present");
+TENSES.push(...[{"id": "psimple", "g": "past", "en": "Past Simple", "ar": "الماضي البسيط", "short": "Simple", "use": "حدث انتهى في وقت محدد في الماضي", "formula": "S + V2 / did", "uses": [{"u": "حدث انتهى في وقت معروف", "x": "I <mark>visited</mark> Cairo last year."}, {"u": "أحداث متتالية في قصة", "x": "She <mark>came</mark> home, <mark>cooked</mark>, and <mark>slept</mark>."}, {"u": "عادة في الماضي انتهت", "x": "When I was a child, I <mark>walked</mark> to school."}], "forms": [{"s": "+", "l": "إثبات", "fx": "S + V2 (‎-ed أو شاذ)", "note": "نفس الشكل مع كل الفاعلين. الأفعال العادية تأخذ <b>ed</b>، والشاذة لها تصريف ثانٍ خاص (go → went).", "ex": [["We <mark>watched</mark> a film last night.", "فعل عادي ← ed"], ["He <mark>went</mark> to the market yesterday.", "فعل شاذ ← went"]]}, {"s": "−", "l": "نفي", "fx": "S + didn't + V", "note": "<b>didn't</b> مع الجميع، والفعل يرجع لأصله لأن did أخذت الماضي.", "ex": [["She <mark>didn't call</mark> me yesterday.", "call بدون ed"]], "warn": "✕ didn't called — الماضي يظهر مرة واحدة فقط."}, {"s": "?", "l": "سؤال", "fx": "Did + S + V ?", "note": "ابدأ بـ <b>Did</b> والفعل بأصله.", "ex": [["<mark>Did</mark> you <mark>see</mark> the match?", "see وليس saw"], ["<mark>Did</mark> he <mark>finish</mark> his work?", ""]], "warn": "جواب قصير: Yes, I did. / No, he didn't."}], "signals": ["yesterday", "last week / year", "ago", "in 2020", "when I was young", "then"], "compare": "<b>Past Simple ضد Present Perfect:</b> <span class=\"en\">I lost my keys yesterday.</span> (متى؟ انتهى) ← <span class=\"en\">I've lost my keys.</span> (النتيجة الآن: لا أجدها)"}, {"id": "pcont", "g": "past", "en": "Past Continuous", "ar": "الماضي المستمر", "short": "Continuous", "use": "كان يحدث في لحظة معيّنة في الماضي، أو قاطعه حدث", "formula": "S + was/were + V-ing", "uses": [{"u": "كان جارياً في وقت محدد", "x": "At 8 last night, I <mark>was studying</mark>."}, {"u": "خلفية قاطعها حدث قصير", "x": "I <mark>was cooking</mark> when the phone rang."}, {"u": "حدثان في نفس الوقت", "x": "While she <mark>was reading</mark>, he <mark>was watching</mark> TV."}], "forms": [{"s": "+", "l": "إثبات", "fx": "S + was / were + V-ing", "note": "<b>was</b> مع I/he/she/it، و<b>were</b> مع you/we/they.", "ex": [["They <mark>were playing</mark> football at 5.", "they ← were"], ["He <mark>was playing</mark> football at 5.", "he ← was"]]}, {"s": "−", "l": "نفي", "fx": "S + wasn't / weren't + V-ing", "note": "NOT بعد was/were.", "ex": [["I <mark>wasn't sleeping</mark> when you called.", ""]]}, {"s": "?", "l": "سؤال", "fx": "Was / Were + S + V-ing ?", "note": "قدّم was/were قبل الفاعل.", "ex": [["<mark>Were</mark> you <mark>working</mark> at midnight?", ""]]}], "signals": ["at 8 last night", "at this time yesterday", "while", "when + حدث قصير", "all evening"], "compare": "<span class=\"en\">When he arrived, I was cooking.</span> (كنت في منتصف الطبخ) ← <span class=\"en\">When he arrived, I cooked.</span> (بدأت الطبخ بعد وصوله)"}, {"id": "pperf", "g": "past", "en": "Past Perfect", "ar": "الماضي التام", "short": "Perfect", "use": "حدث وقع قبل حدث آخر في الماضي", "formula": "S + had + V3", "uses": [{"u": "الأسبق بين حدثين ماضيين", "x": "When I arrived, the train <mark>had left</mark>."}, {"u": "سبب لحالة في الماضي", "x": "She was sad because she <mark>had lost</mark> her bag."}, {"u": "تجربة قبل نقطة في الماضي", "x": "I <mark>had never seen</mark> snow before 2015."}], "forms": [{"s": "+", "l": "إثبات", "fx": "S + had + V3", "note": "<b>had</b> مع كل الفاعلين + التصريف الثالث.", "ex": [["They <mark>had finished</mark> before the meeting started.", "الإنهاء أولاً ثم الاجتماع"]]}, {"s": "−", "l": "نفي", "fx": "S + hadn't + V3", "note": "", "ex": [["I <mark>hadn't eaten</mark>, so I was hungry.", ""]]}, {"s": "?", "l": "سؤال", "fx": "Had + S + V3 ?", "note": "", "ex": [["<mark>Had</mark> you <mark>met</mark> him before?", ""]]}], "signals": ["before", "after", "already", "by the time", "when", "never … before"], "compare": "<span class=\"en\">When I arrived, the train left.</span> (غادر لحظة وصولي) ← <span class=\"en\">When I arrived, the train had left.</span> (غادر قبل وصولي)"}, {"id": "ppc", "g": "past", "en": "Past Perfect Continuous", "ar": "الماضي التام المستمر", "short": "Perf. Cont.", "use": "استمر مدة قبل لحظة في الماضي", "formula": "S + had been + V-ing", "uses": [{"u": "مدة قبل لحظة ماضية", "x": "I <mark>had been waiting</mark> for an hour when the bus came."}, {"u": "سبب أثر ظهر في الماضي", "x": "He was tired because he <mark>had been running</mark>."}], "forms": [{"s": "+", "l": "إثبات", "fx": "S + had been + V-ing", "note": "<b>had been</b> ثابتة مع الجميع.", "ex": [["She <mark>had been working</mark> there for ten years before she left.", ""]]}, {"s": "−", "l": "نفي", "fx": "S + hadn't been + V-ing", "note": "", "ex": [["They <mark>hadn't been sleeping</mark> well, so they were tired.", ""]]}, {"s": "?", "l": "سؤال", "fx": "Had + S + been + V-ing ?", "note": "", "ex": [["How long <mark>had</mark> you <mark>been studying</mark> before the exam?", ""]]}], "signals": ["for", "since", "how long", "before", "by the time", "all day"], "compare": "<span class=\"en\">I had read the book.</span> (أنهيته) ← <span class=\"en\">I had been reading the book.</span> (كنت مشغولاً بقراءته — المدة)"}, {"id": "will", "g": "future", "en": "Future Simple (will)", "ar": "المستقبل البسيط", "short": "will", "use": "قرار لحظي، توقّع، وعد أو عرض مساعدة", "formula": "S + will + V", "uses": [{"u": "قرار تتخذه لحظة الكلام", "x": "The phone is ringing. I<mark>'ll answer</mark> it."}, {"u": "توقّع أو رأي", "x": "I think it <mark>will rain</mark>."}, {"u": "وعد أو عرض", "x": "I<mark>'ll help</mark> you with that."}], "forms": [{"s": "+", "l": "إثبات", "fx": "S + will + V", "note": "<b>will</b> مع الجميع، والفعل بأصله دائماً.", "ex": [["She <mark>will call</mark> you tomorrow.", ""]], "warn": "✕ will calls / will to call"}, {"s": "−", "l": "نفي", "fx": "S + won't + V", "note": "<b>won't</b> = will not.", "ex": [["I <mark>won't be</mark> late.", ""]]}, {"s": "?", "l": "سؤال", "fx": "Will + S + V ?", "note": "", "ex": [["<mark>Will</mark> you <mark>come</mark> to the party?", ""]]}], "signals": ["tomorrow", "next week", "I think", "probably", "soon", "I promise"], "compare": "<b>will ضد going to:</b> <span class=\"en\">I'll buy bread.</span> (قررت الآن) ← <span class=\"en\">I'm going to buy bread.</span> (قررت قبل الكلام)"}, {"id": "goto", "g": "future", "en": "Be going to", "ar": "النية والخطة", "short": "going to", "use": "خطة قررتها مسبقاً، أو توقّع عليه دليل", "formula": "S + am/is/are going to + V", "uses": [{"u": "خطة أو نية مسبقة", "x": "I<mark>'m going to buy</mark> a car next month."}, {"u": "توقّع مبني على دليل أمامك", "x": "Look at those clouds! It<mark>'s going to rain</mark>."}], "forms": [{"s": "+", "l": "إثبات", "fx": "S + am / is / are going to + V", "note": "am/is/are حسب الفاعل، ثم <b>going to</b> ثابتة، ثم الفعل بأصله.", "ex": [["We <mark>are going to travel</mark> in summer.", ""]], "warn": "✕ I going to — لا تحذف am/is/are."}, {"s": "−", "l": "نفي", "fx": "S + 'm not / isn't / aren't going to + V", "note": "", "ex": [["He <mark>isn't going to stay</mark> long.", ""]]}, {"s": "?", "l": "سؤال", "fx": "Am / Is / Are + S + going to + V ?", "note": "", "ex": [["<mark>Are</mark> you <mark>going to study</mark> tonight?", ""]]}], "signals": ["next month", "tonight", "this summer", "Look! (دليل)"], "compare": "للمواعيد المرتّبة مع أشخاص (حجز، اجتماع) يُستخدم أيضاً المضارع المستمر: <span class=\"en\">I'm meeting Ali at 6.</span>"}, {"id": "fcont", "g": "future", "en": "Future Continuous", "ar": "المستقبل المستمر", "short": "Continuous", "use": "سيكون جارياً في لحظة معيّنة في المستقبل", "formula": "S + will be + V-ing", "uses": [{"u": "في منتصف الحدث وقت معيّن مستقبلاً", "x": "At 9 tomorrow, I <mark>will be flying</mark> to Cairo."}, {"u": "سؤال مهذّب عن خطط الشخص", "x": "<mark>Will</mark> you <mark>be using</mark> the car tonight?"}], "forms": [{"s": "+", "l": "إثبات", "fx": "S + will be + V-ing", "note": "", "ex": [["This time next week, we <mark>will be lying</mark> on the beach.", ""]]}, {"s": "−", "l": "نفي", "fx": "S + won't be + V-ing", "note": "", "ex": [["I <mark>won't be working</mark> on Friday.", ""]]}, {"s": "?", "l": "سؤال", "fx": "Will + S + be + V-ing ?", "note": "", "ex": [["<mark>Will</mark> you <mark>be waiting</mark> at the station?", ""]]}], "signals": ["at this time tomorrow", "at 9 tonight", "this time next week", "all day tomorrow"], "compare": "<span class=\"en\">At 8, I will have dinner.</span> (أبدأ العشاء 8) ← <span class=\"en\">At 8, I will be having dinner.</span> (سأكون في منتصفه)"}, {"id": "fperf", "g": "future", "en": "Future Perfect", "ar": "المستقبل التام", "short": "Perfect", "use": "سيكون قد انتهى قبل وقت معيّن في المستقبل", "formula": "S + will have + V3", "uses": [{"u": "منتهٍ قبل موعد مستقبلي (by)", "x": "By 6 p.m., I <mark>will have finished</mark> the report."}, {"u": "إنجاز متوقّع قبل نقطة زمنية", "x": "By next year, she <mark>will have graduated</mark>."}], "forms": [{"s": "+", "l": "إثبات", "fx": "S + will have + V3", "note": "have ثابتة مع الجميع بعد will.", "ex": [["They <mark>will have arrived</mark> by noon.", ""]], "warn": "✕ will has"}, {"s": "−", "l": "نفي", "fx": "S + won't have + V3", "note": "", "ex": [["I <mark>won't have finished</mark> by Friday.", ""]]}, {"s": "?", "l": "سؤال", "fx": "Will + S + have + V3 ?", "note": "", "ex": [["<mark>Will</mark> you <mark>have done</mark> it by tomorrow?", ""]]}], "signals": ["by 6 p.m.", "by tomorrow", "by the end of", "by the time", "before"], "compare": "<span class=\"en\">I will finish at 6.</span> (وقت الانتهاء) ← <span class=\"en\">I will have finished by 6.</span> (منتهٍ عند 6 أو قبلها)"}, {"id": "fpc", "g": "future", "en": "Future Perfect Continuous", "ar": "المستقبل التام المستمر", "short": "Perf. Cont.", "use": "مدة الاستمرار حتى نقطة في المستقبل", "formula": "S + will have been + V-ing", "uses": [{"u": "كم ستكون المدة عند نقطة مستقبلية", "x": "By June, I <mark>will have been working</mark> here for five years."}], "forms": [{"s": "+", "l": "إثبات", "fx": "S + will have been + V-ing", "note": "", "ex": [["By 8, she <mark>will have been studying</mark> for three hours.", ""]]}, {"s": "−", "l": "نفي", "fx": "S + won't have been + V-ing", "note": "", "ex": [["By then, they <mark>won't have been waiting</mark> long.", ""]]}, {"s": "?", "l": "سؤال", "fx": "Will + S + have been + V-ing ?", "note": "", "ex": [["How long <mark>will</mark> you <mark>have been living</mark> here by 2030?", ""]]}], "signals": ["for … by", "by the time", "by next year"], "compare": "<b>نادر في الكلام اليومي.</b> تعلّمه للفهم أولاً؛ في الحديث العادي غالباً يكفي غيره."}]);
+Object.assign(PRACTICE,{"psimple": [{"t": "اختر", "q": "We ___ a great film last night.", "o": ["watched", "have watched", "watch"], "e": "last night وقت منتهٍ ← Past Simple."}, {"t": "صحّح الخطأ", "q": "He didn't went to work yesterday.", "o": ["He didn't go to work yesterday.", "He didn't goes to work yesterday.", "He not went to work yesterday."], "e": "didn't + الفعل بأصله."}, {"t": "حوّل لسؤال", "q": "She called you yesterday.", "o": ["Did she call you yesterday?", "Did she called you yesterday?", "Was she call you yesterday?"], "e": "Did + الفعل بأصله."}, {"t": "حوّل لنفي", "q": "They bought a new car.", "o": ["They didn't buy a new car.", "They didn't bought a new car.", "They don't bought a new car."], "e": "bought → buy بعد didn't."}, {"t": "انتبه", "q": "I ___ him three days ago.", "o": ["met", "have met", "had met"], "e": "ago ← Past Simple."}, {"t": "اختر", "q": "When I was a child, I ___ to school every day.", "o": ["walked", "was walking", "have walked"], "e": "عادة في الماضي ← Past Simple."}], "pcont": [{"t": "اختر", "q": "At 8 o'clock last night, I ___ dinner.", "o": ["was having", "had", "have had"], "e": "جارٍ في لحظة محددة ← was + ing."}, {"t": "صحّح الخطأ", "q": "They was playing football.", "o": ["They were playing football.", "They were play football.", "They was play football."], "e": "they ← were."}, {"t": "اختر", "q": "I ___ a shower when the phone rang.", "o": ["was taking", "took", "had taken"], "e": "الحدث الطويل الذي قوطع ← Past Continuous."}, {"t": "حوّل لسؤال", "q": "He was sleeping at midnight.", "o": ["Was he sleeping at midnight?", "Did he sleeping at midnight?", "Were he sleeping at midnight?"], "e": "قدّم was فقط."}, {"t": "اختر", "q": "While she ___, he was watching TV.", "o": ["was reading", "read", "reads"], "e": "while + حدثان متوازيان ← Continuous."}, {"t": "حوّل لنفي", "q": "We were working at 5.", "o": ["We weren't working at 5.", "We didn't working at 5.", "We wasn't working at 5."], "e": "were ← weren't."}], "pperf": [{"t": "اختر", "q": "When I arrived at the station, the train ___.", "o": ["had already left", "has already left", "already leaves"], "e": "غادر قبل وصولي ← had + V3."}, {"t": "صحّح الخطأ", "q": "She had went home before the party.", "o": ["She had gone home before the party.", "She has gone home before the party.", "She had go home before the party."], "e": "had + V3 (gone)."}, {"t": "اختر", "q": "I was hungry because I ___ all day.", "o": ["hadn't eaten", "haven't eaten", "don't eat"], "e": "السبب أسبق من الجوع في الماضي ← hadn't + V3."}, {"t": "حوّل لسؤال", "q": "They had met before.", "o": ["Had they met before?", "Did they had met before?", "Have they met before?"], "e": "قدّم had."}, {"t": "اختر", "q": "Before 2015, I ___ snow.", "o": ["had never seen", "have never seen", "never see"], "e": "تجربة قبل نقطة ماضية ← had never + V3."}, {"t": "المعنى", "q": "Which shows the train left BEFORE I arrived?", "o": ["When I arrived, the train had left.", "When I arrived, the train left.", "When I arrived, the train was leaving."], "e": "had left = الأسبق."}], "ppc": [{"t": "اختر", "q": "I ___ for an hour when the bus finally came.", "o": ["had been waiting", "have been waiting", "was wait"], "e": "مدة قبل لحظة ماضية ← had been + ing."}, {"t": "صحّح الخطأ", "q": "He had been work there for years.", "o": ["He had been working there for years.", "He has been work there for years.", "He had working there for years."], "e": "بعد been ← V-ing."}, {"t": "اختر", "q": "She was tired because she ___ all morning.", "o": ["had been running", "has been running", "runs"], "e": "أثر في الماضي بسبب نشاط ممتد قبله."}, {"t": "اختر", "q": "How long ___ before the exam?", "o": ["had you been studying", "have you been studying", "did you studying"], "e": "How long + قبل لحظة ماضية."}, {"t": "انتبه", "q": "By noon, I ___ three letters.", "o": ["had written", "had been writing", "was writing"], "e": "عدد = نتيجة ← Past Perfect."}, {"t": "حوّل لنفي", "q": "They had been sleeping well.", "o": ["They hadn't been sleeping well.", "They hadn't sleeping well.", "They didn't been sleeping well."], "e": "hadn't + been + ing."}], "will": [{"t": "اختر", "q": "The phone is ringing. I ___ it.", "o": ["'ll answer", "am going to answer", "answer"], "e": "قرار لحظة الكلام ← will."}, {"t": "صحّح الخطأ", "q": "She will calls you tomorrow.", "o": ["She will call you tomorrow.", "She wills call you tomorrow.", "She will to call you tomorrow."], "e": "will + الفعل بأصله."}, {"t": "اختر", "q": "I think it ___ tomorrow.", "o": ["will rain", "rains", "rained"], "e": "رأي/توقّع ← will."}, {"t": "حوّل لنفي", "q": "I will be late.", "o": ["I won't be late.", "I will not to be late.", "I don't will be late."], "e": "won't + الفعل بأصله."}, {"t": "حوّل لسؤال", "q": "You will help me.", "o": ["Will you help me?", "Do you will help me?", "Will you to help me?"], "e": "قدّم will."}, {"t": "اختر", "q": "Don't worry, I ___ anyone your secret.", "o": ["won't tell", "don't tell", "am not telling"], "e": "وعد ← will."}], "goto": [{"t": "اختر", "q": "Look at those dark clouds! It ___.", "o": ["is going to rain", "will rain", "rains"], "e": "دليل أمامك ← going to."}, {"t": "صحّح الخطأ", "q": "I going to visit my uncle.", "o": ["I am going to visit my uncle.", "I am going to visiting my uncle.", "I go to visit my uncle."], "e": "لا تحذف am."}, {"t": "اختر", "q": "We've booked the hotel. We ___ to Salalah in July.", "o": ["are going to travel", "travel", "travelled"], "e": "خطة مقررة مسبقاً ← going to."}, {"t": "حوّل لنفي", "q": "He is going to stay long.", "o": ["He isn't going to stay long.", "He doesn't going to stay long.", "He isn't going to staying long."], "e": "isn't going to + الفعل بأصله."}, {"t": "حوّل لسؤال", "q": "They are going to sell the house.", "o": ["Are they going to sell the house?", "Do they going to sell the house?", "Are they going sell the house?"], "e": "قدّم are، و to لا تُحذف."}, {"t": "المعنى", "q": "Which shows a decision made BEFORE now?", "o": ["I'm going to buy a new phone.", "Oh, I'll buy it then.", "I bought a phone."], "e": "going to = قرار سابق."}], "fcont": [{"t": "اختر", "q": "At this time tomorrow, I ___ to Cairo.", "o": ["will be flying", "fly", "flew"], "e": "في منتصف الحدث وقتاً محدداً مستقبلاً."}, {"t": "صحّح الخطأ", "q": "Tomorrow at 9, I will be work.", "o": ["Tomorrow at 9, I will be working.", "Tomorrow at 9, I will working.", "Tomorrow at 9, I will be worked."], "e": "will be + ing."}, {"t": "حوّل لسؤال", "q": "You will be using the car tonight.", "o": ["Will you be using the car tonight?", "Will be you using the car tonight?", "Are you will be using the car tonight?"], "e": "الفاعل بين will و be."}, {"t": "حوّل لنفي", "q": "I will be working on Friday.", "o": ["I won't be working on Friday.", "I won't working on Friday.", "I will not be work on Friday."], "e": "won't be + ing."}, {"t": "اختر", "q": "Don't call at 8 — we ___ dinner then.", "o": ["will be having", "had", "have had"], "e": "سنكون في منتصف العشاء ← will be + ing."}, {"t": "المعنى", "q": "At 8 I'll be in the middle of eating.", "o": ["At 8, I'll be having dinner.", "At 8, I'll have dinner.", "At 8, I'll have had dinner."], "e": "المنتصف ← will be + ing."}], "fperf": [{"t": "اختر", "q": "By 6 p.m. tomorrow, I ___ the report.", "o": ["will have finished", "finished", "have finished"], "e": "by + موعد مستقبلي ← will have + V3."}, {"t": "صحّح الخطأ", "q": "By next year, she will have graduate.", "o": ["By next year, she will have graduated.", "By next year, she will has graduated.", "By next year, she will have graduating."], "e": "will have + V3."}, {"t": "حوّل لسؤال", "q": "You will have done it by Monday.", "o": ["Will you have done it by Monday?", "Will have you done it by Monday?", "Do you will have done it by Monday?"], "e": "الفاعل بعد will مباشرة."}, {"t": "حوّل لنفي", "q": "I will have finished by Friday.", "o": ["I won't have finished by Friday.", "I won't has finished by Friday.", "I will not finished by Friday."], "e": "won't have + V3."}, {"t": "اختر", "q": "By the time you arrive, we ___ dinner.", "o": ["will have eaten", "ate", "have eaten"], "e": "منتهٍ قبل وصولك ← will have + V3."}, {"t": "اختر الكلمة", "q": "I'll have finished the book ___ Sunday.", "o": ["by", "since", "for"], "e": "by = قبل أو عند موعد."}], "fpc": [{"t": "اختر", "q": "By June, I ___ here for five years.", "o": ["will have been working", "will be working", "am working"], "e": "مدة حتى نقطة مستقبلية."}, {"t": "صحّح الخطأ", "q": "By 8, she will have been study for three hours.", "o": ["By 8, she will have been studying for three hours.", "By 8, she will have studying for three hours.", "By 8, she will been studying for three hours."], "e": "will have been + ing."}, {"t": "اختر", "q": "How long ___ here by 2030?", "o": ["will you have been living", "will you be live", "did you live"], "e": "How long + by (مستقبل)."}, {"t": "حوّل لنفي", "q": "They will have been waiting long.", "o": ["They won't have been waiting long.", "They won't have waiting long.", "They will not been waiting long."], "e": "won't have been + ing."}, {"t": "انتبه", "q": "By 5, I ___ ten emails.", "o": ["will have written", "will have been writing", "will be writing"], "e": "عدد = نتيجة ← Future Perfect."}, {"t": "اختر", "q": "Next month, we ___ together for 20 years.", "o": ["will have been working", "work", "worked"], "e": "المدة حتى الشهر القادم."}]});
+QUIZ.forEach(q=>{q.g=q.g||"present"});
+QUIZ.push(...[{"g": "past", "q": "I ___ my wallet yesterday.", "o": ["lost", "have lost", "was losing"], "a": 0, "e": "yesterday ← Past Simple."}, {"g": "past", "q": "What ___ you doing at 10 last night?", "o": ["were", "did", "have"], "a": 0, "e": "doing + لحظة ماضية ← were."}, {"g": "past", "q": "She ___ TV when I came in.", "o": ["was watching", "watched", "has watched"], "a": 0, "e": "حدث جارٍ قاطعه دخولي ← Past Continuous."}, {"g": "past", "q": "They ___ dinner before we arrived.", "o": ["had finished", "have finished", "finish"], "a": 0, "e": "الأسبق في الماضي ← Past Perfect."}, {"g": "past", "q": "___ you go out last weekend?", "o": ["Did", "Were", "Have"], "a": 0, "e": "go بأصله ← Did."}, {"g": "past", "q": "He was exhausted because he ___ all day.", "o": ["had been working", "has been working", "works"], "a": 0, "e": "مدة قبل لحظة ماضية ← had been + ing."}, {"g": "past", "q": "I ___ learning English three years ago.", "o": ["started", "have started", "had been start"], "a": 0, "e": "ago ← Past Simple."}, {"g": "past", "q": "While I ___ home, it started to rain.", "o": ["was walking", "walked", "have walked"], "a": 0, "e": "while + الحدث الطويل ← Past Continuous."}, {"g": "future", "q": "I'm cold. I ___ the window.", "o": ["will close", "closed", "have closed"], "a": 0, "e": "قرار لحظي ← will."}, {"g": "future", "q": "Look! That glass ___ fall.", "o": ["is going to", "has", "was"], "a": 0, "e": "دليل أمامك ← going to."}, {"g": "future", "q": "This time tomorrow, I ___ on the beach.", "o": ["will be lying", "lay", "have lain"], "a": 0, "e": "منتصف الحدث مستقبلاً ← will be + ing."}, {"g": "future", "q": "By 2030, they ___ the new bridge.", "o": ["will have built", "built", "have built"], "a": 0, "e": "by + مستقبل ← will have + V3."}, {"g": "future", "q": "I promise I ___ you tomorrow.", "o": ["will call", "called", "have called"], "a": 0, "e": "وعد ← will."}, {"g": "future", "q": "We ___ visit Grandma next week — we bought the tickets.", "o": ["are going to", "were", "have"], "a": 0, "e": "خطة مسبقة ← going to."}, {"g": "future", "q": "When I ___ home, I'll call you.", "o": ["get", "will get", "got"], "a": 0, "e": "بعد when للمستقبل نستخدم المضارع، لا will."}, {"g": "future", "q": "___ you be at home this evening?", "o": ["Will", "Are", "Do"], "a": 0, "e": "be بأصلها ← Will."}]);
+MISTAKES.push(...[["Did he went to school?", "Did he <b>go</b> to school?", "Did أخذت الماضي ← الفعل بأصله.", "past"], ["I was study when you called.", "I was <b>studying</b> when you called.", "was + V-ing.", "past"], ["They was late.", "They <b>were</b> late.", "they ← were.", "past"], ["I will to go tomorrow.", "I will <b>go</b> tomorrow.", "will + الفعل مباشرة بدون to.", "future"], ["When I will arrive, I'll call you.", "When I <b>arrive</b>, I'll call you.", "بعد when / after / before للمستقبل ← مضارع بسيط.", "future"], ["I am go to travel next week.", "I am <b>going to</b> travel next week.", "am going to + الفعل.", "future"]]);
+RULES.forEach(r=>{r.g=r.g||"present"});
+RULES.push(...[{"g": "past", "t": "was أم were؟", "d": "الماضي من be", "h": "<table class=\"rtbl\"><tr><th>الفاعل</th><th class=\"en\">الماضي</th></tr><tr><td class=\"en\">I / he / she / it</td><td class=\"en\"><b>was</b></td></tr><tr><td class=\"en\">you / we / they</td><td class=\"en\"><b>were</b></td></tr></table>"}, {"g": "past", "t": "كتابة -ed", "d": "الأفعال العادية في الماضي", "h": "<table class=\"rtbl\"><tr><th>القاعدة</th><th class=\"en\">مثال</th></tr><tr><td>أغلب الأفعال + ed</td><td class=\"en\">work → worked</td></tr><tr><td>ينتهي بـ e ← d فقط</td><td class=\"en\">live → lived</td></tr><tr><td>ساكن + y ← ied</td><td class=\"en\">study → studied</td></tr><tr><td>ساكن-متحرك-ساكن ← ضاعف</td><td class=\"en\">stop → stopped</td></tr></table>"}, {"g": "future", "t": "will أم going to؟", "d": "أكثر سؤال يتكرر في المستقبل", "h": "<table class=\"rtbl\"><tr><th></th><th>متى</th><th class=\"en\">مثال</th></tr><tr><td class=\"en\"><b>will</b></td><td>قرار الآن، وعد، رأي</td><td class=\"en\">I'll get it.</td></tr><tr><td class=\"en\"><b>going to</b></td><td>خطة سابقة، دليل أمامك</td><td class=\"en\">I'm going to move.</td></tr></table>"}, {"g": "future", "t": "المستقبل بعد when / after / before", "d": "لا نستخدم will بعدها", "h": "<p style=\"margin:0\"><span class=\"en\">I'll call you <b>when I arrive</b>.</span> ✔<br><span class=\"en\">I'll call you when I will arrive.</span> ✕</p><p style=\"margin-bottom:0\">نفس القاعدة مع: <span class=\"en\">as soon as, until, before, after, if</span>.</p>"}]);
+
+(function(){
+  const base=(now,inner)=>`<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="${now}" y1="6" x2="${now}" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><text x="${now}" y="44" font-size="6" text-anchor="middle" fill="var(--muted)" font-family="Literata,serif">now</text>${inner}</svg>`;
+  const ref=x=>`<line x1="${x}" y1="10" x2="${x}" y2="34" stroke="currentColor" stroke-width="1.2" stroke-dasharray="1 2" opacity=".7"/>`;
+  const arrow=(x1,x2)=>`<path d="M${x1+5} 21 Q${(x1+x2)/2} 11 ${x2-3} 20" stroke="currentColor" stroke-width="2.2" stroke-dasharray="4 4"/><path d="M${x2-9} 15 l7 5 -8 4" stroke="currentColor" stroke-width="2.2"/>`;
+  Object.assign(GLYPH,{
+    psimple:base(96,`<circle cx="44" cy="22" r="5" fill="currentColor"/>`),
+    pcont:base(96,`<path d="M22 22 q5-8 10 0 t10 0 t10 0 t10 0" stroke="currentColor" stroke-width="3"/><line x1="54" y1="12" x2="54" y2="30" stroke="currentColor" stroke-width="2.4"/>`),
+    pperf:base(96,ref(62)+`<circle cx="24" cy="22" r="5" fill="currentColor"/>`+arrow(24,62)),
+    ppc:base(96,ref(62)+`<line x1="16" y1="22" x2="62" y2="22" stroke="currentColor" stroke-width="7"/>`),
+    will:base(22,`<circle cx="74" cy="22" r="5" fill="currentColor"/>`),
+    goto:base(22,`<path d="M26 22 H64" stroke="currentColor" stroke-width="2.2" stroke-dasharray="3 4"/><circle cx="76" cy="22" r="5" fill="currentColor"/>`),
+    fcont:base(22,`<path d="M54 22 q5-8 10 0 t10 0 t10 0 t10 0" stroke="currentColor" stroke-width="3"/>`),
+    fperf:base(22,ref(98)+`<circle cx="58" cy="22" r="5" fill="currentColor"/>`+arrow(58,98)),
+    fpc:base(22,ref(98)+`<line x1="40" y1="22" x2="98" y2="22" stroke="currentColor" stroke-width="7"/>`)
+  });
+  const V2={drink:['drank','coffee'],write:['wrote','an email'],study:['studied','English'],go:['went','to the gym'],watch:['watched','the news'],make:['made','dinner'],run:['ran','in the park'],speak:['spoke','to the manager'],eat:['ate','breakfast'],clean:['cleaned','the kitchen'],drive:['drove','to work']};
+  VERBS.forEach(v=>{v.v2=V2[v.b][0];v.obj=V2[v.b][1]});
+  Object.assign(MEANING,{
+    psimple:{'+':'حدث انتهى في وقت محدد في الماضي.','−':'لم يحدث في ذلك الوقت.','?':'سؤال عن حدث منتهٍ.'},
+    pcont:{'+':'كان جارياً في تلك اللحظة من الماضي.','−':'لم يكن جارياً في تلك اللحظة.','?':'هل كان جارياً في تلك اللحظة؟'},
+    pperf:{'+':'تم قبل حدث آخر في الماضي.','−':'لم يكن قد تم قبل ذلك الحدث.','?':'هل كان قد تم قبل ذلك؟'},
+    ppc:{'+':'استمر مدة قبل لحظة في الماضي.','−':'لم يكن مستمراً قبل تلك اللحظة.','?':'سؤال عن المدة قبل لحظة ماضية.'},
+    will:{'+':'قرار أو توقّع أو وعد عن المستقبل.','−':'لن يحدث.','?':'سؤال أو طلب عن المستقبل.'},
+    goto:{'+':'خطة مقررة مسبقاً أو توقّع عليه دليل.','−':'لا ينوي ذلك.','?':'سؤال عن النية والخطة.'},
+    fcont:{'+':'سيكون في منتصف الحدث في ذلك الوقت.','−':'لن يكون جارياً في ذلك الوقت.','?':'سؤال عمّا سيكون جارياً.'},
+    fperf:{'+':'سيكون قد انتهى قبل ذلك الموعد.','−':'لن يكون قد انتهى بحلول ذلك الموعد.','?':'هل سيكون منتهياً بحلول الموعد؟'},
+    fpc:{'+':'المدة التي سيكون قد استمرها حتى تلك النقطة.','−':'لن يكون مستمراً تلك المدة.','?':'سؤال عن المدة حتى نقطة مستقبلية.'}
+  });
+})();
+const GROUPS=[{g:'present',ar:'الحاضر',en:'Present'},{g:'past',ar:'الماضي',en:'Past'},{g:'future',ar:'المستقبل',en:'Future'}];
+
 /* ================= STORAGE (safe) ================= */
 const store = {
   get(k,d){try{const v=localStorage.getItem('pt_'+k);return v===null?d:JSON.parse(v)}catch(e){return d}},
@@ -718,14 +778,34 @@ document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g
 $('#backBtn').onclick=()=>go('home');
 
 /* ================= HOME ================= */
-$('#tenseList').innerHTML = TENSES.map(t=>`
+const isOpenG=g=>g==='present'||!!store.get('unlocked',{})[g];
+function cardHTML(t){return `
   <button class="tcard t-${t.id}" data-tense="${t.id}">
     <span><span class="name">${t.en}</span><span class="ar" style="display:block">${t.ar}</span>
     <span class="use" style="display:block">${t.use}</span>
     <span class="formula en">${t.formula}</span></span>
     ${GLYPH[t.id]}
-  </button>`).join('');
-$('#tenseList').addEventListener('click',e=>{const c=e.target.closest('[data-tense]');if(c)openSheet(c.dataset.tense)});
+  </button>`}
+function renderHome(){
+  const exp=store.get('gexp',{present:true});
+  $('#tenseList').innerHTML=GROUPS.map(G=>{
+    const list=TENSES.filter(t=>t.g===G.g), unl=isOpenG(G.g), open=unl&&exp[G.g];
+    return `<section class="grp${open?' open':''}" data-g="${G.g}">
+      <button class="grp-head" aria-expanded="${open}"><span class="gt"><b>${G.ar} <span class="en">${G.en}</span></b><span>${list.length} أزمنة${unl?'':' — افتحه عندما تصل إليه في الكورس'}</span></span>${unl?'':'<span class="lock">🔒 لاحقاً</span>'}${chevSVG}</button>
+      <div class="acc"><div><div><div class="tense-list">${unl?list.map(cardHTML).join(''):''}</div>${unl&&G.g!=='present'?'<button class="relock">إغلاق هذا القسم وإخفاؤه من التمارين</button>':''}</div></div></div>
+    </section>`}).join('');
+  markHome();
+}
+function refreshAll(){renderHome();renderBuilder();renderLists();qz=null;renderQ()}
+$('#tenseList').addEventListener('click',e=>{const c=e.target.closest('[data-tense]');if(c){openSheet(c.dataset.tense);return}
+  const h=e.target.closest('.grp-head');
+  if(h){const g=h.parentElement.dataset.g;const exp=store.get('gexp',{present:true});
+    if(!isOpenG(g)){const u=store.get('unlocked',{});u[g]=true;store.set('unlocked',u);exp[g]=true;store.set('gexp',exp);refreshAll();toast('تم فتح قسم '+GROUPS.find(x=>x.g===g).ar);return}
+    exp[g]=!h.parentElement.classList.contains('open');store.set('gexp',exp);h.parentElement.classList.toggle('open',exp[g]);h.setAttribute('aria-expanded',exp[g]);return}
+  const rl=e.target.closest('.relock');
+  if(rl){const g=rl.closest('.grp').dataset.g;const u=store.get('unlocked',{});u[g]=false;store.set('unlocked',u);refreshAll();toast('تم إغلاق القسم')}
+});
+
 
 /* ================= SHEET ================= */
 const sheet=$('#sheet'), scrim=$('#scrim');
@@ -768,7 +848,7 @@ $('#shBody').addEventListener('click',e=>{
   const fb=e.target.closest('.form-btn');
   if(fb){const f=fb.parentElement;f.classList.toggle('open');fb.setAttribute('aria-expanded',f.classList.contains('open'))}
   const tr=e.target.closest('[data-try]');
-  if(tr){bs.tense=tr.dataset.try;renderBuilder();hideSheetUI();history.replaceState({page:'build'},'');show('build')}
+  if(tr){bs.tense=tr.dataset.try;bs.group=T(bs.tense).g;renderBuilder();hideSheetUI();history.replaceState({page:'build'},'');show('build')}
   const al=e.target.closest('[data-allforms]');
   if(al){const fs=[...$('#shBody').querySelectorAll('.form')];const open=!fs.every(f=>f.classList.contains('open'));fs.forEach(f=>f.classList.toggle('open',open));al.textContent=open?'طي الكل':'فتح الكل'}
 });
@@ -781,7 +861,7 @@ $('#shBody').addEventListener('click',e=>{
 })();
 
 /* ================= BUILDER ================= */
-const bs = Object.assign({tense:'simple',form:'+',subj:'He',verb:'drink'}, store.get('builder',{}));
+const bs = Object.assign({group:'present',tense:'simple',form:'+',subj:'He',verb:'drink'}, store.get('builder',{}));
 function suffixSplit(base,form){
   let i=0;while(i<base.length&&i<form.length&&base[i]===form[i])i++;
   if(i===form.length) return [form,''];
@@ -810,6 +890,52 @@ function build(tense,form,subj,v){
     if(form==='−') p=[sub, aux(S.haveN), vw(v.b,v.pp), rest(r), '<span class="p-adv">yet</span>'];
     if(form==='?') p=[aux(cap(S.have)), sub, vw(v.b,v.pp), rest(r), '<span class="p-adv">yet</span>'];
   }
+  const o=v.obj, W=S.be==='am'||S.be==='is'?'was':'were', WN=W==='was'?"wasn't":"weren't", A=x=>`<span class="p-adv">${x}</span>`;
+  if(tense==='psimple'){
+    if(form==='+') p=[sub, vw(v.b,v.v2), rest(o+' yesterday')];
+    if(form==='−') p=[sub, aux("didn't"), v.b, rest(o+' yesterday')];
+    if(form==='?') p=[aux('Did'), sub, v.b, rest(o+' yesterday')];
+  }
+  if(tense==='pcont'){
+    if(form==='+') p=[sub, aux(W), vw(v.b,v.ing), rest(o+' at 8 last night')];
+    if(form==='−') p=[sub, aux(WN), vw(v.b,v.ing), rest(o+' at 8 last night')];
+    if(form==='?') p=[aux(cap(W)), sub, vw(v.b,v.ing), rest(o+' at 8 last night')];
+  }
+  if(tense==='pperf'){
+    if(form==='+') p=[sub, aux('had'), A('already'), vw(v.b,v.pp), rest(o+' before I arrived')];
+    if(form==='−') p=[sub, aux("hadn't"), vw(v.b,v.pp), rest(o+' before I arrived')];
+    if(form==='?') p=[aux('Had'), sub, vw(v.b,v.pp), rest(o+' before I arrived')];
+  }
+  if(tense==='ppc'){
+    if(form==='+') p=[sub, aux('had been'), vw(v.b,v.ing), rest(o+' for an hour before I arrived')];
+    if(form==='−') p=[sub, aux("hadn't been"), vw(v.b,v.ing), rest(o+' for an hour before I arrived')];
+    if(form==='?') p=[aux('Had'), sub, aux('been'), vw(v.b,v.ing), rest(o+' for an hour before I arrived')];
+  }
+  if(tense==='will'){
+    if(form==='+') p=[sub, aux('will'), v.b, rest(o+' tomorrow')];
+    if(form==='−') p=[sub, aux("won't"), v.b, rest(o+' tomorrow')];
+    if(form==='?') p=[aux('Will'), sub, v.b, rest(o+' tomorrow')];
+  }
+  if(tense==='goto'){
+    if(form==='+') p=[sub, aux(S.be+' going to'), v.b, rest(o+' next week')];
+    if(form==='−') p=[sub, aux(S.beN+' going to'), v.b, rest(o+' next week')];
+    if(form==='?') p=[aux(cap(S.be)), sub, aux('going to'), v.b, rest(o+' next week')];
+  }
+  if(tense==='fcont'){
+    if(form==='+') p=[sub, aux('will be'), vw(v.b,v.ing), rest(o+' at this time tomorrow')];
+    if(form==='−') p=[sub, aux("won't be"), vw(v.b,v.ing), rest(o+' at this time tomorrow')];
+    if(form==='?') p=[aux('Will'), sub, aux('be'), vw(v.b,v.ing), rest(o+' at this time tomorrow')];
+  }
+  if(tense==='fperf'){
+    if(form==='+') p=[sub, aux('will have'), vw(v.b,v.pp), rest(o+' by tonight')];
+    if(form==='−') p=[sub, aux("won't have"), vw(v.b,v.pp), rest(o+' by tonight')];
+    if(form==='?') p=[aux('Will'), sub, aux('have'), vw(v.b,v.pp), rest(o+' by tonight')];
+  }
+  if(tense==='fpc'){
+    if(form==='+') p=[sub, aux('will have been'), vw(v.b,v.ing), rest(o+' for two hours by tonight')];
+    if(form==='−') p=[sub, aux("won't have been"), vw(v.b,v.ing), rest(o+' for two hours by tonight')];
+    if(form==='?') p=[aux('Will'), sub, aux('have been'), vw(v.b,v.ing), rest(o+' for two hours by tonight')];
+  }
   if(tense==='pc'){
     if(form==='+') p=[sub, aux(S.have+' been'), vw(v.b,v.ing), rest(r)];
     if(form==='−') p=[sub, aux(S.haveN+' been'), vw(v.b,v.ing), rest(r)];
@@ -819,7 +945,7 @@ function build(tense,form,subj,v){
 }
 function seg(el,items,key){
   el.innerHTML=items.map(([v,l])=>`<button data-v="${v}" class="${bs[key]===v?'on':''}">${l}</button>`).join('');
-  el.onclick=e=>{const b=e.target.closest('button');if(!b)return;bs[key]=b.dataset.v;renderBuilder()};
+  el.onclick=e=>{const b=e.target.closest('button');if(!b)return;bs[key]=b.dataset.v;if(key==='group'){const f=TENSES.find(t=>t.g===bs.group);bs.tense=f.id}renderBuilder()};
 }
 function chips(el,items,key){
   el.innerHTML=items.map(([v,l])=>`<button class="chip ${bs[key]===v?'on':''}" data-v="${v}">${l}</button>`).join('');
@@ -828,43 +954,74 @@ function chips(el,items,key){
 function renderBuilder(){
   const page=$('#p-build'); page.className='page'+(page.classList.contains('active')?' active':'')+' t-'+bs.tense;
   page.classList.add('t-'+bs.tense);
-  seg($('#bTense'),TENSES.map(t=>[t.id,`<span class="en" style="text-align:center;display:block">${t.short}</span>`]),'tense');
+  const openG=GROUPS.filter(G=>isOpenG(G.g));
+  if(!isOpenG(bs.group))bs.group='present';
+  $('#bGroupWrap').style.display=openG.length>1?'':'none';
+  seg($('#bGroup'),openG.map(G=>[G.g,G.ar]),'group');
+  const gt=TENSES.filter(t=>t.g===bs.group);
+  if(!gt.some(t=>t.id===bs.tense))bs.tense=gt[0].id;
+  seg($('#bTense'),gt.map(t=>[t.id,`<span class="en" style="text-align:center;display:block">${t.short}</span>`]),'tense');
   seg($('#bForm'),[['+','+ إثبات'],['−','− نفي'],['?','? سؤال']],'form');
   chips($('#bSubj'),Object.keys(SUBJ).map(s=>[s,`<span class="en">${s}</span>`]),'subj');
   chips($('#bVerb'),VERBS.map(v=>[v.b,`<span class="en">${v.b}</span> ${v.ar}`]),'verb');
   const v=VERBS.find(x=>x.b===bs.verb)||VERBS[0];
   $('#bSentence').innerHTML=build(bs.tense,bs.form,bs.subj,v);
   $('#bMeaning').innerHTML=`<b>${T(bs.tense).ar}:</b> ${MEANING[bs.tense][bs.form]}`;
-  $('#bAll').innerHTML=TENSES.map(t=>`<div class="grid-row t-${t.id}"><b>${t.en}</b>
+  $('#bAll').innerHTML=TENSES.filter(t=>t.g===bs.group).map(t=>`<div class="grid-row t-${t.id}"><b>${t.en}</b>
     <div class="en">${build(t.id,'+',bs.subj,v)}</div><div class="en">${build(t.id,'−',bs.subj,v)}</div><div class="en">${build(t.id,'?',bs.subj,v)}</div>
     <small style="color:var(--muted)">${MEANING[t.id]['+']}</small></div>`).join('');
   store.set('builder',bs);
 }
-$('#bAllBtn').onclick=()=>{const a=$('#bAllAcc');a.classList.toggle('open');$('#bAllBtn').textContent=a.classList.contains('open')?'إخفاء المقارنة':'اعرض هذا الفعل في الأزمنة الأربعة'};
+$('#bAllBtn').onclick=()=>{const a=$('#bAllAcc');a.classList.toggle('open');$('#bAllBtn').textContent=a.classList.contains('open')?'إخفاء المقارنة':'اعرض هذا الفعل في كل أزمنة المجموعة'};
 
 /* ================= DECISION ================= */
 const DEC = {
+  when:{q:'متى يقع الحدث الذي تتكلم عنه؟', h:'ابدأ بتحديد موقعه من «الآن».', o:[
+    {b:'في الماضي — وانتهى',s:'yesterday / last year / قصة حدثت',n:'past'},
+    {b:'في الحاضر أو مرتبط بالآن',s:'عادة، الآن، أو حدث نتيجته باقية',n:'start'},
+    {b:'في المستقبل',s:'tomorrow / next week / by 2030',n:'future'}]},
   start:{q:'هل للحدث علاقة بالماضي؟', h:'بدأ قبل الآن، أو حدث قبل الآن ونتيجته باقية.', o:[
     {b:'لا — أتكلم عن الحاضر فقط',s:'عادة، حقيقة، أو شيء يحدث الآن',n:'present'},
-    {b:'نعم — بدأ أو حدث قبل الآن',s:'وما زال مرتبطاً باللحظة الحالية',n:'past'}]},
+    {b:'نعم — بدأ أو حدث قبل الآن',s:'وما زال مرتبطاً باللحظة الحالية',n:'ppast'}]},
   present:{q:'هل يحدث في هذه اللحظة أو مؤقتاً؟', h:'تخيّل أنك تصف ما تراه أمامك الآن.', o:[
     {b:'نعم — الآن / هذه الأيام / خطة قريبة',s:'Look! … / this week / tomorrow (مرتّب)',n:'stative'},
     {b:'لا — عادة أو حقيقة دائمة',s:'every day / always / حقيقة علمية / جدول',r:'simple'}]},
   stative:{q:'هل الفعل يصف حالة لا حركة؟', h:'مثل: know, like, want, need, understand, own.', o:[
     {b:'نعم — فعل حالة',s:'لا يأخذ ing',r:'simple',why:'أفعال الحالة تبقى في Simple حتى لو كان المعنى «الآن».'},
     {b:'لا — فعل حركة أو نشاط',s:'work, write, run, eat…',r:'cont'}]},
-  past:{q:'هل وقت الحدث محدد ومنتهٍ؟', h:'مثل: yesterday, last week, in 2020, two days ago.', o:[
-    {b:'نعم — ذكرت وقتاً منتهياً',s:'yesterday / ago / last…',r:'past'},
+  ppast:{q:'هل ذكرت وقتاً منتهياً محدداً؟', h:'مثل: yesterday, last week, in 2020, two days ago.', o:[
+    {b:'نعم — ذكرت وقتاً منتهياً',s:'yesterday / ago / last…',r:'psimple',why:'مع وقت منتهٍ محدد لا نستخدم Present Perfect.'},
     {b:'لا — الوقت غير مهم أو مستمر حتى الآن',s:'already / ever / for / since',n:'focus'}]},
   focus:{q:'على ماذا تركّز؟', h:'السؤال المفتاحي بين التام والتام المستمر.', o:[
     {b:'النتيجة / العدد / التجربة',s:'ماذا أنجزت؟ كم مرة؟ هل جربت؟',r:'perf'},
     {b:'المدة / الاستمرار / التعب',s:'منذ متى؟ طوال اليوم…',n:'stative2'}]},
   stative2:{q:'هل الفعل يصف حالة لا حركة؟', h:'know, have (يملك), like, believe…', o:[
     {b:'نعم — فعل حالة',s:'I have known him for years',r:'perf',why:'أفعال الحالة لا تأخذ ing ← نستخدم Present Perfect مع for/since.'},
-    {b:'لا — نشاط',s:'I have been working all day',r:'pc'}]}
+    {b:'لا — نشاط',s:'I have been working all day',r:'pc'}]},
+  past:{q:'هل وقع قبل حدث ماضٍ آخر تذكره؟', h:'مثل: When I arrived, the train … (أيهما أولاً؟)', o:[
+    {b:'نعم — هو الأسبق',s:'before / by the time / already',n:'pfocus'},
+    {b:'لا',s:'حدث واحد أو أحداث بالترتيب',n:'pprog'}]},
+  pprog:{q:'هل كان جارياً في لحظة معيّنة أو قاطعه حدث؟', h:'At 8 last night… / I was … when …', o:[
+    {b:'نعم — كان في منتصفه',s:'while / when + حدث قصير',r:'pcont'},
+    {b:'لا — حدث مكتمل',s:'yesterday / last year / ago',r:'psimple'}]},
+  pfocus:{q:'على ماذا تركّز؟', h:'النتيجة أم المدة قبل تلك اللحظة؟', o:[
+    {b:'أنه اكتمل قبله',s:'the train had left',r:'pperf'},
+    {b:'كم استمر قبله',s:'I had been waiting for an hour',r:'ppc'}]},
+  future:{q:'هل سيكون منتهياً أو مستمراً حتى موعد معيّن (by…)؟', h:'By 6 p.m. / By next year…', o:[
+    {b:'نعم — حتى موعد محدد',s:'by + وقت',n:'ffocus'},
+    {b:'لا',s:'',n:'fprog'}]},
+  ffocus:{q:'على ماذا تركّز؟', h:'', o:[
+    {b:'أنه سيكون قد اكتمل',s:'I will have finished by 6',r:'fperf'},
+    {b:'كم سيكون قد استمر',s:'for five years by June',r:'fpc'}]},
+  fprog:{q:'هل ستكون في منتصف الحدث في وقت معيّن؟', h:'At this time tomorrow…', o:[
+    {b:'نعم — سأكون في منتصفه',s:'at 9 tomorrow / this time next week',r:'fcont'},
+    {b:'لا',s:'',n:'fplan'}]},
+  fplan:{q:'متى قررت؟ وعلى ماذا تعتمد؟', h:'هذا يحسم will أم going to.', o:[
+    {b:'قررت الآن / وعد / رأي',s:"I think… / I'll help you",r:'will'},
+    {b:'خطة سابقة / دليل أمامي',s:'We booked… / Look at the clouds!',r:'goto'}]}
 };
 let decPath=[];
-function renderDec(node='start',why){
+function renderDec(node='when',why){
   const box=$('#decBox');
   const trail = decPath.length?`<div class="dec-trail">${decPath.map(p=>`<span class="chip">${p}</span>`).join('')}</div>`:'';
   if(node.startsWith('R:')){
@@ -883,8 +1040,9 @@ function renderDec(node='start',why){
        <button class="primary" data-open="${id}">افتح بطاقة الزمن</button>
        <button class="all-btn" id="decReset" style="margin-top:8px">ابدأ من جديد</button>`;
     }
-    $('#decReset').onclick=()=>{decPath=[];renderDec()};
+    $('#decReset').onclick=()=>{decPath=[];decHist=[];renderDec()};
     const o=box.querySelector('[data-open]'); if(o)o.onclick=()=>openSheet(o.dataset.open);
+    if(id!=='past'&&!isOpenG(T(id).g)){const u=store.get('unlocked',{});u[T(id).g]=true;store.set('unlocked',u);renderHome();renderBuilder();renderLists()}
     return;
   }
   const n=DEC[node];
@@ -903,7 +1061,7 @@ let decHist=[];
 let qz=null;
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function updateStats(){$('#sBest').textContent=store.get('best',0)+'/10';$('#sRounds').textContent=store.get('rounds',0)}
-function startQuiz(){qz={items:shuffle(QUIZ).slice(0,10).map(q=>{const order=shuffle([0,1,2]);return {...q,order}}),i:0,score:0};renderQ()}
+function startQuiz(){qz={items:shuffle(QUIZ.filter(q=>isOpenG(q.g))).slice(0,10).map(q=>{const order=shuffle([0,1,2]);return {...q,order}}),i:0,score:0};renderQ()}
 function renderQ(){
   const box=$('#quizBox');
   if(!qz){box.innerHTML=`<div class="qcard"><p style="margin:0 0 4px;font-weight:700">جولة جديدة</p><p style="margin:0;color:var(--muted);font-size:.92rem">اختر الزمن الصحيح في كل جملة. ستظهر لك القاعدة بعد كل إجابة.</p><button class="primary" id="qStart">ابدأ</button></div>`;$('#qStart').onclick=startQuiz;return}
@@ -930,10 +1088,13 @@ function renderQ(){
 }
 
 /* ================= MISTAKES & RULES ================= */
-$('#misList').innerHTML=MISTAKES.map(m=>`<div class="mis"><button class="mis-btn"><span class="x-badge">✕</span><span class="en">${m[0]}</span>${chevSVG}</button>
+function renderLists(){
+$('#misList').innerHTML=MISTAKES.filter(m=>isOpenG(m[3]||'present')).map(m=>`<div class="mis"><button class="mis-btn"><span class="x-badge">✕</span><span class="en">${m[0]}</span>${chevSVG}</button>
   <div class="acc"><div><div class="fix"><span class="x-badge ok-badge">✓</span><span class="en">${m[1]}</span></div><div class="why">${m[2]}</div></div></div></div>`).join('');
 $('#misList').addEventListener('click',e=>{const b=e.target.closest('.mis-btn');if(!b)return;const a=b.nextElementSibling;a.classList.toggle('open');b.querySelector('.chev').style.transform=a.classList.contains('open')?'rotate(180deg)':''});
-$('#rulesList').innerHTML=RULES.map(r=>`<div class="rule-acc"><button><span>${r.t}<small>${r.d}</small></span>${chevSVG}</button><div class="acc"><div><div class="acc-in">${r.h}</div></div></div></div>`).join('');
+$('#rulesList').innerHTML=RULES.filter(r=>isOpenG(r.g)).map(r=>`<div class="rule-acc"><button><span>${r.t}<small>${r.d}</small></span>${chevSVG}</button><div class="acc"><div><div class="acc-in">${r.h}</div></div></div></div>`).join('');
+}
+renderLists();
 $('#rulesList').addEventListener('click',e=>{const b=e.target.closest('.rule-acc>button');if(b)b.parentElement.classList.toggle('open')});
 $('#rulesAll').onclick=()=>{const rs=[...document.querySelectorAll('.rule-acc')];const open=!rs.every(r=>r.classList.contains('open'));rs.forEach(r=>r.classList.toggle('open',open));$('#rulesAll').textContent=open?'طي الكل':'فتح الكل'};
 
@@ -964,7 +1125,7 @@ $('#rulesAll').onclick=()=>{const rs=[...document.querySelectorAll('.rule-acc')]
 })();
 
 /* ================= INIT ================= */
-renderBuilder(); renderDec(); updateStats(); renderQ(); markHome();
+renderHome(); renderBuilder(); renderDec(); updateStats(); renderQ();
 history.replaceState({page:'home'},'');
 const lastPage=store.get('page','home'); if(ORDER.includes(lastPage)&&lastPage!=='home')go(lastPage);
 </script>
