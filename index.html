@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#101A3A">
+<meta name="theme-color" content="#031634">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="English Tense">
@@ -11,9 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>English Tense</title>
 <meta name="description" content="Present tenses made easy: rules, sentence builder, and practice.">
-<link rel="manifest" href="manifest.webmanifest?v=2">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=2">
+<link rel="manifest" href="manifest.webmanifest?v=3">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=3">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=3">
 <!-- Link previews (WhatsApp, Telegram, X...) need absolute URLs -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="English Tense">
@@ -30,27 +30,30 @@
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* Deep-blue default: no white surfaces anywhere */
-  --bg:#101A3A; --bg2:#13224A; --surface:#18264D; --surface2:#1E2F5C; --ink:#EAF0FB; --muted:#A3B3D3; --line:#2E4277;
-  --accent:#4C7DF0; --violet:#8B6CF0; --coral:#FF8A6B; --on-accent:#FFFFFF;
-  --simple:#4FD1C5; --cont:#86AEFF; --perf:#F2C25B; --pc:#F08DBE; --ok:#55D08A; --bad:#FF7B70;
-  --simple-bg:#163E4A; --cont-bg:#1E3368; --perf-bg:#3D3420; --pc-bg:#43254A;
+  /* Base: COLOURlovers "Terra?" — deep navy-teal, sand text (less glare than white) */
+  --bg:#031634; --bg2:#033649; --surface:#0A2A47; --surface2:#0F3452; --ink:#E8DDCB; --muted:#A9B4B0; --line:#1D4A63;
+  --accent:#036564; --accent2:#CDB380; --on-accent:#F4EEE2; --violet:#CDB380; --coral:#E08E79;
+  /* Tense accents — soft, matched values (from Adrift in Dreams / Giant Goldfish / Ocean Five / let them eat cake) */
+  --simple:#79BD9A; --cont:#7FC7D9; --perf:#DDBF6A; --pc:#E08E79; --ok:#8CC9A1; --bad:#E58A80;
+  --simple-bg:#12403F; --cont-bg:#103F55; --perf-bg:#3A3826; --pc-bg:#3E2E32;
   --ar:"Amiri", "Traditional Arabic", "Times New Roman", serif;
   --en:"Literata", Georgia, "Times New Roman", serif;
   --ease:cubic-bezier(.22,.8,.24,1);
+  --scale:1.1;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   color-scheme:dark;
 }
-/* Alternative: softer dusk blue (still no white) */
+/* Alternative: lighter teal evening (still no white) */
 :root[data-theme="dusk"]{
-  --bg:#22355A; --bg2:#2B4370; --surface:#2C4472; --surface2:#34507F; --ink:#EEF2FA; --muted:#B5C3DD; --line:#46608F;
-  --accent:#5A8BF2; --simple-bg:#245563; --cont-bg:#2E4A8A; --perf-bg:#54482A; --pc-bg:#5A3561;
+  --bg:#0B3B4F; --bg2:#0E4A5E; --surface:#13526A; --surface2:#185C75; --ink:#F1E9DA; --muted:#BFCBC6; --line:#2B6A80;
+  --simple-bg:#1B5A55; --cont-bg:#195A70; --perf-bg:#4B4A30; --pc-bg:#55393D;
 }
+html{font-size:calc(16px * var(--scale))}
 *,*::before,*::after{box-sizing:border-box}
 html,body{height:100%;margin:0}
 html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
-body{background:radial-gradient(120% 60% at 100% 0%,var(--bg2),transparent 60%),var(--bg);background-attachment:fixed;color:var(--ink);font-family:var(--ar);font-size:18px;line-height:1.75;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
+body{background:radial-gradient(120% 60% at 100% 0%,var(--bg2),transparent 60%),var(--bg);background-attachment:fixed;color:var(--ink);font-family:var(--ar);font-size:1.125rem;line-height:1.8;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
 button:focus-visible,.chip:focus-visible{outline:2px solid var(--cont);outline-offset:2px;border-radius:10px}
 .en{font-family:var(--en);direction:ltr;unicode-bidi:isolate;text-align:left}
@@ -61,7 +64,7 @@ button:focus-visible,.chip:focus-visible{outline:2px solid var(--cont);outline-o
 .top h1{font-size:1.05rem;margin:0;font-weight:700}
 .top small{display:block;color:var(--muted);font-size:.8rem;font-weight:500}
 .icon-btn[hidden]{display:none}
-.icon-btn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--surface);border:1px solid var(--line)}
+.icon-btn{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--surface);border:1px solid var(--line)}
 
 /* pages */
 .page{display:none}
@@ -246,47 +249,36 @@ td.en,th.en{font-family:var(--en)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 
-/* ===== Color layer ===== */
-body{background:
-  radial-gradient(70% 45% at 100% 0%, rgba(79,209,197,.20), transparent 70%),
-  radial-gradient(60% 40% at 0% 35%, rgba(139,108,240,.22), transparent 70%),
-  radial-gradient(70% 45% at 100% 100%, rgba(240,141,190,.14), transparent 70%),
-  linear-gradient(180deg,#101A3A 0%,#141B44 55%,#1A1840 100%);background-attachment:fixed}
-:root[data-theme="dusk"] body{background:
-  radial-gradient(70% 45% at 100% 0%, rgba(79,209,197,.25), transparent 70%),
-  radial-gradient(60% 40% at 0% 40%, rgba(139,108,240,.28), transparent 70%),
-  linear-gradient(180deg,#22355A,#2A3466);background-attachment:fixed}
+/* ===== Calm color layer ===== */
+.lesson-practice{border-color:color-mix(in srgb,var(--c) 45%,var(--line))}
+.lp-badge{position:absolute;top:10px;left:12px;font-family:var(--en);font-size:.75rem;font-weight:700;color:var(--c);background:var(--cbg);padding:1px 8px;border-radius:999px}
+body{background:linear-gradient(180deg,#031634 0%,#04203F 60%,#033649 100%);background-attachment:fixed}
+:root[data-theme="dusk"] body{background:linear-gradient(180deg,#0B3B4F,#0E4A5E);background-attachment:fixed}
 body{--pagec:var(--simple)}
 body[data-page="build"]{--pagec:var(--cont)} body[data-page="decide"]{--pagec:var(--perf)}
-body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--coral)}
-.top h1{background:linear-gradient(90deg,var(--pagec),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent;font-size:1.2rem}
+body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc)}
+.top h1{color:var(--accent2);font-size:1.15rem}
+.nav{background:rgba(3,22,52,.92)}
 .nav button.on{color:var(--pagec)}
-.nav button.on svg{filter:drop-shadow(0 0 7px var(--pagec))}
-.nav{background:rgba(16,24,58,.82)}
 .nav button.on::after{content:"";width:18px;height:3px;border-radius:3px;background:var(--pagec);margin-top:2px}
-.hero{background:linear-gradient(140deg,rgba(139,108,240,.22),rgba(79,209,197,.12) 60%,rgba(24,38,77,.6));border-color:rgba(139,108,240,.35)}
-.tcard{background:linear-gradient(120deg,var(--cbg) 0%,var(--surface) 75%);border-color:color-mix(in srgb,var(--c) 40%,transparent)}
-.tcard .formula{background:color-mix(in srgb,var(--c) 22%,transparent)}
-.cta{background:linear-gradient(120deg,#7A5CE8,#4C7DF0 55%,#2FB5B0)}
-.block{background:linear-gradient(160deg,color-mix(in srgb,var(--c,var(--violet)) 10%,var(--surface)),var(--surface))}
-.sheet{background:linear-gradient(180deg,color-mix(in srgb,var(--c) 14%,#101A3A),#111B3C 40%)}
-.sheet-head{border-bottom-color:color-mix(in srgb,var(--c) 35%,transparent)}
-.builder-out{background:linear-gradient(140deg,var(--cbg),var(--surface) 80%);border-color:color-mix(in srgb,var(--c) 45%,transparent)}
-.primary{background:linear-gradient(120deg,var(--violet),var(--accent))}
-#p-quiz .primary{background:linear-gradient(120deg,#2FAE6A,#2FB5B0)}
-.stat:first-child{background:linear-gradient(140deg,rgba(242,194,91,.22),var(--surface))}
-.stat:last-child{background:linear-gradient(140deg,rgba(79,209,197,.2),var(--surface))}
-.qcard,.dec-step{background:linear-gradient(160deg,color-mix(in srgb,var(--pagec) 12%,var(--surface)),var(--surface))}
-.dec-opt:active,.qopt:active{transform:scale(.98)}
-.mis{background:linear-gradient(120deg,rgba(255,123,112,.10),var(--surface) 60%)}
-.rule-acc{background:linear-gradient(120deg,rgba(139,108,240,.14),var(--surface) 60%)}
-.rule-acc:nth-child(4n+2){background:linear-gradient(120deg,rgba(79,209,197,.13),var(--surface) 60%)}
-.rule-acc:nth-child(4n+3){background:linear-gradient(120deg,rgba(242,194,91,.13),var(--surface) 60%)}
-.rule-acc:nth-child(4n){background:linear-gradient(120deg,rgba(240,141,190,.13),var(--surface) 60%)}
-.chip.on{background:linear-gradient(120deg,var(--violet),var(--accent));border-color:transparent}
-.toast{background:linear-gradient(120deg,var(--violet),var(--accent))}
+.hero{background:var(--surface);border-color:var(--line)}
+.tcard{background:var(--surface);border-color:var(--line);box-shadow:none}
+.tcard .formula{background:var(--cbg)}
+.cta{background:var(--accent);color:var(--on-accent)}
+.cta .q{background:rgba(232,221,203,.14);color:var(--accent2)}
+.primary{background:var(--accent);color:var(--on-accent)}
+.chip.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.toast{background:var(--accent);color:var(--on-accent)}
+.qbar i{background:var(--accent2)}
+.sheet{background:var(--bg)}
+.builder-out{background:var(--surface);border-color:color-mix(in srgb,var(--c) 45%,var(--line))}
+.stat b{color:var(--accent2)}
+.mis-btn .en{text-decoration-color:color-mix(in srgb,var(--bad) 70%,transparent)}
 .brand{display:flex;align-items:center;gap:10px}
-.brand img{width:38px;height:38px;border-radius:11px;box-shadow:0 4px 14px rgba(76,125,240,.45)}
+.brand img{width:36px;height:36px;border-radius:10px}
+.top-actions{display:flex;gap:6px;align-items:center}
+.fs-btn{flex:none;white-space:nowrap;width:40px;height:40px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-family:var(--en);font-weight:700;color:var(--accent2);line-height:1}
+.fs-btn small{font-size:.7em}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -297,9 +289,13 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--co
       <button class="icon-btn" id="backBtn" aria-label="الرجوع للرئيسية" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
       <div class="brand"><img src="icon-192.png" alt="" id="topLogo"><div><h1 id="topTitle">English Tense</h1><small id="topSub">دليلي اليومي للكلام الصحيح</small></div></div>
     </div>
+    <div class="top-actions">
+    <button class="fs-btn" id="fsDown" dir="ltr" aria-label="تصغير الخط"><small>A</small>−</button>
+    <button class="fs-btn" id="fsUp" dir="ltr" aria-label="تكبير الخط">A+</button>
     <button class="icon-btn" id="themeBtn" aria-label="تبديل درجة الأزرق">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
     </button>
+    </div>
   </header>
 
   <!-- HOME -->
@@ -601,6 +597,82 @@ const RULES = [
   <tr><td>Perf. Cont.</td><td class="en">Has it been raining? — Yes, it has.</td></tr></table>`}
 ];
 
+
+const PRACTICE = {
+ simple:[
+  {t:'اختر',q:'My father ___ newspapers every morning.',o:['reads','read','is reading'],e:'father مفرد + every morning (عادة) ← reads.'},
+  {t:'صحّح الخطأ',q:'She don\'t like tea.',o:['She doesn\'t like tea.','She doesn\'t likes tea.','She isn\'t like tea.'],e:'she ← doesn\'t، والفعل بعدها بدون s.'},
+  {t:'حوّل لسؤال',q:'They play football on Fridays.',o:['Do they play football on Fridays?','Does they play football on Fridays?','Are they play football on Fridays?'],e:'they ← Do، والفعل يبقى play.'},
+  {t:'حوّل لنفي',q:'He watches TV at night.',o:['He doesn\'t watch TV at night.','He doesn\'t watches TV at night.','He not watch TV at night.'],e:'doesn\'t أخذت الـ es ← watch.'},
+  {t:'اختر',q:'The shop ___ at 9 a.m. every day.',o:['opens','is opening','open'],e:'جدول ثابت + shop مفرد ← opens.'},
+  {t:'المعنى',q:'Which sentence describes a habit?',o:['I drink tea every evening.','I am drinking tea now.','I have drunk my tea.'],e:'every evening = عادة متكررة ← Simple.'}
+ ],
+ cont:[
+  {t:'اختر',q:'Be quiet! The children ___.',o:['are sleeping','sleep','is sleeping'],e:'Be quiet! = الآن، و children جمع ← are sleeping.'},
+  {t:'صحّح الخطأ',q:'He working now.',o:['He is working now.','He are working now.','He works now.'],e:'الـ ing تحتاج is مع he.'},
+  {t:'حوّل لسؤال',q:'She is cooking dinner.',o:['Is she cooking dinner?','Does she cooking dinner?','Is she cook dinner?'],e:'قدّم is فقط، والـ ing تبقى.'},
+  {t:'حوّل لنفي',q:'We are watching a film.',o:['We aren\'t watching a film.','We don\'t watching a film.','We aren\'t watch a film.'],e:'NOT بعد are، ولا نستخدم don\'t مع ing.'},
+  {t:'اختر',q:'I ___ my cousin tomorrow evening. We booked a table.',o:['am meeting','meet','have met'],e:'خطة مرتّبة في المستقبل القريب ← Continuous.'},
+  {t:'انتبه',q:'I ___ you now.',o:['understand','am understanding','understanding'],e:'understand فعل حالة ← لا يأخذ ing حتى مع now.'}
+ ],
+ perf:[
+  {t:'اختر',q:'I ___ my phone. I can\'t find it.',o:['have lost','am losing','loses'],e:'النتيجة الآن (لا أجده) ← have + V3.'},
+  {t:'صحّح الخطأ',q:'She has eat breakfast.',o:['She has eaten breakfast.','She have eaten breakfast.','She has ate breakfast.'],e:'has + V3: eat → ate → eaten.'},
+  {t:'حوّل لسؤال',q:'They have finished the project.',o:['Have they finished the project?','Do they have finished the project?','Has they finished the project?'],e:'they ← Have، قدّمها قبل الفاعل.'},
+  {t:'حوّل لنفي',q:'He has called me.',o:['He hasn\'t called me yet.','He hasn\'t call me yet.','He doesn\'t called me yet.'],e:'hasn\'t + V3، و yet في الآخر.'},
+  {t:'انتبه',q:'I ___ to London last year.',o:['went','have gone','have been'],e:'last year وقت منتهٍ ← Past Simple، وليس Perfect.'},
+  {t:'اختر',q:'___ you ever ___ a camel?',o:['Have … ridden','Did … rode','Have … rode'],e:'ever = تجربة ← Have + V3 (ride → rode → ridden).'}
+ ],
+ pc:[
+  {t:'اختر',q:'She ___ for three hours. She\'s exhausted.',o:['has been studying','is studying','studies'],e:'مدة (three hours) + أثر ظاهر ← has been + ing.'},
+  {t:'صحّح الخطأ',q:'I have been wait for you.',o:['I have been waiting for you.','I have waiting for you.','I am been waiting for you.'],e:'بعد been يأتي V-ing دائماً.'},
+  {t:'حوّل لسؤال',q:'He has been working all day.',o:['Has he been working all day?','Has been he working all day?','Is he been working all day?'],e:'الفاعل بين has و been.'},
+  {t:'اختر',q:'How long ___ here?',o:['have you been living','are you living','do you live'],e:'How long ← Perfect Continuous.'},
+  {t:'انتبه',q:'I ___ five emails this morning.',o:['have written','have been writing','am writing'],e:'عدد (five emails) = نتيجة ← Present Perfect وليس المستمر.'},
+  {t:'حوّل لنفي',q:'They have been sleeping well.',o:['They haven\'t been sleeping well.','They haven\'t sleeping well.','They don\'t been sleeping well.'],e:'haven\'t + been + ing.'}
+ ]
+};
+let lp=null;
+function renderPractice(id){
+  const box=$('#lessonPractice'); if(!box)return;
+  const set=PRACTICE[id];
+  if(!lp||lp.id!==id){lp={id,i:-1,score:0,items:set.map(q=>({...q,order:shuffle([0,1,2])}))}}
+  const best=store.get('lp_'+id,null);
+  if(lp.i===-1){
+    box.innerHTML=`<p style="margin:0 0 4px">6 تمارين قصيرة على هذا الدرس فقط: اختيار، تصحيح خطأ، وتحويل الجملة.</p>
+     ${best!==null?`<p style="margin:0;color:var(--muted);font-size:.9rem">أفضل نتيجة سابقة: <b class="en" style="color:var(--c)">${best}/6</b></p>`:''}
+     <button class="primary" id="lpStart">ابدأ التدريب</button>`;
+    $('#lpStart').onclick=()=>{lp.i=0;lp.score=0;lp.items=set.map(q=>({...q,order:shuffle([0,1,2])}));renderPractice(id)};return;
+  }
+  if(lp.i>=lp.items.length){
+    store.set('lp_'+id,Math.max(best||0,lp.score)); markHome();
+    const msg=lp.score===6?'ممتاز — أتقنت هذا الدرس.':lp.score>=4?'جيد — راجع التمارين التي أخطأت فيها.':'اقرأ الشرح فوق مرة أخرى ثم أعد التدريب.';
+    box.innerHTML=`<p class="en" style="font-size:1.8rem;font-weight:700;margin:0;color:var(--c)">${lp.score}/6</p><p style="margin:2px 0 0">${msg}</p>
+     <button class="primary" id="lpAgain">أعد التدريب</button>`;
+    $('#lpAgain').onclick=()=>{lp.i=0;lp.score=0;lp.items=set.map(q=>({...q,order:shuffle([0,1,2])}));renderPractice(id)};return;
+  }
+  const q=lp.items[lp.i];
+  box.innerHTML=`<div class="qbar"><i style="width:${lp.i/6*100}%;background:var(--c)"></i></div>
+   <div class="qmeta"><span class="chip static" style="padding:2px 10px">${q.t}</span><span>${lp.i+1} / 6</span></div>
+   <div class="qtext">${q.q.replace('___','<span class="gap">?</span>')}</div>
+   <div class="qopts">${q.order.map(k=>`<button class="qopt" data-k="${k}">${q.o[k]}</button>`).join('')}</div><div id="lpAfter"></div>`;
+  box.querySelectorAll('.qopt').forEach(b=>b.onclick=()=>{
+    if(q.done)return;q.done=true;const k=+b.dataset.k, ok=k===0; if(ok)lp.score++;
+    box.querySelectorAll('.qopt').forEach(x=>{if(+x.dataset.k===0)x.classList.add('right');else if(x===b)x.classList.add('wrong')});
+    if(navigator.vibrate)navigator.vibrate(ok?15:[30,40,30]);
+    $('#lpAfter').innerHTML=`<div class="qexp"><b style="color:${ok?'var(--ok)':'var(--bad)'}">${ok?'صحيح.':'ليس هذا.'}</b> ${q.e}</div><button class="primary" id="lpNext">${lp.i===5?'النتيجة':'التالي'}</button>`;
+    $('#lpNext').onclick=()=>{lp.i++;renderPractice(id);$('#lessonPractice').scrollIntoView({block:'nearest',behavior:'smooth'})};
+  });
+}
+function markHome(){
+  document.querySelectorAll('.tcard').forEach(c=>{
+    const v=store.get('lp_'+c.dataset.tense,null); let b=c.querySelector('.lp-badge');
+    if(v===null){if(b)b.remove();return}
+    if(!b){b=document.createElement('span');b.className='lp-badge';c.appendChild(b)}
+    b.textContent=(v===6?'✓ ':'')+v+'/6';
+  });
+}
+
 /* ================= STORAGE (safe) ================= */
 const store = {
   get(k,d){try{const v=localStorage.getItem('pt_'+k);return v===null?d:JSON.parse(v)}catch(e){return d}},
@@ -665,7 +737,9 @@ function openSheet(id){
    </div>
    <div class="block"><h3>كلمات تدلك عليه</h3><div class="chips">${t.signals.map(s=>`<span class="chip static en">${s}</span>`).join('')}</div></div>
    <div class="block"><div class="compare">${t.compare}</div></div>
-   <button class="primary" data-try="${id}">جرّبه في المُركِّب</button>`;
+   <div class="block lesson-practice"><h3>✎ تدرّب على هذا الدرس</h3><div id="lessonPractice"></div></div>
+   <button class="all-btn" data-try="${id}">جرّبه في المُركِّب</button>`;
+  lp=null; renderPractice(id);
   $('#shBody').scrollTop=0;
   scrim.classList.add('show'); sheet.classList.add('show');
   document.body.style.overflow='hidden';
@@ -856,18 +930,30 @@ $('#rulesList').innerHTML=RULES.map(r=>`<div class="rule-acc"><button><span>${r.
 $('#rulesList').addEventListener('click',e=>{const b=e.target.closest('.rule-acc>button');if(b)b.parentElement.classList.toggle('open')});
 $('#rulesAll').onclick=()=>{const rs=[...document.querySelectorAll('.rule-acc')];const open=!rs.every(r=>r.classList.contains('open'));rs.forEach(r=>r.classList.toggle('open',open));$('#rulesAll').textContent=open?'طي الكل':'فتح الكل'};
 
+/* ================= FONT SIZE ================= */
+(function(){
+  const STEPS=[0.95,1.05,1.15,1.3,1.45,1.6];
+  let i=store.get('fsIdx',2);
+  const apply=(say)=>{document.documentElement.style.setProperty('--scale',STEPS[i]);store.set('fsIdx',i);
+    $('#fsDown').disabled=i===0;$('#fsUp').disabled=i===STEPS.length-1;
+    $('#fsDown').style.opacity=i===0?.4:1;$('#fsUp').style.opacity=i===STEPS.length-1?.4:1;
+    if(say)toast('حجم الخط '+(i+1)+' / '+STEPS.length)};
+  $('#fsUp').onclick=()=>{if(i<STEPS.length-1){i++;apply(true)}};
+  $('#fsDown').onclick=()=>{if(i>0){i--;apply(true)}};
+  apply(false);
+})();
 /* ================= THEME ================= */
 (function(){
   const saved=store.get('theme','deep'); if(saved==='dusk')document.documentElement.dataset.theme='dusk';
   $('#themeBtn').onclick=()=>{
     const next=document.documentElement.dataset.theme==='dusk'?'deep':'dusk';
     if(next==='dusk')document.documentElement.dataset.theme='dusk'; else delete document.documentElement.dataset.theme;
-    store.set('theme',next); toast(next==='dusk'?'أزرق هادئ':'أزرق داكن');
+    store.set('theme',next); toast(next==='dusk'?'تركوازي فاتح':'كحلي هادئ');
   };
 })();
 
 /* ================= INIT ================= */
-renderBuilder(); renderDec(); updateStats(); renderQ();
+renderBuilder(); renderDec(); updateStats(); renderQ(); markHome();
 history.replaceState({page:'home'},'');
 const lastPage=store.get('page','home'); if(ORDER.includes(lastPage)&&lastPage!=='home')go(lastPage);
 </script>
