@@ -256,6 +256,11 @@ td.en,th.en{font-family:var(--en)}
 
 
 /* ===== Calm color layer ===== */
+/* English inside Arabic text: isolated as one LTR unit so it never jumps to the wrong end of the line */
+.lat{font-family:var(--en);direction:ltr;unicode-bidi:isolate;font-weight:600;font-size:.94em;
+  background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--accent);padding:0 5px;border-radius:6px;margin:0 2px;white-space:nowrap}
+:root[data-theme="night"] .lat{color:var(--cont)}
+.uses .u .lat,.note .lat{white-space:normal}
 .w{cursor:pointer;border-radius:4px;transition:background .15s}
 .w:active{background:color-mix(in srgb,var(--accent) 22%,transparent)}
 .w.saved{border-bottom:2px dotted var(--accent2)}
@@ -1316,6 +1321,32 @@ function renderReview(){
     store.set('dict',d);rv.show=false;renderReview();updateDictUI()};
   $('#rvBad').onclick=()=>finish(false); $('#rvGood').onclick=()=>finish(true);
 }
+
+/* ================= BIDI FIX (Arabic + English) ================= */
+const LAT_RE=/\(?-?[A-Za-z][A-Za-z0-9'’()]*(?:(?:\s*[\/+]\s*|[\-\s])\(?-?[A-Za-z0-9][A-Za-z0-9'’()]*)*(?:\.\.\.|…)?/g;
+const HAS_AR=/[\u0600-\u06FF]/;
+function isolateLatin(root){
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{
+    const p=n.parentElement; if(!p)return NodeFilter.FILTER_REJECT;
+    if(p.closest('.en,.lat,.w,script,style,svg,input,textarea,.sentence,.qtext,.qopt,.dw,.rv-word,.wp-word,.wp-ctx,.dc,.name'))return NodeFilter.FILTER_REJECT;
+    const t=n.nodeValue; if(!/[A-Za-z]/.test(t))return NodeFilter.FILTER_REJECT;
+    // only fix text that sits in an Arabic context (Arabic in the node, or in its parent block)
+    if(!HAS_AR.test(t)&&!HAS_AR.test(p.textContent))return NodeFilter.FILTER_REJECT;
+    return NodeFilter.FILTER_ACCEPT}});
+  const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+  nodes.forEach(n=>{
+    const t=n.nodeValue; LAT_RE.lastIndex=0; let m,last=0; const frag=document.createDocumentFragment(); let any=false;
+    while((m=LAT_RE.exec(t))){any=true;
+      if(m.index>last)frag.appendChild(document.createTextNode(t.slice(last,m.index)));
+      const b=document.createElement('bdi');b.className='lat';b.dir='ltr';b.textContent=m[0];frag.appendChild(b);last=m.index+m[0].length}
+    if(!any)return; if(last<t.length)frag.appendChild(document.createTextNode(t.slice(last)));
+    n.parentNode.replaceChild(frag,n);
+  });
+}
+let bidiQueued=false;
+const bidiObs=new MutationObserver(()=>{if(bidiQueued)return;bidiQueued=true;requestAnimationFrame(()=>{bidiQueued=false;isolateLatin(document.body)})});
+bidiObs.observe(document.body,{childList:true,subtree:true,characterData:false});
+isolateLatin(document.body);
 
 /* ================= THEME ================= */
 (function(){
