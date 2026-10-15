@@ -256,6 +256,51 @@ td.en,th.en{font-family:var(--en)}
 
 
 /* ===== Calm color layer ===== */
+.w{cursor:pointer;border-radius:4px;transition:background .15s}
+.w:active{background:color-mix(in srgb,var(--accent) 22%,transparent)}
+.w.saved{border-bottom:2px dotted var(--accent2)}
+.note{display:flex;gap:8px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--line);font-size:.95rem}
+.note:last-child{border-bottom:0}
+.ntag{flex:none;font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--perf-bg);color:var(--perf);margin-top:3px;white-space:nowrap}
+.ntag.rare{background:var(--surface2);color:var(--muted)} .ntag.exc{background:var(--pc-bg);color:var(--pc)} .ntag.common{background:var(--simple-bg);color:var(--simple)}
+.ex-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}
+.ex-head small{color:var(--muted);font-size:.8rem}
+.xrow{display:grid;grid-template-columns:1fr auto;gap:2px 8px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.xrow:last-child{border-bottom:0}
+.xrow .en{font-size:1.02rem;line-height:1.55}
+.xrow .xar{grid-column:1;color:var(--muted);font-size:.9rem}
+.spk{grid-row:1 / span 2;grid-column:2;width:34px;height:34px;border-radius:10px;background:var(--surface2);border:1px solid var(--line);font-size:.95rem;align-self:center}
+.wscrim{position:fixed;inset:0;z-index:70;background:rgba(20,28,36,.35);opacity:0;pointer-events:none;transition:opacity .25s}
+.wscrim.show{opacity:1;pointer-events:auto}
+.wpop{position:fixed;inset-inline:0;bottom:0;margin:0 auto;max-width:560px;z-index:80;background:var(--surface);border-radius:22px 22px 0 0;border:1px solid var(--line);
+  padding:16px 16px calc(18px + env(safe-area-inset-bottom,0px));transform:translateY(110%);transition:transform .35s var(--ease);box-shadow:0 -10px 30px rgba(0,0,0,.18)}
+.wpop.show{transform:none}
+.wp-top{display:flex;align-items:center;gap:10px}
+.wp-word{font-size:1.6rem;font-weight:700;color:var(--accent);flex:1}
+.wp-base{color:var(--muted);font-size:.85rem;margin-top:-2px}
+.wpop label{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 4px;font-weight:700}
+.inp{width:100%;font:inherit;font-size:1rem;color:var(--ink);background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:9px 12px}
+.inp.en{font-family:var(--en)}
+.wp-ctx{margin-top:10px;font-size:.95rem;color:var(--muted);background:var(--surface2);border-radius:10px;padding:8px 10px}
+.wp-actions{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}
+.wp-actions .primary{margin:0}
+.ghost{border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-weight:700;font-size:.9rem;background:var(--surface2);color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.nav-badge{position:absolute;top:4px;margin-inline-start:22px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--pc);color:#fff;font-size:.68rem;font-family:var(--en);display:grid;place-items:center}
+.nav button{position:relative}
+.nav-badge[hidden]{display:none}
+.dict-item{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;display:grid;grid-template-columns:1fr auto auto;gap:4px 8px;align-items:center}
+.dict-item .dw{font-family:var(--en);font-weight:700;font-size:1.08rem;color:var(--accent)}
+.dict-item .dm{grid-column:1 / span 3;font-size:.95rem}
+.dict-item .dc{grid-column:1 / span 3;font-size:.86rem;color:var(--muted)}
+.lvl{font-size:.72rem;color:var(--muted)}
+.lvl b{color:var(--simple)}
+.mini{width:32px;height:32px;border-radius:10px;background:var(--surface2);border:1px solid var(--line);font-size:.9rem}
+.rv-word{font-family:var(--en);font-size:2rem;font-weight:700;color:var(--accent);text-align:center;margin:6px 0}
+.rv-mean{text-align:center;font-size:1.25rem;font-weight:700;margin:8px 0}
+.rv-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.rv-btns button{border-radius:14px;padding:12px;font-weight:700}
+.bad-btn{background:var(--pc-bg);color:var(--pc)} .good-btn{background:var(--simple-bg);color:var(--simple)}
+.hint-card{display:flex;gap:10px;align-items:center;background:var(--surface);border:1px dashed var(--accent2);border-radius:16px;padding:10px 14px;margin:-6px 0 18px;font-size:.92rem}
 .t-psimple,.t-will{--c:var(--simple);--cbg:var(--simple-bg)} .t-pcont,.t-fcont{--c:var(--cont);--cbg:var(--cont-bg)}
 .t-pperf,.t-fperf{--c:var(--perf);--cbg:var(--perf-bg)} .t-ppc,.t-fpc{--c:var(--pc);--cbg:var(--pc-bg)}
 .t-goto{--c:var(--goto);--cbg:var(--goto-bg)}
@@ -343,6 +388,7 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
       </div>
     </div>
 
+    <div class="hint-card"><span style="font-size:1.3rem">👆</span><span>اضغط على <b>أي كلمة إنجليزية</b> في الأمثلة لترى معناها وتحفظها في <b>قاموسي</b>.</span></div>
     <div class="tense-list" id="tenseList"></div>
 
     <button class="cta" data-go="decide">
@@ -394,6 +440,21 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
     <div id="quizBox"></div>
   </section>
 
+  <!-- DICTIONARY -->
+  <section class="page" id="p-dict">
+    <p class="page-sub">كل كلمة تضغط عليها وتحفظها تأتي هنا. راجعها يومياً وستثبت في ذاكرتك.</p>
+    <div class="stats" style="grid-template-columns:1fr 1fr 1fr"><div class="stat"><b id="dTotal">0</b><span>كلمة محفوظة</span></div><div class="stat"><b id="dDue">0</b><span>للمراجعة اليوم</span></div><div class="stat"><b id="dDone">0</b><span>أتقنتها</span></div></div>
+    <div id="dReview"></div>
+    <div class="block" style="--c:var(--accent)"><h3>أضف كلمة بنفسك</h3>
+      <input class="inp en" id="dAddW" placeholder="word" dir="ltr" autocomplete="off" autocapitalize="off">
+      <input class="inp" id="dAddM" placeholder="المعنى بالعربية" style="margin-top:8px">
+      <button class="primary" id="dAddBtn">أضف إلى قاموسي</button></div>
+    <input class="inp" id="dSearch" placeholder="ابحث في قاموسك…" style="margin-bottom:10px">
+    <div id="dList"></div>
+    <div class="block" style="--c:var(--muted)"><h3>نسخة احتياطية</h3><p style="margin:0 0 8px;font-size:.88rem;color:var(--muted)">القاموس محفوظ على هذا الجهاز فقط. احفظ نسخة من وقت لآخر حتى لا تفقده إذا مسحت بيانات المتصفح.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="ghost" id="dExport">حفظ نسخة</button><label class="ghost" style="cursor:pointer">استرجاع نسخة<input type="file" id="dImport" accept="application/json" hidden></label></div></div>
+  </section>
+
   <!-- MISTAKES + RULES -->
   <section class="page" id="p-fix">
     <h2 class="page-title">أخطاء وقواعد</h2>
@@ -409,7 +470,7 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
   <div class="nav-in">
     <button data-go="home" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M7 8v8M12 6v12M17 9v6"/></svg>الأزمنة</button>
     <button data-go="build"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="7" rx="2"/><rect x="14" y="4" width="7" height="7" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/></svg>المُركِّب</button>
-    <button data-go="decide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="12" r="2"/><path d="M6 7v10M6 12h4a4 4 0 0 0 4-4V8M16 12h-2"/></svg>القرار</button>
+    <button data-go="dict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M9 7h6M9 11h4"/></svg><span class="nav-badge" id="navDue" hidden>0</span>قاموسي</button>
     <button data-go="quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 5-6"/></svg>تمرّن</button>
     <button data-go="fix"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>الأخطاء</button>
   </div>
@@ -427,6 +488,13 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
   <div class="sheet-body" id="shBody"></div>
 </div>
 <div class="toast" id="toast"></div>
+<div class="wscrim" id="wscrim"></div>
+<div class="wpop" id="wpop" role="dialog" aria-modal="true">
+  <div class="wp-top"><div style="flex:1"><div class="wp-word en" id="wpWord"></div><div class="wp-base" id="wpBase"></div></div><button class="icon-btn" id="wpSay" aria-label="استمع">🔊</button></div>
+  <label>المعنى</label><input class="inp" id="wpMean" placeholder="اكتب المعنى">
+  <div class="wp-ctx en" id="wpCtx"></div>
+  <div class="wp-actions"><button class="primary" id="wpSave"></button><a class="ghost" id="wpG" target="_blank" rel="noopener">ترجمة Google</a></div>
+</div>
 
 <script>
 /* ================= DATA ================= */
@@ -682,6 +750,7 @@ function renderPractice(id){
    <div class="qmeta"><span class="chip static" style="padding:2px 10px">${q.t}</span><span>${lp.i+1} / 6</span></div>
    <div class="qtext">${q.q.replace('___','<span class="gap">?</span>')}</div>
    <div class="qopts">${q.order.map(k=>`<button class="qopt" data-k="${k}">${q.o[k]}</button>`).join('')}</div><div id="lpAfter"></div>`;
+  tokenize(box);
   box.querySelectorAll('.qopt').forEach(b=>b.onclick=()=>{
     if(q.done)return;q.done=true;const k=+b.dataset.k, ok=k===0; if(ok)lp.score++;
     box.querySelectorAll('.qopt').forEach(x=>{if(+x.dataset.k===0)x.classList.add('right');else if(x===b)x.classList.add('wrong')});
@@ -740,6 +809,28 @@ RULES.push(...[{"g": "past", "t": "was أم were؟", "d": "الماضي من be"
 })();
 const GROUPS=[{g:'present',ar:'الحاضر',en:'Present'},{g:'past',ar:'الماضي',en:'Past'},{g:'future',ar:'المستقبل',en:'Future'}];
 
+const EXTRA={"simple": [["She <mark>works</mark> at a hospital near our house.", "تعمل في مستشفى قرب بيتنا."], ["We usually <mark>have</mark> lunch at two o'clock.", "نتناول الغداء عادةً في الثانية."], ["My brother <mark>doesn't eat</mark> meat.", "أخي لا يأكل اللحم."], ["How often <mark>do</mark> you <mark>visit</mark> your parents?", "كم مرة تزور والديك؟"], ["The museum <mark>closes</mark> at six on Fridays.", "يُغلق المتحف في السادسة أيام الجمعة."], ["Ahmed <mark>speaks</mark> three languages fluently.", "يتحدث أحمد ثلاث لغات بطلاقة."], ["It rarely <mark>rains</mark> in the desert.", "نادراً ما تمطر في الصحراء."], ["I <mark>prefer</mark> tea to coffee.", "أفضّل الشاي على القهوة."]], "cont": [["I <mark>am looking</mark> for my glasses.", "أبحث عن نظارتي."], ["She <mark>is staying</mark> with her aunt this month.", "تقيم عند خالتها هذا الشهر."], ["Why <mark>are</mark> you <mark>laughing</mark>?", "لماذا تضحك؟"], ["The company <mark>is hiring</mark> new engineers.", "الشركة توظّف مهندسين جدداً."], ["We <mark>are moving</mark> to a new apartment on Saturday.", "سننتقل إلى شقة جديدة يوم السبت."], ["He <mark>isn't feeling</mark> well today.", "لا يشعر أنه بخير اليوم."], ["The weather <mark>is getting</mark> colder.", "الطقس يزداد برودة."], ["Listen! Someone <mark>is knocking</mark> on the door.", "اسمع! أحدهم يطرق الباب."]], "perf": [["I <mark>have</mark> already <mark>paid</mark> the electricity bill.", "دفعت فاتورة الكهرباء بالفعل."], ["She <mark>has visited</mark> twelve countries.", "زارت اثنتي عشرة دولة."], ["<mark>Have</mark> you ever <mark>tried</mark> Omani halwa?", "هل جرّبت الحلوى العمانية من قبل؟"], ["They <mark>haven't replied</mark> to my email yet.", "لم يردّوا على رسالتي بعد."], ["We <mark>have known</mark> each other since university.", "نعرف بعضنا منذ الجامعة."], ["He <mark>has just arrived</mark> at the airport.", "وصل للتو إلى المطار."], ["Prices <mark>have increased</mark> a lot this year.", "ارتفعت الأسعار كثيراً هذا العام."], ["I <mark>have forgotten</mark> his name.", "نسيت اسمه."]], "pc": [["I <mark>have been learning</mark> English for six months.", "أتعلم الإنجليزية منذ ستة أشهر."], ["It <mark>has been raining</mark> since this morning.", "إنها تمطر منذ الصباح."], ["She <mark>has been working</mark> on this project all week.", "تعمل على هذا المشروع طوال الأسبوع."], ["Your eyes are red. <mark>Have</mark> you <mark>been crying</mark>?", "عيناك حمراوان. هل كنت تبكي؟"], ["We <mark>have been saving</mark> money for a new car.", "ندّخر المال لسيارة جديدة."], ["He <mark>hasn't been sleeping</mark> well lately.", "لا ينام جيداً في الفترة الأخيرة."], ["How long <mark>have</mark> they <mark>been living</mark> in Dubai?", "منذ متى يعيشون في دبي؟"], ["I <mark>have been waiting</mark> for the doctor for an hour.", "أنتظر الطبيب منذ ساعة."]], "psimple": [["I <mark>bought</mark> a new laptop last week.", "اشتريت حاسوباً محمولاً جديداً الأسبوع الماضي."], ["We <mark>travelled</mark> to Istanbul in 2019.", "سافرنا إلى إسطنبول عام 2019."], ["She <mark>didn't understand</mark> the question.", "لم تفهم السؤال."], ["<mark>Did</mark> you <mark>sleep</mark> well last night?", "هل نمت جيداً البارحة؟"], ["The meeting <mark>started</mark> late and <mark>ended</mark> early.", "بدأ الاجتماع متأخراً وانتهى مبكراً."], ["My grandfather <mark>built</mark> this house fifty years ago.", "بنى جدي هذا البيت قبل خمسين عاماً."], ["He <mark>lost</mark> his wallet at the market.", "أضاع محفظته في السوق."], ["I <mark>felt</mark> nervous before the interview.", "شعرت بالتوتر قبل المقابلة."]], "pcont": [["I <mark>was driving</mark> home when I saw the accident.", "كنت أقود إلى البيت عندما رأيت الحادث."], ["At midnight, the children <mark>were</mark> still <mark>watching</mark> cartoons.", "في منتصف الليل كان الأطفال ما زالوا يشاهدون الرسوم المتحركة."], ["She <mark>was preparing</mark> lunch while her husband <mark>was cleaning</mark> the car.", "كانت تحضّر الغداء بينما كان زوجها ينظّف السيارة."], ["What <mark>were</mark> you <mark>doing</mark> at 9 this morning?", "ماذا كنت تفعل في التاسعة صباح اليوم؟"], ["It <mark>was snowing</mark> when we landed.", "كان الثلج يتساقط عندما هبطنا."], ["Sorry, I <mark>wasn't listening</mark>. Can you repeat that?", "آسف، لم أكن منتبهاً. هل تعيد ذلك؟"], ["They <mark>were arguing</mark> loudly in the corridor.", "كانوا يتجادلون بصوت عالٍ في الممر."], ["He cut his finger while he <mark>was chopping</mark> onions.", "جرح إصبعه بينما كان يقطّع البصل."]], "pperf": [["By the time we arrived, the film <mark>had started</mark>.", "عندما وصلنا كان الفيلم قد بدأ."], ["She <mark>had never flown</mark> before her trip to London.", "لم تكن قد ركبت طائرة قبل رحلتها إلى لندن."], ["I realized that I <mark>had left</mark> my keys in the car.", "أدركت أنني كنت قد تركت مفاتيحي في السيارة."], ["They <mark>had sold</mark> all the tickets before noon.", "كانوا قد باعوا كل التذاكر قبل الظهر."], ["<mark>Had</mark> you <mark>finished</mark> your homework before dinner?", "هل كنت قد أنهيت واجبك قبل العشاء؟"], ["He was angry because nobody <mark>had told</mark> him.", "كان غاضباً لأن أحداً لم يكن قد أخبره."], ["The shop <mark>had closed</mark>, so we went home.", "كان المتجر قد أغلق، فعدنا إلى البيت."], ["After she <mark>had graduated</mark>, she found a job in a bank.", "بعد أن تخرّجت وجدت عملاً في بنك."]], "ppc": [["We <mark>had been driving</mark> for five hours when the car broke down.", "كنا نقود منذ خمس ساعات عندما تعطلت السيارة."], ["She <mark>had been studying</mark> medicine for two years before she changed her major.", "كانت تدرس الطب سنتين قبل أن تغيّر تخصصها."], ["The ground was wet because it <mark>had been raining</mark>.", "كانت الأرض مبللة لأنها كانت تمطر."], ["I <mark>had been waiting</mark> for an hour, so I was annoyed.", "كنت أنتظر منذ ساعة، فانزعجت."], ["How long <mark>had</mark> you <mark>been working</mark> there before you left?", "كم كنت تعمل هناك قبل أن تغادر؟"], ["They <mark>hadn't been speaking</mark> to each other for weeks.", "لم يكونوا يتحدثون مع بعضهم منذ أسابيع."], ["His hands were dirty; he <mark>had been fixing</mark> the bike.", "كانت يداه متسختين؛ كان يصلح الدراجة."], ["She was out of breath because she <mark>had been running</mark>.", "كانت تلهث لأنها كانت تجري."]], "will": [["Don't worry, I <mark>will remember</mark> your birthday.", "لا تقلق، سأتذكر عيد ميلادك."], ["I think robots <mark>will do</mark> many of our jobs.", "أعتقد أن الروبوتات ستقوم بكثير من وظائفنا."], ["This bag looks heavy. I<mark>'ll carry</mark> it for you.", "تبدو الحقيبة ثقيلة. سأحملها عنك."], ["She <mark>won't agree</mark> to that plan.", "لن توافق على تلك الخطة."], ["<mark>Will</mark> you <mark>lend</mark> me your pen?", "هل تعيرني قلمك؟"], ["The new hospital <mark>will open</mark> next year.", "سيُفتتح المستشفى الجديد العام القادم."], ["I'm thirsty. I<mark>'ll get</mark> some water.", "أنا عطشان. سأحضر بعض الماء."], ["He <mark>will</mark> probably <mark>be</mark> late again.", "على الأرجح سيتأخر مرة أخرى."]], "goto": [["I<mark>'m going to join</mark> a gym on Monday.", "سأشترك في نادٍ رياضي يوم الاثنين."], ["They<mark>'re going to open</mark> a new restaurant downtown.", "سيفتتحون مطعماً جديداً في وسط المدينة."], ["Watch out! You<mark>'re going to fall</mark>!", "انتبه! ستسقط!"], ["We <mark>aren't going to sell</mark> the house.", "لن نبيع البيت."], ["What <mark>are</mark> you <mark>going to wear</mark> to the wedding?", "ماذا ستلبس في حفل الزفاف؟"], ["She<mark>'s going to have</mark> a baby in March.", "ستُرزق بطفل في مارس."], ["He has studied hard. He<mark>'s going to pass</mark> the exam.", "درس بجد. سينجح في الامتحان."], ["I<mark>'m going to call</mark> the bank after lunch.", "سأتصل بالبنك بعد الغداء."]], "fcont": [["This time tomorrow, I <mark>will be sitting</mark> on the plane.", "في مثل هذا الوقت غداً سأكون جالساً في الطائرة."], ["Don't call at 7; we <mark>will be having</mark> dinner.", "لا تتصل في السابعة؛ سنكون نتناول العشاء."], ["<mark>Will</mark> you <mark>be using</mark> your laptop this evening?", "هل ستستخدم حاسوبك هذا المساء؟"], ["She <mark>will be working</mark> from home all next week.", "ستعمل من البيت طوال الأسبوع القادم."], ["At noon, the team <mark>will be presenting</mark> the results.", "عند الظهر سيكون الفريق يعرض النتائج."], ["I <mark>won't be attending</mark> the meeting tomorrow.", "لن أحضر الاجتماع غداً."], ["In ten years, we <mark>will be living</mark> in a smart city.", "بعد عشر سنوات سنعيش في مدينة ذكية."], ["Hurry! The guests <mark>will be arriving</mark> soon.", "أسرع! سيصل الضيوف قريباً."]], "fperf": [["By Friday, I <mark>will have read</mark> the whole book.", "بحلول الجمعة سأكون قد قرأت الكتاب كله."], ["She <mark>will have left</mark> by the time you get there.", "ستكون قد غادرت عندما تصل إلى هناك."], ["By 2030, they <mark>will have built</mark> a new airport.", "بحلول 2030 سيكونون قد بنوا مطاراً جديداً."], ["<mark>Will</mark> you <mark>have finished</mark> the report by noon?", "هل ستكون قد أنهيت التقرير بحلول الظهر؟"], ["We <mark>won't have saved</mark> enough money by summer.", "لن نكون قد ادخرنا مالاً كافياً بحلول الصيف."], ["By the end of this course, you <mark>will have learned</mark> all the tenses.", "بنهاية هذه الدورة ستكون قد تعلمت كل الأزمنة."], ["By next month, he <mark>will have worked</mark> here for a year.", "بحلول الشهر القادم سيكون قد عمل هنا عاماً."]], "fpc": [["By December, I <mark>will have been teaching</mark> for twenty years.", "بحلول ديسمبر سأكون أدرّس منذ عشرين عاماً."], ["When you arrive, we <mark>will have been waiting</mark> for two hours.", "عندما تصل سنكون ننتظر منذ ساعتين."], ["By 5 p.m., she <mark>will have been driving</mark> all day.", "بحلول الخامسة ستكون قد قادت طوال اليوم."], ["Next year, they <mark>will have been living</mark> here for a decade.", "العام القادم سيكونون قد عاشوا هنا عقداً كاملاً."], ["By midnight, the workers <mark>will have been repairing</mark> the road for ten hours.", "بحلول منتصف الليل سيكون العمال يصلحون الطريق منذ عشر ساعات."]]};
+const NOTES={"simple": [["شائع جداً", "أكثر زمن استخداماً في الإنجليزية؛ تحتاجه للكلام عن نفسك وعملك وروتينك."], ["استثناء", "have ← <b class=\"en\">has</b>، do ← <b class=\"en\">does</b>، go ← <b class=\"en\">goes</b> (وليس haves أو dos)."], ["تنبيه", "مع أفعال الحالة نستخدمه حتى لو كان المعنى «الآن»: <span class=\"en\">I want, I know</span>."]], "cont": [["استثناء", "بعض الأفعال لها معنيان: <span class=\"en\">I'm having lunch</span> ✔ (آكل) لكن <span class=\"en\">I have a car</span> (أملك) بدون ing. وكذلك <span class=\"en\">I'm thinking about it</span> (أفكّر) مقابل <span class=\"en\">I think it's good</span> (رأيي)."], ["شائع", "يُستخدم كثيراً للمواعيد القريبة بدل will: <span class=\"en\">I'm meeting Ali tonight.</span>"], ["تنبيه", "always مع المستمر تعني التذمّر: <span class=\"en\">He's always losing his keys!</span>"]], "perf": [["شائع", "الأمريكيون يستخدمونه أقل، فقد تسمع <span class=\"en\">Did you eat yet?</span> بدل <span class=\"en\">Have you eaten yet?</span> — والاثنان مفهومان."], ["استثناء", "<span class=\"en\">He has been to Paris</span> = ذهب ورجع، <span class=\"en\">He has gone to Paris</span> = ما زال هناك."], ["تنبيه", "لا يجتمع مع yesterday / ago / last."]], "pc": [["استثناء", "أفعال الحالة لا تأخذه: <span class=\"en\">I have known him for years</span> ✔."], ["تنبيه", "مع live و work و for/since الزمنان صحيحان تقريباً: <span class=\"en\">I've lived / I've been living here for 5 years.</span>"], ["شائع", "<span class=\"en\">How long have you been…?</span> من أشهر أسئلة المحادثة."]], "psimple": [["شائع جداً", "زمن القصص والأحداث — تحتاجه في كل حديث عن الماضي."], ["استثناء", "حوالي 100 فعل شاذ لا تأخذ ed (go → went، buy → bought). احفظها تدريجياً من جدول الأفعال الشاذة في «الأخطاء والقواعد»."], ["تنبيه", "للعادة القديمة يمكن أيضاً: <span class=\"en\">I used to walk to school.</span>"]], "pcont": [["تنبيه", "لا تستخدمه للعادة: <span class=\"en\">I was going to school every day</span> ✕ ← <span class=\"en\">I went / I used to go</span>."], ["شائع", "مثالي لوصف خلفية القصة: <span class=\"en\">It was raining and people were running…</span>"], ["استثناء", "أفعال الحالة لا تأخذه: <span class=\"en\">I was knowing</span> ✕ ← <span class=\"en\">I knew</span>."]], "pperf": [["تنبيه", "استخدمه فقط عندما يوجد حدث ماضٍ آخر تقارن به. لرحلة عادية قل <span class=\"en\">I visited Cairo</span>، لا <span class=\"en\">I had visited</span>."], ["شائع", "مع before و after يجوز غالباً الماضي البسيط لأن الترتيب واضح: <span class=\"en\">After I finished, I left.</span> ✔"], ["شائع", "في الكلام يُختصر: <span class=\"en\">I'd already eaten</span> (I'd = I had)."]], "ppc": [["نادر نسبياً", "أكثر في القصص والكتابة منه في الكلام اليومي."], ["تنبيه", "<span class=\"en\">'d</span> قد تعني had أو would: <span class=\"en\">I'd been waiting</span> (had) مقابل <span class=\"en\">I'd like</span> (would)."]], "will": [["شائع", "في الكلام يُختصر دائماً تقريباً: <span class=\"en\">I'll, she'll, won't</span>."], ["تنبيه", "لا تستخدم will بعد if / when / before للمستقبل: <span class=\"en\">If it rains, we'll stay home.</span>"], ["شائع", "لعرض المساعدة بأدب: <span class=\"en\">Shall I open the window?</span>"]], "goto": [["شائع جداً", "في الكلام السريع يُنطق <span class=\"en\">gonna</span> — افهمه ولا تكتبه في الرسائل الرسمية."], ["تنبيه", "<span class=\"en\">I'm going to go shopping</span> صحيح تماماً رغم تكرار go."]], "fcont": [["قليل الاستخدام", "أقل من will و going to، لكنه مهذّب جداً في الأسئلة: <span class=\"en\">Will you be joining us?</span>"]], "fperf": [["قليل الاستخدام", "يظهر غالباً مع by."], ["تنبيه", "by هنا تعني «عند أو قبل» موعد، وليس «بواسطة»."]], "fpc": [["نادر جداً", "تعلّمه للفهم فقط؛ في الكلام العادي نادراً ما تحتاجه."]]};
+const GLOSS={"a": "أداة نكرة (واحد)", "about": "عن، حول", "accident": "حادث", "after": "بعد", "again": "مرة أخرى", "ages": "مدة طويلة جداً", "ago": "منذ (في الماضي)", "agree": "يوافق", "airport": "مطار", "all": "كل، جميع", "already": "بالفعل، سابقاً", "always": "دائماً", "an": "أداة نكرة (قبل حرف متحرك)", "and": "و", "angry": "غاضب", "annoyed": "منزعج", "answer": "يجيب، إجابة", "anyone": "أي أحد", "anything": "أي شيء", "apartment": "شقة", "argue": "يتجادل", "arrive": "يصل", "at": "في، عند", "attend": "يحضر (اجتماعاً)", "attention": "انتباه", "aunt": "عمة، خالة", "baby": "طفل رضيع", "bag": "حقيبة", "bank": "بنك، مصرف", "be": "يكون", "beach": "شاطئ", "because": "لأن", "before": "قبل", "believe": "يصدّق، يعتقد", "bike": "دراجة", "bill": "فاتورة", "birthday": "عيد ميلاد", "boil": "يغلي", "book": "كتاب / يحجز", "bread": "خبز", "break": "يكسر، يتعطّل (break down)", "breakfast": "فطور", "breath": "نَفَس (out of breath: يلهث)", "bridge": "جسر", "brother": "أخ", "build": "يبني", "bus": "حافلة", "buy": "يشتري", "by": "بحلول، قبل (موعد) / بواسطة", "call": "يتصل، ينادي", "camel": "جمل", "can": "يستطيع", "car": "سيارة", "carry": "يحمل", "cartoon": "رسوم متحركة", "change": "يغيّر", "chapter": "فصل (في كتاب)", "child": "طفل", "chop": "يقطّع", "city": "مدينة", "clean": "ينظّف / نظيف", "close": "يغلق", "cloud": "سحابة", "coffee": "قهوة", "cold": "بارد", "come": "يأتي", "company": "شركة", "cook": "يطبخ", "corridor": "ممر", "country": "دولة، بلد", "course": "دورة دراسية", "cousin": "ابن العم/الخال", "cry": "يبكي", "cup": "فنجان، كوب", "cut": "يجرح، يقطع", "dark": "مظلم، داكن", "day": "يوم", "decade": "عقد (عشر سنوات)", "december": "ديسمبر", "decision": "قرار", "describe": "يصف", "desert": "صحراء", "dinner": "عشاء", "dirty": "متّسخ", "do": "يفعل", "doctor": "طبيب", "dog": "كلب", "door": "باب", "down": "أسفل", "downtown": "وسط المدينة", "drink": "يشرب", "drive": "يقود (سيارة)", "each": "كل (each other: بعضنا بعضاً)", "early": "مبكراً", "eat": "يأكل", "electricity": "كهرباء", "email": "بريد إلكتروني", "emit": "يبعث، يُطلق", "end": "ينتهي / نهاية", "engineer": "مهندس", "english": "الإنجليزية", "enough": "كافٍ", "evening": "مساء", "ever": "قطّ، من قبل (في السؤال)", "every": "كل", "exam": "امتحان", "exhausted": "مُنهَك", "eye": "عين", "fall": "يسقط", "far": "بعيد", "father": "أب", "feel": "يشعر", "fifty": "خمسون", "film": "فيلم", "finally": "أخيراً", "find": "يجد", "finger": "إصبع", "finish": "يُنهي", "five": "خمسة", "fix": "يُصلح", "fluently": "بطلاقة", "fly": "يطير، يسافر بالطائرة", "football": "كرة القدم", "for": "لمدة / من أجل", "forget": "ينسى", "friday": "الجمعة", "friend": "صديق", "from": "من", "fun": "متعة", "get": "يحصل، يصل، يصبح", "give": "يعطي", "glass": "كأس، زجاج", "glasses": "نظارة", "go": "يذهب", "good": "جيد", "graduate": "يتخرّج", "grandfather": "جدّ", "grandma": "جدّة", "gravity": "الجاذبية", "great": "رائع", "ground": "الأرض", "guest": "ضيف", "gym": "نادٍ رياضي", "habit": "عادة", "half": "نصف", "halwa": "حلوى", "hand": "يد", "hard": "بجد / صعب", "have": "يملك، لديه / فعل مساعد", "he": "هو", "heat": "حرارة", "heavy": "ثقيل", "help": "يساعد", "her": "ها، لها", "here": "هنا", "him": "ـه، له", "hire": "يوظّف", "his": "ـه (ملكية)", "hold": "يمسك، يعقد (اجتماعاً)", "home": "البيت", "homework": "واجب منزلي", "hospital": "مستشفى", "hotel": "فندق", "hour": "ساعة (مدة)", "house": "بيت", "how": "كيف (how long: منذ متى / how often: كم مرة)", "hungry": "جائع", "hurry": "يُسرع", "husband": "زوج", "i": "أنا", "if": "إذا", "important": "مهم", "in": "في", "increase": "يزداد، يرتفع", "interview": "مقابلة", "it": "هو/هي (لغير العاقل)", "job": "وظيفة", "join": "ينضم، يشترك", "just": "للتو / فقط", "key": "مفتاح", "kitchen": "مطبخ", "knock": "يطرق", "know": "يعرف", "land": "يهبط (الطائرة)", "language": "لغة", "laptop": "حاسوب محمول", "last": "الماضي (last week) / آخر", "late": "متأخر", "lately": "مؤخراً", "laugh": "يضحك", "learn": "يتعلّم", "leave": "يغادر، يترك", "lend": "يُعير، يُقرض", "lesson": "درس", "letter": "رسالة، حرف", "lie": "يستلقي", "light": "ضوء", "like": "يحب / مثل", "listen": "يستمع", "live": "يعيش، يسكن", "long": "طويل", "look": "ينظر، يبدو (look for: يبحث عن)", "lose": "يفقد، يُضيع", "lot": "كثير (a lot)", "loudly": "بصوت عالٍ", "love": "يحب", "lunch": "غداء", "major": "تخصص (دراسي)", "make": "يصنع، يحضّر", "manager": "مدير", "many": "كثير (للمعدود)", "march": "مارس", "market": "سوق", "match": "مباراة", "me": "ني، لي", "meat": "لحم", "medicine": "الطب، دواء", "meet": "يقابل، يلتقي", "meeting": "اجتماع", "middle": "منتصف", "midnight": "منتصف الليل", "minute": "دقيقة", "monday": "الاثنين", "money": "مال", "month": "شهر", "morning": "صباح", "move": "ينتقل، يتحرك", "museum": "متحف", "my": "ـي (ملكية)", "name": "اسم", "near": "قريب من", "need": "يحتاج", "nervous": "متوتّر", "never": "أبداً، لم يسبق", "new": "جديد", "news": "الأخبار", "newspaper": "صحيفة", "next": "القادم", "night": "ليل", "nobody": "لا أحد", "noon": "الظهر", "not": "لا، ليس", "now": "الآن", "of": "من (إضافة)", "often": "غالباً، كثيراً", "oh": "آه", "omani": "عُماني", "on": "على / يوم (on Monday)", "onion": "بصل", "open": "يفتح / مفتوح", "orbit": "يدور حول", "other": "آخر", "our": "ـنا (ملكية)", "out": "خارج", "own": "يملك", "parent": "أحد الوالدين", "park": "حديقة عامة", "party": "حفلة", "pass": "ينجح (في امتحان)", "pay": "يدفع (pay attention: ينتبه)", "pen": "قلم", "people": "ناس", "pick": "يلتقط (pick up: يُقلّ شخصاً)", "plan": "خطة / يخطط", "plane": "طائرة", "planet": "كوكب", "play": "يلعب", "prefer": "يفضّل", "prepare": "يحضّر", "present": "يعرض، يقدّم / الحاضر", "price": "سعر", "probably": "على الأرجح", "project": "مشروع", "promise": "يَعِد / وعد", "question": "سؤال", "quiet": "هادئ", "rain": "يمطر / مطر", "rarely": "نادراً", "read": "يقرأ", "realize": "يدرك", "red": "أحمر", "remember": "يتذكّر", "repair": "يُصلح", "repeat": "يكرّر", "reply": "يرد", "report": "تقرير", "restaurant": "مطعم", "result": "نتيجة", "ride": "يركب", "right": "حالاً (right now) / صحيح", "ring": "يرنّ", "road": "طريق", "robot": "روبوت", "run": "يجري، يركض", "sad": "حزين", "save": "يدّخر، يحفظ", "school": "مدرسة", "secret": "سرّ", "see": "يرى", "sell": "يبيع", "sentence": "جملة", "shall": "صيغة للعرض والاقتراح (Shall I…?)", "she": "هي", "shop": "متجر", "shopping": "تسوّق", "shower": "دُش، استحمام", "show": "يُظهر", "since": "منذ (نقطة بداية)", "sit": "يجلس", "six": "ستة", "sleep": "ينام", "smart": "ذكي", "snow": "ثلج / يتساقط الثلج", "so": "لذلك / جداً (so far: حتى الآن)", "solar": "شمسي", "some": "بعض", "someone": "شخص ما", "soon": "قريباً", "sorry": "آسف", "speak": "يتحدث", "start": "يبدأ", "station": "محطة", "stay": "يبقى، يقيم", "still": "ما زال", "study": "يدرس", "summer": "الصيف", "sun": "الشمس", "sunday": "الأحد", "sushi": "سوشي", "sweets": "حلويات", "system": "نظام", "table": "طاولة", "take": "يأخذ", "tea": "شاي", "teach": "يدرّس، يعلّم", "team": "فريق", "tell": "يخبر", "ten": "عشرة", "tense": "زمن (في القواعد)", "term": "فصل دراسي", "that": "ذلك، أنّ", "the": "أداة التعريف (الـ)", "then": "ثم، حينها", "there": "هناك", "they": "هم", "think": "يفكّر، يعتقد", "thirsty": "عطشان", "this": "هذا", "those": "أولئك، تلك", "three": "ثلاثة", "ticket": "تذكرة", "time": "وقت", "tired": "متعب", "to": "إلى", "today": "اليوم", "together": "معاً", "tomorrow": "غداً", "tonight": "الليلة", "train": "قطار", "travel": "يسافر", "trip": "رحلة", "try": "يجرّب، يحاول", "tv": "تلفاز", "twelve": "اثنا عشر", "twenty": "عشرون", "two": "اثنان", "uncle": "عم، خال", "understand": "يفهم", "university": "جامعة", "up": "أعلى", "us": "نا، لنا", "use": "يستخدم (used to: اعتاد)", "usually": "عادةً", "visit": "يزور", "wait": "ينتظر", "walk": "يمشي", "wallet": "محفظة", "want": "يريد", "watch": "يشاهد / ساعة يد (watch out: انتبه)", "water": "ماء", "we": "نحن", "wear": "يرتدي", "weather": "الطقس", "wedding": "حفل زفاف", "week": "أسبوع", "weekend": "عطلة نهاية الأسبوع", "well": "جيداً", "wet": "مبلّل", "what": "ماذا، ما", "when": "عندما، متى", "which": "أيّ، الذي", "while": "بينما", "whole": "كامل", "why": "لماذا", "will": "سوف (للمستقبل)", "window": "نافذة", "with": "مع", "work": "يعمل / عمل", "worker": "عامل", "worry": "يقلق", "would": "فعل مساعد (I'd like: أودّ)", "write": "يكتب", "year": "سنة", "yesterday": "أمس", "yet": "بعد (في النفي) / حتى الآن (في السؤال)", "you": "أنت، أنتم", "your": "ـك (ملكية)", "gonna": "(عامية) going to", "km": "كيلومتر", "o'clock": "الساعة (للتوقيت)", "continuous": "مستمر", "past": "الماضي", "perfect": "تام، مثالي", "permanent": "دائم", "phone": "هاتف", "regular": "منتظم، عادي", "simple": "بسيط", "saturday": "السبت", "july": "يوليو", "june": "يونيو"};
+const IRR={"went": "go", "gone": "go", "goes": "go", "was": "be", "were": "be", "been": "be", "is": "be", "am": "be", "are": "be", "isn't": "be", "aren't": "be", "wasn't": "be", "weren't": "be", "has": "have", "had": "have", "hasn't": "have", "haven't": "have", "hadn't": "have", "did": "do", "does": "do", "done": "do", "didn't": "do", "doesn't": "do", "don't": "do", "won't": "will", "can't": "can", "ate": "eat", "eaten": "eat", "drank": "drink", "drunk": "drink", "wrote": "write", "written": "write", "drove": "drive", "driven": "drive", "ran": "run", "spoke": "speak", "spoken": "speak", "made": "make", "bought": "buy", "built": "build", "broke": "break", "broken": "break", "came": "come", "cut": "cut", "felt": "feel", "flew": "fly", "flown": "fly", "forgot": "forget", "forgotten": "forget", "found": "find", "got": "get", "gotten": "get", "gave": "give", "given": "give", "held": "hold", "knew": "know", "known": "know", "lay": "lie", "lain": "lie", "lying": "lie", "left": "leave", "lent": "lend", "lost": "lose", "met": "meet", "paid": "pay", "rang": "ring", "rung": "ring", "rode": "ride", "ridden": "ride", "saw": "see", "seen": "see", "sold": "sell", "sat": "sit", "slept": "sleep", "took": "take", "taken": "take", "taught": "teach", "told": "tell", "thought": "think", "understood": "understand", "wore": "wear", "worn": "wear", "children": "child", "people": "people", "glasses": "glasses", "news": "news", "sweets": "sweets", "i'm": "i", "i've": "i", "i'll": "i", "i'd": "i", "he's": "he", "she's": "she", "she'll": "she", "it's": "it", "we'll": "we", "we've": "we", "they're": "they", "you're": "you", "sun's": "sun", "me": "me", "us": "us", "colder": "cold"};
+const PROPER=new Set(["ahmed", "ali", "barney", "cairo", "dubai", "istanbul", "japan", "london", "paris", "salalah", "ted", "tracy"]);
+function lemma(raw){
+  let w=raw.toLowerCase().replace(/[’]/g,"'");
+  if(IRR[w])return IRR[w];
+  if(GLOSS[w])return w;
+  w=w.replace(/'(s|re|ve|ll|d|m)$/,'');
+  if(IRR[w])return IRR[w]; if(GLOSS[w])return w;
+  const c=[];
+  if(w.endsWith('ies'))c.push(w.slice(0,-3)+'y');
+  if(w.endsWith('ied'))c.push(w.slice(0,-3)+'y');
+  if(w.endsWith('es'))c.push(w.slice(0,-2));
+  if(w.endsWith('s'))c.push(w.slice(0,-1));
+  if(w.endsWith('ed')){c.push(w.slice(0,-2),w.slice(0,-1));if(/(.)\1ed$/.test(w))c.push(w.slice(0,-3))}
+  if(w.endsWith('ing')){const b=w.slice(0,-3);c.push(b,b+'e');if(/(.)\1$/.test(b))c.push(b.slice(0,-1))}
+  for(const x of c){if(IRR[x])return IRR[x];if(GLOSS[x])return x}
+  return null;
+}
+
 /* ================= STORAGE (safe) ================= */
 const store = {
   get(k,d){try{const v=localStorage.getItem('pt_'+k);return v===null?d:JSON.parse(v)}catch(e){return d}},
@@ -753,8 +844,8 @@ const T = id => TENSES.find(t=>t.id===id);
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1600)}
 
 /* ================= NAV ================= */
-const ORDER=['home','build','decide','quiz','fix'];
-const TITLES={home:['English Tense','دليلي اليومي للكلام الصحيح'],build:['مُركِّب الجمل','ابنِ الجملة وراقب التغيير'],decide:['أي زمن أستخدم؟','سؤالان يحسمان اختيارك'],quiz:['تمرّن','10 أسئلة في كل جولة'],fix:['أخطاء وقواعد','صحّح نفسك قبل الكلام']};
+const ORDER=['home','build','decide','quiz','fix','dict'];
+const TITLES={home:['English Tense','دليلي اليومي للكلام الصحيح'],build:['مُركِّب الجمل','ابنِ الجملة وراقب التغيير'],decide:['أي زمن أستخدم؟','سؤالان يحسمان اختيارك'],quiz:['تمرّن','10 أسئلة في كل جولة'],fix:['أخطاء وقواعد','صحّح نفسك قبل الكلام'],dict:['قاموسي','كلماتك الجديدة للمراجعة']};
 let cur='home';
 function show(page){
   if(page===cur)return;
@@ -815,6 +906,7 @@ function openSheet(id){
   $('#shTitle').textContent=t.en; $('#shSub').textContent=t.ar+' — '+t.use;
   $('#shBody').innerHTML=`
    <div class="block"><h3>متى أستخدمه؟</h3><ul class="uses">${t.uses.map(u=>`<li><span class="u">${u.u}</span><span class="x en">${u.x}</span></li>`).join('')}</ul></div>
+   ${NOTES[id]?`<div class="block"><h3>⚠︎ تنبيهات مهمة</h3>${NOTES[id].map(n=>`<div class="note"><span class="ntag ${/نادر|قليل/.test(n[0])?'rare':/استثناء/.test(n[0])?'exc':/شائع/.test(n[0])?'common':''}">${n[0]}</span><span>${n[1]}</span></div>`).join('')}</div>`:''}
    <div class="block"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px"><h3 style="margin:0">التركيب — اضغط على أي صيغة</h3><button class="chip" data-allforms>فتح الكل</button></div>
     ${t.forms.map((f,i)=>`<div class="form${i===0?' open':''}">
       <button class="form-btn" aria-expanded="${i===0}"><span class="sign">${f.s}</span><span style="display:flex;flex-direction:column;flex:1;min-width:0"><span class="lbl">${f.l}</span><span class="fx">${f.fx}</span></span>${chevSVG}</button>
@@ -822,11 +914,12 @@ function openSheet(id){
         ${f.ex.map(x=>`<div class="ex"><div class="en">${x[0]}</div><small>${x[1]}</small></div>`).join('')}
         ${f.warn?`<div class="warn">${f.warn}</div>`:''}</div></div></div></div>`).join('')}
    </div>
+   ${EXTRA[id]?`<div class="block"><div class="ex-head"><h3 style="margin:0">أمثلة إضافية (${EXTRA[id].length})</h3><small>🔊 للاستماع · اضغط كلمة لحفظها</small></div>${EXTRA[id].map(e=>`<div class="xrow"><div class="en">${e[0]}</div><div class="xar">${e[1]}</div><button class="spk" data-say="${encodeURIComponent(e[0].replace(/<[^>]+>/g,''))}" aria-label="استمع">🔊</button></div>`).join('')}</div>`:''}
    <div class="block"><h3>كلمات تدلك عليه</h3><div class="chips">${t.signals.map(s=>`<span class="chip static en">${s}</span>`).join('')}</div></div>
    <div class="block"><div class="compare">${t.compare}</div></div>
    <div class="block lesson-practice"><h3>✎ تدرّب على هذا الدرس</h3><div id="lessonPractice"></div></div>
    <button class="all-btn" data-try="${id}">جرّبه في المُركِّب</button>`;
-  lp=null; renderPractice(id);
+  lp=null; renderPractice(id); tokenize($('#shBody'));
   $('#shBody').scrollTop=0;
   scrim.classList.add('show'); sheet.classList.add('show');
   document.body.style.overflow='hidden';
@@ -970,6 +1063,7 @@ function renderBuilder(){
   $('#bAll').innerHTML=TENSES.filter(t=>t.g===bs.group).map(t=>`<div class="grid-row t-${t.id}"><b>${t.en}</b>
     <div class="en">${build(t.id,'+',bs.subj,v)}</div><div class="en">${build(t.id,'−',bs.subj,v)}</div><div class="en">${build(t.id,'?',bs.subj,v)}</div>
     <small style="color:var(--muted)">${MEANING[t.id]['+']}</small></div>`).join('');
+  tokenize($('#bSentence')); tokenize($('#bAll'));
   store.set('builder',bs);
 }
 $('#bAllBtn').onclick=()=>{const a=$('#bAllAcc');a.classList.toggle('open');$('#bAllBtn').textContent=a.classList.contains('open')?'إخفاء المقارنة':'اعرض هذا الفعل في كل أزمنة المجموعة'};
@@ -1041,6 +1135,7 @@ function renderDec(node='when',why){
        <button class="all-btn" id="decReset" style="margin-top:8px">ابدأ من جديد</button>`;
     }
     $('#decReset').onclick=()=>{decPath=[];decHist=[];renderDec()};
+    tokenize(box);
     const o=box.querySelector('[data-open]'); if(o)o.onclick=()=>openSheet(o.dataset.open);
     if(id!=='past'&&!isOpenG(T(id).g)){const u=store.get('unlocked',{});u[T(id).g]=true;store.set('unlocked',u);renderHome();renderBuilder();renderLists()}
     return;
@@ -1077,6 +1172,7 @@ function renderQ(){
    <div class="qtext">${q.q.replace('___','<span class="gap">?</span>')}</div>
    <div class="qopts">${q.order.map(k=>`<button class="qopt" data-k="${k}">${q.o[k]}</button>`).join('')}</div>
    <div id="qAfter"></div></div>`;
+  tokenize(box.querySelector('.qtext'));
   box.querySelectorAll('.qopt').forEach(b=>b.onclick=()=>{
     if(q.done)return;q.done=true;const k=+b.dataset.k, ok=k===q.a;
     if(ok)qz.score++;
@@ -1092,6 +1188,7 @@ function renderLists(){
 $('#misList').innerHTML=MISTAKES.filter(m=>isOpenG(m[3]||'present')).map(m=>`<div class="mis"><button class="mis-btn"><span class="x-badge">✕</span><span class="en">${m[0]}</span>${chevSVG}</button>
   <div class="acc"><div><div class="fix"><span class="x-badge ok-badge">✓</span><span class="en">${m[1]}</span></div><div class="why">${m[2]}</div></div></div></div>`).join('');
 $('#misList').addEventListener('click',e=>{const b=e.target.closest('.mis-btn');if(!b)return;const a=b.nextElementSibling;a.classList.toggle('open');b.querySelector('.chev').style.transform=a.classList.contains('open')?'rotate(180deg)':''});
+tokenize($('#misList'));
 $('#rulesList').innerHTML=RULES.filter(r=>isOpenG(r.g)).map(r=>`<div class="rule-acc"><button><span>${r.t}<small>${r.d}</small></span>${chevSVG}</button><div class="acc"><div><div class="acc-in">${r.h}</div></div></div></div>`).join('');
 }
 renderLists();
@@ -1110,6 +1207,116 @@ $('#rulesAll').onclick=()=>{const rs=[...document.querySelectorAll('.rule-acc')]
   $('#fsDown').onclick=()=>{if(i>0){i--;apply(true)}};
   apply(false);
 })();
+/* ================= WORDS & DICTIONARY ================= */
+const DAY=864e5, IV=[1,2,4,7,15,30];
+const FORMS={}; Object.entries(IRR).forEach(([f,b])=>{if(/'/.test(f)||f===b||['is','am','are','me','us','children','people','glasses','news','sweets','colder'].includes(f))return;(FORMS[b]=FORMS[b]||new Set()).add(f)});
+function dict(){return store.get('dict',{})}
+function saveDict(d){store.set('dict',d);updateDictUI()}
+function keyOf(w){return lemma(w)||w.toLowerCase()}
+function tokenize(root){
+  if(!root)return; const d=dict();
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{
+    const p=n.parentElement; if(!p||!/[A-Za-z]/.test(n.nodeValue))return NodeFilter.FILTER_REJECT;
+    if(p.closest('button,input,textarea,.w,.gap,svg,label'))return NodeFilter.FILTER_REJECT;
+    if(!p.closest('.en'))return NodeFilter.FILTER_REJECT; return NodeFilter.FILTER_ACCEPT}});
+  const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+  nodes.forEach(n=>{
+    const frag=document.createDocumentFragment();
+    n.nodeValue.split(/([A-Za-z]+(?:['’][A-Za-z]+)?)/).forEach((part,i)=>{
+      if(i%2===0){if(part)frag.appendChild(document.createTextNode(part));return}
+      const sp=document.createElement('span');sp.className='w'+(d[keyOf(part)]?' saved':'');sp.dataset.w=part;sp.textContent=part;frag.appendChild(sp)});
+    n.parentNode.replaceChild(frag,n);
+  });
+}
+function say(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.88;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){toast('الاستماع غير متاح في هذا المتصفح')}}
+let wpCur=null;
+function openWord(el){
+  const w=el.dataset.w, base=lemma(w), key=base||w.toLowerCase(), d=dict(), saved=d[key];
+  const ctxEl=el.closest('.xrow .en,.ex .en,.uses li .x,.grid-row .en,.fix .en,.qtext,.dec-result .en,#bSentence,.compare,.note,.chip,.mis-btn')||el.parentElement;
+  const ctx=(ctxEl.innerText||'').replace(/\s+/g,' ').trim().slice(0,160);
+  wpCur={key,w,ctx};
+  $('#wpWord').textContent=key;
+  const forms=FORMS[key]?[...FORMS[key]].join('، '):'';
+  $('#wpBase').innerHTML=(base&&base!==w.toLowerCase()?`<span class="en">${w}</span> ← أصلها <b class="en">${base}</b>`:'')+(forms?` · صيغ: <span class="en">${forms}</span>`:'')+(PROPER.has(w.toLowerCase())?'اسم علم (مكان أو شخص)':'');
+  $('#wpMean').value=saved?saved.m:(GLOSS[key]||'');
+  $('#wpCtx').textContent=ctx;
+  $('#wpSave').textContent=saved?'✓ محفوظة — احذفها':'احفظ في قاموسي';
+  $('#wpG').href='https://translate.google.com/?sl=en&tl=ar&text='+encodeURIComponent(key)+'&op=translate';
+  $('#wscrim').classList.add('show');$('#wpop').classList.add('show');
+}
+function closeWord(){$('#wscrim').classList.remove('show');$('#wpop').classList.remove('show');wpCur=null}
+$('#wscrim').onclick=closeWord;
+$('#wpSay').onclick=()=>wpCur&&say(wpCur.key);
+$('#wpSave').onclick=()=>{
+  if(!wpCur)return; const d=dict();
+  if(d[wpCur.key]){delete d[wpCur.key];toast('حُذفت من قاموسك')}
+  else{d[wpCur.key]={m:$('#wpMean').value.trim()||'—',ex:wpCur.ctx,added:Date.now(),lvl:0,due:Date.now()};toast('حُفظت في قاموسك ✓')}
+  saveDict(d); markSaved(); closeWord();
+};
+$('#wpMean').addEventListener('change',()=>{if(!wpCur)return;const d=dict();if(d[wpCur.key]){d[wpCur.key].m=$('#wpMean').value.trim()||'—';saveDict(d)}});
+function markSaved(){const d=dict();document.querySelectorAll('.w').forEach(s=>s.classList.toggle('saved',!!d[keyOf(s.dataset.w)]))}
+document.addEventListener('click',e=>{
+  const sp=e.target.closest('.spk'); if(sp){say(decodeURIComponent(sp.dataset.say));return}
+  const w=e.target.closest('.w'); if(w){e.preventDefault();openWord(w)}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeWord()});
+
+function dueList(){const d=dict(),now=Date.now();return Object.keys(d).filter(k=>d[k].lvl<IV.length&&d[k].due<=now)}
+function updateDictUI(){
+  const d=dict(), keys=Object.keys(d), due=dueList();
+  $('#dTotal').textContent=keys.length; $('#dDue').textContent=due.length; $('#dDone').textContent=keys.filter(k=>d[k].lvl>=IV.length).length;
+  const nb=$('#navDue'); nb.hidden=!due.length; nb.textContent=due.length;
+  if(!rv)renderReviewStart(); renderDictList();
+}
+function renderDictList(){
+  const d=dict(), q=($('#dSearch').value||'').trim().toLowerCase();
+  const keys=Object.keys(d).filter(k=>!q||k.includes(q)||(d[k].m||'').includes(q)).sort((a,b)=>d[b].added-d[a].added);
+  $('#dList').innerHTML=keys.length?keys.map(k=>{const x=d[k];return `<div class="dict-item"><span class="dw">${k}</span><button class="mini" data-dsay="${k}" aria-label="استمع">🔊</button><button class="mini" data-ddel="${k}" aria-label="حذف">✕</button>
+    <span class="dm">${x.m}</span>${x.ex?`<span class="dc en">${x.ex.replace(/</g,'&lt;')}</span>`:''}<span class="lvl">${x.lvl>=IV.length?'<b>✓ أتقنتها</b>':'مستوى '+x.lvl+' / '+IV.length}</span></div>`}).join('')
+    :`<p style="text-align:center;color:var(--muted)">${q?'لا نتائج':'قاموسك فارغ. افتح أي درس واضغط على كلمة لا تعرفها.'}</p>`;
+}
+$('#dList').addEventListener('click',e=>{
+  const s=e.target.closest('[data-dsay]'); if(s){say(s.dataset.dsay);return}
+  const x=e.target.closest('[data-ddel]'); if(x){const d=dict();delete d[x.dataset.ddel];saveDict(d);markSaved();toast('حُذفت')}
+});
+$('#dSearch').addEventListener('input',renderDictList);
+$('#dAddBtn').onclick=()=>{const w=$('#dAddW').value.trim().toLowerCase(); if(!/^[a-z' -]+$/.test(w)){toast('اكتب كلمة إنجليزية');return}
+  const d=dict(); const k=lemma(w)||w; d[k]=d[k]||{m:$('#dAddM').value.trim()||GLOSS[k]||'—',ex:'',added:Date.now(),lvl:0,due:Date.now()};
+  saveDict(d); $('#dAddW').value='';$('#dAddM').value=''; markSaved(); toast('أُضيفت ✓')};
+$('#dExport').onclick=()=>{const blob=new Blob([JSON.stringify(dict(),null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='english-tense-dictionary.json';document.body.appendChild(a);a.click();a.remove()};
+$('#dImport').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const inc=JSON.parse(r.result);const d=dict();let n=0;Object.entries(inc).forEach(([k,v])=>{if(!d[k]&&v&&v.m){d[k]=v;n++}});saveDict(d);markSaved();toast('استُرجعت '+n+' كلمة')}catch(err){toast('الملف غير صالح')}};r.readAsText(f);e.target.value=''};
+
+let rv=null;
+function renderReviewStart(){
+  const n=dueList().length, box=$('#dReview');
+  box.innerHTML=n?`<button class="cta" id="rvStart" style="margin:0 0 14px"><span class="q">↻</span><span><b>راجع الآن (${n})</b><span>كلمات حان وقت مراجعتها</span></span></button>`:
+    (Object.keys(dict()).length?`<div class="hint-card" style="margin:0 0 14px">✓ لا توجد كلمات للمراجعة الآن. عُد لاحقاً.</div>`:'');
+  const b=$('#rvStart'); if(b)b.onclick=()=>{rv={q:shuffle(dueList()),done:0,ok:0,show:false,retry:new Set()};renderReview()};
+}
+function renderReview(){
+  const box=$('#dReview');
+  if(!rv.q.length){box.innerHTML=`<div class="qcard" style="margin-bottom:14px;text-align:center"><p class="en" style="font-size:1.6rem;font-weight:700;margin:0;color:var(--accent)">${rv.ok}/${rv.done}</p><p style="margin:2px 0 0">انتهت المراجعة. الكلمات التي تذكّرتها ستعود بعد فترة أطول.</p><button class="primary" id="rvEnd">تم</button></div>`;
+    $('#rvEnd').onclick=()=>{rv=null;updateDictUI()};return}
+  const k=rv.q[0], x=dict()[k];
+  if(!x){rv.q.shift();renderReview();return}
+  const blank=x.ex?x.ex.replace(new RegExp('\\b'+k.replace(/[^a-z]/g,'')+'\\w*','gi'),'____'):'';
+  box.innerHTML=`<div class="qcard" style="margin-bottom:14px"><div class="qmeta"><span>بقي ${rv.q.length}</span><span>مستوى ${x.lvl}</span></div>
+    <div class="rv-word">${k} <button class="mini" id="rvSay">🔊</button></div>
+    ${rv.show?`<div class="rv-mean">${x.m}</div>${x.ex?`<div class="wp-ctx en">${x.ex.replace(/</g,'&lt;')}</div>`:''}
+      <div class="rv-btns"><button class="bad-btn" id="rvBad">لم أتذكّر</button><button class="good-btn" id="rvGood">تذكّرت ✓</button></div>`
+     :`${blank?`<div class="wp-ctx en">${blank.replace(/</g,'&lt;')}</div>`:''}<button class="primary" id="rvShow">أظهر المعنى</button>`}</div>`;
+  $('#rvSay').onclick=()=>say(k);
+  if(!rv.show){$('#rvShow').onclick=()=>{rv.show=true;renderReview()};return}
+  const finish=good=>{const d=dict(),it=d[k];
+    if(good){
+      if(!rv.retry.has(k)){it.lvl=Math.min(it.lvl+1,IV.length);it.due=Date.now()+IV[it.lvl-1]*DAY;rv.ok++}
+      else{it.lvl=0;it.due=Date.now()+DAY}
+      rv.done++;rv.q.shift();
+    } else {it.lvl=0;it.due=Date.now();rv.retry.add(k);rv.q.push(rv.q.shift())}
+    store.set('dict',d);rv.show=false;renderReview();updateDictUI()};
+  $('#rvBad').onclick=()=>finish(false); $('#rvGood').onclick=()=>finish(true);
+}
+
 /* ================= THEME ================= */
 (function(){
   const sun='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
@@ -1125,7 +1332,7 @@ $('#rulesAll').onclick=()=>{const rs=[...document.querySelectorAll('.rule-acc')]
 })();
 
 /* ================= INIT ================= */
-renderHome(); renderBuilder(); renderDec(); updateStats(); renderQ();
+renderHome(); renderBuilder(); renderDec(); updateStats(); renderQ(); updateDictUI();
 history.replaceState({page:'home'},'');
 const lastPage=store.get('page','home'); if(ORDER.includes(lastPage)&&lastPage!=='home')go(lastPage);
 </script>
