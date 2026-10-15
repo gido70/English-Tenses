@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#031634">
+<meta name="theme-color" content="#E6ECF0" id="themeMeta">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="English Tense">
@@ -30,24 +30,30 @@
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* Base: COLOURlovers "Terra?" — deep navy-teal, sand text (less glare than white) */
-  --bg:#031634; --bg2:#033649; --surface:#0A2A47; --surface2:#0F3452; --ink:#E8DDCB; --muted:#A9B4B0; --line:#1D4A63;
-  --accent:#036564; --accent2:#CDB380; --on-accent:#F4EEE2; --violet:#CDB380; --coral:#E08E79;
-  /* Tense accents — soft, matched values (from Adrift in Dreams / Giant Goldfish / Ocean Five / let them eat cake) */
-  --simple:#79BD9A; --cont:#7FC7D9; --perf:#DDBF6A; --pc:#E08E79; --ok:#8CC9A1; --bad:#E58A80;
-  --simple-bg:#12403F; --cont-bg:#103F55; --perf-bg:#3A3826; --pc-bg:#3E2E32;
+  /* Default: soft daylight — warm beige with a hint of blue (not white) */
+  --bg:#ECE6DA; --bg2:#E2E8EE; --surface:#F6F2E9; --surface2:#EFE9DD; --ink:#1F3442; --muted:#5E6B70; --line:#D8CEBB;
+  --accent:#036564; --accent2:#8A6A2B; --on-accent:#F6F2E9; --violet:#8A6A2B; --coral:#B4553F;
+  --simple:#2E7A58; --cont:#2A6C8C; --perf:#946F12; --pc:#B0523C; --ok:#2E7A58; --bad:#B4483C;
+  --simple-bg:#DCEADF; --cont-bg:#D8E6EE; --perf-bg:#F0E4C3; --pc-bg:#F3DDD4;
+  --page-grad:linear-gradient(180deg,#E6ECF0 0%,#ECE6DA 45%,#E9E1D2 100%);
+  --nav-bg:rgba(246,242,233,.94);
   --ar:"Amiri", "Traditional Arabic", "Times New Roman", serif;
   --en:"Literata", Georgia, "Times New Roman", serif;
   --ease:cubic-bezier(.22,.8,.24,1);
   --scale:1.1;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
-  color-scheme:dark;
+  color-scheme:light;
 }
-/* Alternative: lighter teal evening (still no white) */
-:root[data-theme="dusk"]{
-  --bg:#0B3B4F; --bg2:#0E4A5E; --surface:#13526A; --surface2:#185C75; --ink:#F1E9DA; --muted:#BFCBC6; --line:#2B6A80;
-  --simple-bg:#1B5A55; --cont-bg:#195A70; --perf-bg:#4B4A30; --pc-bg:#55393D;
+/* Night reading option (moon button) — COLOURlovers "Terra?" */
+:root[data-theme="night"]{
+  --bg:#031634; --bg2:#033649; --surface:#0A2A47; --surface2:#0F3452; --ink:#E8DDCB; --muted:#A9B4B0; --line:#1D4A63;
+  --accent:#036564; --accent2:#CDB380; --on-accent:#F4EEE2; --violet:#CDB380; --coral:#E08E79;
+  --simple:#79BD9A; --cont:#7FC7D9; --perf:#DDBF6A; --pc:#E08E79; --ok:#8CC9A1; --bad:#E58A80;
+  --simple-bg:#12403F; --cont-bg:#103F55; --perf-bg:#3A3826; --pc-bg:#3E2E32;
+  --page-grad:linear-gradient(180deg,#031634 0%,#04203F 60%,#033649 100%);
+  --nav-bg:rgba(3,22,52,.92);
+  color-scheme:dark;
 }
 html{font-size:calc(16px * var(--scale))}
 *,*::before,*::after{box-sizing:border-box}
@@ -107,7 +113,7 @@ button:focus-visible,.chip:focus-visible{outline:2px solid var(--cont);outline-o
 .section-h{font-size:1.05rem;font-weight:700;margin:26px 0 10px}
 
 /* sheet */
-.scrim{position:fixed;inset:0;background:rgba(4,8,20,.6);opacity:0;pointer-events:none;transition:opacity .3s var(--ease);z-index:40}
+.scrim{position:fixed;inset:0;background:rgba(20,28,36,.45);opacity:0;pointer-events:none;transition:opacity .3s var(--ease);z-index:40}
 .scrim.show{opacity:1;pointer-events:auto}
 .sheet{position:fixed;inset-inline:0;bottom:0;margin:0 auto;max-width:560px;height:92%;background:var(--bg);z-index:50;
   border-radius:24px 24px 0 0;transform:perspective(1400px) translateY(105%) rotateX(22deg);transform-origin:50% 100%;transition:transform .5s var(--ease);display:flex;flex-direction:column;box-shadow:0 -8px 40px rgba(0,0,0,.18)}
@@ -252,13 +258,14 @@ td.en,th.en{font-family:var(--en)}
 /* ===== Calm color layer ===== */
 .lesson-practice{border-color:color-mix(in srgb,var(--c) 45%,var(--line))}
 .lp-badge{position:absolute;top:10px;left:12px;font-family:var(--en);font-size:.75rem;font-weight:700;color:var(--c);background:var(--cbg);padding:1px 8px;border-radius:999px}
-body{background:linear-gradient(180deg,#031634 0%,#04203F 60%,#033649 100%);background-attachment:fixed}
-:root[data-theme="dusk"] body{background:linear-gradient(180deg,#0B3B4F,#0E4A5E);background-attachment:fixed}
+body{background:var(--page-grad);background-attachment:fixed}
+.tcard,.block,.hero,.qcard,.dec-step,.stat,.mis,.rule-acc,.builder-out,.form{box-shadow:0 1px 2px rgba(60,50,30,.06)}
+:root[data-theme="night"] .tcard,:root[data-theme="night"] .block{box-shadow:none}
 body{--pagec:var(--simple)}
 body[data-page="build"]{--pagec:var(--cont)} body[data-page="decide"]{--pagec:var(--perf)}
 body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc)}
 .top h1{color:var(--accent2);font-size:1.15rem}
-.nav{background:rgba(3,22,52,.92)}
+.nav{background:var(--nav-bg)}
 .nav button.on{color:var(--pagec)}
 .nav button.on::after{content:"";width:18px;height:3px;border-radius:3px;background:var(--pagec);margin-top:2px}
 .hero{background:var(--surface);border-color:var(--line)}
@@ -944,12 +951,16 @@ $('#rulesAll').onclick=()=>{const rs=[...document.querySelectorAll('.rule-acc')]
 })();
 /* ================= THEME ================= */
 (function(){
-  const saved=store.get('theme','deep'); if(saved==='dusk')document.documentElement.dataset.theme='dusk';
-  $('#themeBtn').onclick=()=>{
-    const next=document.documentElement.dataset.theme==='dusk'?'deep':'dusk';
-    if(next==='dusk')document.documentElement.dataset.theme='dusk'; else delete document.documentElement.dataset.theme;
-    store.set('theme',next); toast(next==='dusk'?'تركوازي فاتح':'كحلي هادئ');
+  const sun='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+  const moon=$('#themeBtn').innerHTML;
+  const apply=t=>{
+    if(t==='night')document.documentElement.dataset.theme='night'; else delete document.documentElement.dataset.theme;
+    $('#themeBtn').innerHTML=t==='night'?sun:moon;
+    $('#themeBtn').setAttribute('aria-label',t==='night'?'الوضع النهاري':'وضع القراءة الليلية');
+    $('#themeMeta').setAttribute('content',t==='night'?'#031634':'#E6ECF0');
   };
+  apply(store.get('theme2','day'));
+  $('#themeBtn').onclick=()=>{const next=document.documentElement.dataset.theme==='night'?'day':'night';apply(next);store.set('theme2',next);toast(next==='night'?'وضع القراءة الليلية':'الوضع النهاري')};
 })();
 
 /* ================= INIT ================= */
