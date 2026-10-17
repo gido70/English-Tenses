@@ -256,6 +256,17 @@ td.en,th.en{font-family:var(--en)}
 
 
 /* ===== Calm color layer ===== */
+.player{background:var(--surface);border:1px solid color-mix(in srgb,var(--accent) 40%,var(--line));border-radius:20px;padding:16px;margin-bottom:14px;position:sticky;top:calc(6px + env(safe-area-inset-top,0px));z-index:5}
+.pl-label{font-size:.8rem;color:var(--muted);display:flex;justify-content:space-between}
+.pl-en{font-family:var(--en);font-size:1.3rem;line-height:1.5;direction:ltr;text-align:left;min-height:2.6em;margin:8px 0 4px}
+.pl-ar{color:var(--muted);font-size:1rem;min-height:1.6em}
+.pl-ctrls{display:grid;grid-template-columns:1fr 1fr 1.4fr 1fr 1fr;gap:8px;margin-top:12px;direction:ltr}
+.pl-ctrls button{height:50px;border-radius:14px;background:var(--surface2);border:1px solid var(--line);font-size:1.15rem}
+.pl-ctrls .pl-main{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-size:1.4rem}
+.pl-now{animation:plpulse 1.6s ease-in-out infinite}
+@keyframes plpulse{50%{opacity:.55}}
+.cta.alt{background:var(--surface);color:var(--ink);border:1px solid var(--line);margin-top:10px}
+.cta.alt .q{background:var(--cont-bg);color:var(--cont)}
 /* English inside Arabic text: isolated as one LTR unit so it never jumps to the wrong end of the line */
 .lat{font-family:var(--en);direction:ltr;unicode-bidi:isolate;font-weight:600;font-size:.94em;
   background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--accent);padding:0 5px;border-radius:6px;margin:0 2px;white-space:nowrap}
@@ -401,6 +412,8 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
       <span><b>أي زمن أستخدم الآن؟</b><span>أجب عن سؤالين وتعرف الزمن الصحيح لجملتك</span></span>
     </button>
 
+    <button class="cta alt" data-go="listen"><span class="q">🎧</span><span><b>وضع الاستماع</b><span>اسمع الدروس وردّد الجمل — في الطائرة أو الانتظار</span></span></button>
+
     <h3 class="section-h">لماذا تتغير الحروف؟</h3>
     <div class="block">
       <ul class="uses">
@@ -445,12 +458,37 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
     <div id="quizBox"></div>
   </section>
 
+  <!-- LISTEN -->
+  <section class="page" id="p-listen">
+    <p class="page-sub">اسمع الدروس والأمثلة بصوت الهاتف، وردّد بعده. مناسب للطائرة وأماكن الانتظار.</p>
+    <div class="player" id="player">
+      <div class="pl-label"><span id="plTag">جاهز</span><span class="en" id="plPos"></span></div>
+      <div class="pl-en" id="plEn">اختر ما تريد سماعه ثم اضغط ▶</div>
+      <div class="pl-ar" id="plAr"></div>
+      <div class="qbar" style="margin:10px 0 0"><i id="plBar"></i></div>
+      <div class="pl-ctrls"><button id="plStop" aria-label="إيقاف">⏹</button><button id="plPrev" aria-label="السابق">⏮</button><button class="pl-main" id="plPlay" aria-label="تشغيل">▶</button><button id="plNext" aria-label="التالي">⏭</button><button id="plRep" aria-label="أعد الجملة">↺</button></div>
+    </div>
+    <div class="ctrl"><label>ماذا تسمع؟</label><div class="seg" id="lSrc"></div></div>
+    <div class="ctrl" id="lTenseWrap"><label>الدرس</label><div class="chips" id="lTense"></div></div>
+    <div class="ctrl"><label>تكرار كل جملة إنجليزية</label><div class="seg seg3" id="lReps"></div></div>
+    <div class="ctrl"><label>السرعة</label><div class="seg seg3" id="lRate"></div></div>
+    <div class="ctrl"><label>الترجمة العربية بالصوت</label><div class="seg seg3" id="lAr"></div></div>
+    <div class="ctrl"><label>وقف قصير لتردّد الجملة بعده</label><div class="seg seg3" id="lShadow"></div></div>
+    <div class="block" style="--c:var(--muted)"><h3>قبل أن تبدأ</h3>
+      <ul class="uses" style="font-size:.92rem">
+        <li><span>📱 <b>أبقِ الشاشة مفتوحة.</b> الصوت يتوقف إذا قفلت الهاتف أو خرجت من التطبيق؛ والتطبيق يمنع الشاشة من الانطفاء أثناء التشغيل.</span></li>
+        <li><span>✈️ <b>للطائرة:</b> افتح التطبيق مرة واحدة وأنت متصل بالإنترنت، فيُحفظ للعمل بدونه بعد ذلك.</span></li>
+        <li><span>🗣 <b>الصوت العربي</b> يعتمد على هاتفك. إن لم يوجد، تُعرض الترجمة مكتوبة فقط.</span></li>
+      </ul></div>
+  </section>
+
   <!-- DICTIONARY -->
   <section class="page" id="p-dict">
     <p class="page-sub">كل كلمة تضغط عليها وتحفظها تأتي هنا. راجعها يومياً وستثبت في ذاكرتك.</p>
     <div class="hint-card" style="margin:0 0 14px;border-color:var(--pc)"><span style="font-size:1.2rem">📱</span><span><b>تذكير:</b> القاموس محفوظ على <b>هذا الجهاز فقط</b>. الكلمات التي تحفظها في الهاتف لن تظهر في الكمبيوتر، والعكس. لنقلها: «حفظ نسخة» هنا ثم «استرجاع نسخة» في الجهاز الآخر.</span></div>
     <div class="stats" style="grid-template-columns:1fr 1fr 1fr"><div class="stat"><b id="dTotal">0</b><span>كلمة محفوظة</span></div><div class="stat"><b id="dDue">0</b><span>للمراجعة اليوم</span></div><div class="stat"><b id="dDone">0</b><span>أتقنتها</span></div></div>
     <div id="dReview"></div>
+    <button class="all-btn" id="dListen" style="margin:-4px 0 14px">🎧 استمع لكلماتي</button>
     <div class="block" style="--c:var(--accent)"><h3>أضف كلمة بنفسك</h3>
       <input class="inp en" id="dAddW" placeholder="word" dir="ltr" autocomplete="off" autocapitalize="off">
       <input class="inp" id="dAddM" placeholder="المعنى بالعربية" style="margin-top:8px">
@@ -504,7 +542,7 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
 </div>
 
 <script>
-const APP_VERSION='1.6';
+const APP_VERSION='1.7';
 /* ================= DATA ================= */
 const GLYPH = {
   simple:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><g fill="currentColor"><circle cx="14" cy="20" r="3.5"/><circle cx="36" cy="20" r="3.5"/><circle cx="58" cy="20" r="3.5"/><circle cx="80" cy="20" r="3.5"/><circle cx="102" cy="20" r="3.5"/></g></svg>',
@@ -852,8 +890,8 @@ const T = id => TENSES.find(t=>t.id===id);
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1600)}
 
 /* ================= NAV ================= */
-const ORDER=['home','build','decide','quiz','fix','dict'];
-const TITLES={home:['English Tense','دليلي اليومي للكلام الصحيح'],build:['مُركِّب الجمل','ابنِ الجملة وراقب التغيير'],decide:['أي زمن أستخدم؟','سؤالان يحسمان اختيارك'],quiz:['تمرّن','10 أسئلة في كل جولة'],fix:['أخطاء وقواعد','صحّح نفسك قبل الكلام'],dict:['قاموسي','كلماتك الجديدة للمراجعة']};
+const ORDER=['home','build','decide','listen','quiz','fix','dict'];
+const TITLES={home:['English Tense','دليلي اليومي للكلام الصحيح'],build:['مُركِّب الجمل','ابنِ الجملة وراقب التغيير'],decide:['أي زمن أستخدم؟','سؤالان يحسمان اختيارك'],quiz:['تمرّن','10 أسئلة في كل جولة'],fix:['أخطاء وقواعد','صحّح نفسك قبل الكلام'],dict:['قاموسي','كلماتك الجديدة للمراجعة'],listen:['وضع الاستماع','اسمع وردّد']};
 let cur='home';
 function show(page){
   if(page===cur)return;
@@ -895,7 +933,7 @@ function renderHome(){
     </section>`}).join('');
   markHome();
 }
-function refreshAll(){renderHome();renderBuilder();renderLists();qz=null;renderQ()}
+function refreshAll(){renderHome();renderBuilder();renderLists();qz=null;renderQ();renderListen()}
 $('#tenseList').addEventListener('click',e=>{const c=e.target.closest('[data-tense]');if(c){openSheet(c.dataset.tense);return}
   const h=e.target.closest('.grp-head');
   if(h){const g=h.parentElement.dataset.g;const exp=store.get('gexp',{present:true});
@@ -926,6 +964,7 @@ function openSheet(id){
    <div class="block"><h3>كلمات تدلك عليه</h3><div class="chips">${t.signals.map(s=>`<span class="chip static en">${s}</span>`).join('')}</div></div>
    <div class="block"><div class="compare">${t.compare}</div></div>
    <div class="block lesson-practice"><h3>✎ تدرّب على هذا الدرس</h3><div id="lessonPractice"></div></div>
+   <button class="all-btn" data-listen="${id}">🎧 استمع لهذا الدرس</button>
    <button class="all-btn" data-try="${id}">جرّبه في المُركِّب</button>`;
   lp=null; renderPractice(id); tokenize($('#shBody'));
   $('#shBody').scrollTop=0;
@@ -950,6 +989,8 @@ $('#shBody').addEventListener('click',e=>{
   if(fb){const f=fb.parentElement;f.classList.toggle('open');fb.setAttribute('aria-expanded',f.classList.contains('open'))}
   const tr=e.target.closest('[data-try]');
   if(tr){bs.tense=tr.dataset.try;bs.group=T(bs.tense).g;renderBuilder();hideSheetUI();history.replaceState({page:'build'},'');show('build')}
+  const ln=e.target.closest('[data-listen]');
+  if(ln){LS.src=T(ln.dataset.listen).g;LS.t=ln.dataset.listen;store.set('listen',LS);renderListen();hideSheetUI();history.replaceState({page:'listen'},'');show('listen');return}
   const al=e.target.closest('[data-allforms]');
   if(al){const fs=[...$('#shBody').querySelectorAll('.form')];const open=!fs.every(f=>f.classList.contains('open'));fs.forEach(f=>f.classList.toggle('open',open));al.textContent=open?'طي الكل':'فتح الكل'}
 });
@@ -1325,6 +1366,89 @@ function renderReview(){
   $('#rvBad').onclick=()=>finish(false); $('#rvGood').onclick=()=>finish(true);
 }
 
+/* ================= LISTENING MODE ================= */
+const LS=Object.assign({src:'present',t:'all',reps:2,rate:0.85,ar:1,shadow:1},store.get('listen',{}));
+const PL={items:[],i:0,playing:false,tok:0};
+let wakeLock=null;
+const plain=h=>{const d=document.createElement('div');d.innerHTML=h;return d.textContent.replace(/\s+/g,' ').trim()};
+function pickVoice(lang){const vs=speechSynthesis.getVoices();const c=vs.filter(v=>v.lang&&v.lang.toLowerCase().startsWith(lang));
+  return c.find(v=>/en-us|en_us/i.test(v.lang)&&v.localService)||c.find(v=>v.localService)||c[0]||null}
+try{speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>{}}catch(e){}
+function speakP(text,lang,tok){return new Promise(res=>{
+  if(!text||tok!==PL.tok)return res();
+  try{const u=new SpeechSynthesisUtterance(text);const v=pickVoice(lang);if(lang==='ar'&&!v)return res();
+    if(v)u.voice=v;u.lang=v?v.lang:(lang==='ar'?'ar-SA':'en-US');u.rate=lang==='ar'?Math.min(1,LS.rate+.1):LS.rate;
+    let done=false;const fin=()=>{if(!done){done=true;res()}};u.onend=fin;u.onerror=fin;
+    setTimeout(fin,2500+text.length*140/LS.rate);speechSynthesis.speak(u)}catch(e){res()}})}
+const wait=(ms,tok)=>new Promise(r=>setTimeout(r,tok===PL.tok?ms:0));
+function buildItems(){
+  const items=[];
+  if(LS.src==='words'){const d=dict();Object.keys(d).sort((a,b)=>d[b].added-d[a].added).forEach(k=>items.push({tag:'كلماتي',en:k,ar:d[k].m!=='—'?d[k].m:'',en2:d[k].ex||''}));return items}
+  const ts=TENSES.filter(t=>t.g===LS.src&&(LS.t==='all'||t.id===LS.t));
+  ts.forEach(t=>{
+    items.push({tag:t.en,head:true,en:t.en,ar:t.ar+'. '+plain(t.use)});
+    t.uses.forEach(u=>items.push({tag:t.en+' · الاستخدام',en:plain(u.x),ar:plain(u.u),arFirst:true}));
+    t.forms.forEach(f=>f.ex.forEach(x=>items.push({tag:t.en+' · '+f.l,en:plain(x[0]),ar:f.l,arFirst:true})));
+    (EXTRA[t.id]||[]).forEach(x=>items.push({tag:t.en+' · مثال',en:plain(x[0]),ar:x[1]}));
+  });
+  return items;
+}
+function showItem(){
+  const it=PL.items[PL.i]; if(!it)return;
+  $('#plTag').textContent=it.tag; $('#plPos').textContent=(PL.i+1)+' / '+PL.items.length;
+  $('#plEn').textContent=it.en+(it.en2?'\n':''); if(it.en2){$('#plEn').innerHTML='';const a=document.createElement('div');a.textContent=it.en;a.style.fontWeight='700';const b=document.createElement('div');b.textContent=it.en2;b.style.fontSize='.85em';b.style.color='var(--muted)';$('#plEn').append(a,b)}
+  $('#plAr').textContent=it.ar||''; $('#plBar').style.width=((PL.i+1)/PL.items.length*100)+'%';
+}
+async function playItem(it,tok){
+  const reps=it.head?1:LS.reps, arOn=LS.ar&&it.ar;
+  if(it.arFirst&&arOn){await speakP(it.ar,'ar',tok);await wait(350,tok)}
+  for(let r=0;r<reps;r++){
+    await speakP(it.en,'en',tok); if(tok!==PL.tok)return;
+    if(r===0&&arOn&&!it.arFirst){await wait(350,tok);await speakP(it.ar,'ar',tok)}
+    if(r<reps-1)await wait(700,tok);
+  }
+  if(it.en2){await wait(400,tok);await speakP(it.en2,'en',tok)}
+  if(LS.shadow&&!it.head){await wait(Math.min(6000,900+it.en.split(' ').length*520/LS.rate),tok)}
+  await wait(it.head?900:600,tok);
+}
+async function runFrom(i){
+  const tok=++PL.tok; try{speechSynthesis.cancel()}catch(e){}
+  PL.playing=true; setPlayUI(); keepAwake(true);
+  for(PL.i=i;PL.i<PL.items.length;PL.i++){if(tok!==PL.tok)return;showItem();await playItem(PL.items[PL.i],tok)}
+  if(tok!==PL.tok)return; PL.playing=false; PL.i=Math.max(0,PL.items.length-1); setPlayUI(); keepAwake(false); $('#plTag').textContent='انتهى ✓';
+}
+function plStop(reset){PL.tok++;try{speechSynthesis.cancel()}catch(e){}PL.playing=false;setPlayUI();keepAwake(false);if(reset){PL.i=0;PL.items=[];$('#plEn').textContent='اختر ما تريد سماعه ثم اضغط ▶';$('#plAr').textContent='';$('#plTag').textContent='جاهز';$('#plPos').textContent='';$('#plBar').style.width='0'}}
+function setPlayUI(){$('#plPlay').textContent=PL.playing?'⏸':'▶';$('#plTag').classList.toggle('pl-now',PL.playing)}
+async function keepAwake(on){try{if(on&&'wakeLock' in navigator&&!wakeLock){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{wakeLock=null})}if(!on&&wakeLock){await wakeLock.release();wakeLock=null}}catch(e){}}
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&PL.playing){plStop(false);toast('توقف الصوت لأن الشاشة أُغلقت')}});
+$('#plPlay').onclick=()=>{
+  if(!('speechSynthesis' in window)){toast('الصوت غير مدعوم في هذا المتصفح');return}
+  if(PL.playing){plStop(false);return}
+  if(!PL.items.length){PL.items=buildItems();PL.i=0;if(!PL.items.length){toast(LS.src==='words'?'قاموسك فارغ':'لا يوجد محتوى');return}
+    if(LS.ar&&!pickVoice('ar'))toast('لا يوجد صوت عربي على جهازك — ستظهر الترجمة مكتوبة')}
+  runFrom(PL.i);
+};
+$('#plStop').onclick=()=>plStop(true);
+$('#plNext').onclick=()=>{if(!PL.items.length)return;PL.i=Math.min(PL.i+1,PL.items.length-1);PL.playing?runFrom(PL.i):showItem()};
+$('#plPrev').onclick=()=>{if(!PL.items.length)return;PL.i=Math.max(PL.i-1,0);PL.playing?runFrom(PL.i):showItem()};
+$('#plRep').onclick=()=>{if(!PL.items.length)return;runFrom(PL.i)};
+function lseg(el,items,key){el.innerHTML=items.map(([v,l])=>`<button data-v="${v}" class="${String(LS[key])===String(v)?'on':''}">${l}</button>`).join('');
+  el.onclick=e=>{const b=e.target.closest('button');if(!b)return;const v=b.dataset.v;LS[key]=isNaN(+v)?v:+v;if(key==='src')LS.t='all';store.set('listen',LS);if(['src','t'].includes(key))plStop(true);renderListen()}}
+function renderListen(){
+  if(LS.src!=='words'&&!isOpenG(LS.src))LS.src='present';
+  lseg($('#lSrc'),[...GROUPS.filter(G=>isOpenG(G.g)).map(G=>[G.g,G.ar]),['words','كلماتي']],'src');
+  $('#lTenseWrap').style.display=LS.src==='words'?'none':'';
+  if(LS.src!=='words'){const ts=TENSES.filter(t=>t.g===LS.src);
+    $('#lTense').innerHTML=[['all','كل الدروس'],...ts.map(t=>[t.id,`<span class="en">${t.short}</span>`])].map(([v,l])=>`<button class="chip ${LS.t===v?'on':''}" data-v="${v}">${l}</button>`).join('');
+    $('#lTense').onclick=e=>{const b=e.target.closest('button');if(!b)return;LS.t=b.dataset.v;store.set('listen',LS);plStop(true);renderListen()}}
+  lseg($('#lReps'),[[1,'مرة'],[2,'مرتين'],[3,'3 مرات']],'reps');
+  lseg($('#lRate'),[[0.7,'بطيء'],[0.85,'متوسط'],[1,'عادي']],'rate');
+  lseg($('#lAr'),[[1,'نعم'],[0,'لا']],'ar');
+  lseg($('#lShadow'),[[1,'نعم'],[0,'لا']],'shadow');
+  $('#lAr').style.gridTemplateColumns=$('#lShadow').style.gridTemplateColumns='1fr 1fr';
+}
+$('#dListen').onclick=()=>{LS.src='words';store.set('listen',LS);plStop(true);renderListen();go('listen')};
+
 /* ================= BIDI FIX (Arabic + English) ================= */
 const LAT_RE=/\(?-?[A-Za-z][A-Za-z0-9'’()]*(?:(?:\s*[\/+]\s*|[\-\s])\(?-?[A-Za-z0-9][A-Za-z0-9'’()]*)*(?:\.\.\.|…)?/g;
 const HAS_AR=/[\u0600-\u06FF]/;
@@ -1366,7 +1490,8 @@ isolateLatin(document.body);
 })();
 
 /* ================= INIT ================= */
-renderHome(); renderBuilder(); renderDec(); updateStats(); renderQ(); updateDictUI(); $('#appVer').textContent=APP_VERSION;
+renderHome(); renderBuilder(); renderDec(); updateStats(); renderQ(); updateDictUI(); $('#appVer').textContent=APP_VERSION; renderListen();
+if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(()=>{})}
 history.replaceState({page:'home'},'');
 const lastPage=store.get('page','home'); if(ORDER.includes(lastPage)&&lastPage!=='home')go(lastPage);
 </script>
