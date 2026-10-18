@@ -256,6 +256,15 @@ td.en,th.en{font-family:var(--en)}
 
 
 /* ===== Calm color layer ===== */
+.isearch{position:sticky;top:calc(6px + env(safe-area-inset-top,0px));z-index:6;display:flex;align-items:center;gap:8px;background:var(--surface);border:2px solid var(--accent);border-radius:16px;padding:4px 10px;margin:0 0 14px;box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.isearch .inp{border:0;background:transparent;padding:10px 4px;font-size:1.05rem}
+.isearch .inp:focus{outline:none}
+.isearch button{width:30px;height:30px;border-radius:9px;background:var(--surface2);flex:none}
+.isearch button[hidden]{display:none}
+.ires{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:14px}
+.ires h3{margin:0;padding:10px 14px;font-size:.95rem;background:var(--surface2)}
+.ires .gname{grid-column:1 / span 3;direction:rtl;text-align:right;font-size:.78rem;color:var(--accent2)}
+mark.hl{background:color-mix(in srgb,var(--perf) 30%,transparent);color:inherit;border-radius:3px;padding:0 1px;font-weight:inherit}
 .pattern{border-color:color-mix(in srgb,var(--c) 50%,var(--line))}
 .pf{background:var(--cbg);color:var(--c);font-weight:700;border-radius:10px;padding:8px 10px;font-size:1rem}
 .sg{display:inline-block;font-family:var(--en);font-weight:700;font-size:.7rem;width:20px;height:20px;line-height:20px;text-align:center;border-radius:6px;margin-inline-end:6px;vertical-align:middle}
@@ -497,13 +506,16 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
 
   <!-- IRREGULAR VERBS -->
   <section class="page" id="p-irr">
+    <div class="isearch"><span>🔎</span><input class="inp" id="iSearch" placeholder="ابحث في كل الأفعال: go أو went أو gone أو يذهب" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="iClear" aria-label="مسح" hidden>✕</button></div>
+    <div id="iResults"></div>
+    <div id="iMain">
     <p class="page-sub">لا تحفظها بالترتيب الأبجدي. احفظها <b>بالمجموعات</b>: الأفعال التي تتغير بنفس الطريقة معاً، فيتذكر عقلك النمط بدل قائمة طويلة.</p>
     <div class="stats" style="grid-template-columns:1fr 1fr"><div class="stat"><b id="iDone">0</b><span>أتقنتها</span></div><div class="stat"><b id="iTotal">0</b><span>فعلاً في القائمة</span></div></div>
     <div class="irr-tools"><button id="iFlash"><b>🃏</b>بطاقات الحفظ</button><button id="iQuiz"><b>✔︎</b>اختبار سريع</button><button id="iListen"><b>🎧</b>استمع</button></div>
     <div id="iPractice"></div>
     <div class="ctrl"><label>أبدأ بـ</label><div class="seg seg3" id="iFilter" style="grid-template-columns:1fr 1fr"></div></div>
-    <input class="inp" id="iSearch" placeholder="ابحث عن فعل… (مثلاً: went أو يكتب)" style="margin-bottom:12px">
     <div id="iList"></div>
+    </div>
   </section>
 
   <!-- LISTEN -->
@@ -590,7 +602,7 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
 </div>
 
 <script>
-const APP_VERSION='1.9';
+const APP_VERSION='1.9.1';
 /* ================= DATA ================= */
 const GLYPH = {
   simple:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><g fill="currentColor"><circle cx="14" cy="20" r="3.5"/><circle cx="36" cy="20" r="3.5"/><circle cx="58" cy="20" r="3.5"/><circle cx="80" cy="20" r="3.5"/><circle cx="102" cy="20" r="3.5"/></g></svg>',
@@ -1539,8 +1551,22 @@ const irrPool=()=>IRRV.filter(v=>IF.f==='all'||v.s);
 const irrDone=v=>(irrS()[v.a]||{}).lvl>=IV.length;
 const sayV=v=>say(`${v.a}, ${v.b.replace(' / ',' or ')}, ${v.c.replace(' / ',' or ')}`);
 const shortAr=v=>v.ar;
+const normAr=t=>String(t).toLowerCase().replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').trim();
+function hl(text,q){if(!q)return text;const i=normAr(text).indexOf(q);if(i<0||/[\u0600-\u06FF]/.test(text))return text;return text.slice(0,i)+'<mark class="hl">'+text.slice(i,i+q.length)+'</mark>'+text.slice(i+q.length)}
+function renderSearch(){
+  const raw=$('#iSearch').value||'', q=normAr(raw);
+  $('#iClear').hidden=!raw; $('#iMain').style.display=q?'none':'';
+  if(!q){$('#iResults').innerHTML='';return}
+  const hits=IRRV.filter(v=>[v.a,v.b,v.c,v.ar].some(x=>normAr(x).includes(q)))
+    .sort((x,y)=>{const sx=[x.a,x.b,x.c].some(f=>normAr(f).startsWith(q))?0:1, sy=[y.a,y.b,y.c].some(f=>normAr(f).startsWith(q))?0:1;return sx-sy||x.a.localeCompare(y.a)});
+  $('#iResults').innerHTML=hits.length?`<div class="ires"><h3>النتائج (${hits.length})</h3><div class="vhead"><span>V1 · الأصل</span><span>V2 · الماضي</span><span>V3 · الثالث</span><span></span></div>
+    ${hits.map(v=>{const G=IRR_GROUPS.find(g=>g.id===v.g);return `<div class="vrow${irrDone(v)?' ok':''}"><span class="en v1">${v.s?'<span class="star">★</span>':''}${hl(v.a,q)}</span><span class="en v2">${hl(v.b,q)}</span><span class="en v3">${hl(v.c,q)}</span><button class="mini" data-vsay="${v.a}" aria-label="استمع">🔊</button><span class="var">${v.ar}</span><span class="gname">النمط: ${G.ar} · ${G.p}</span></div>`}).join('')}</div>`
+    :`<div class="hint-card" style="margin:0 0 14px">لا يوجد فعل شاذ بهذا الاسم. إذا كان فعلاً عادياً فماضيه وتصريفه الثالث بإضافة <b>ed</b>: <span class="en">${raw.trim()} → ${regForm(raw.trim().toLowerCase())}</span></div>`;
+}
+$('#iResults').addEventListener('click',e=>{const sp=e.target.closest('[data-vsay]');if(sp)sayV(IRRV.find(v=>v.a===sp.dataset.vsay))});
+$('#iClear').onclick=()=>{$('#iSearch').value='';renderSearch();$('#iSearch').focus()};
 function renderIrr(){
-  const st=irrS(), q=($('#iSearch').value||'').trim().toLowerCase(), pool=irrPool();
+  const st=irrS(), q='', pool=irrPool();
   $('#iTotal').textContent=pool.length; $('#iDone').textContent=pool.filter(irrDone).length;
   $('#iFilter').innerHTML=[['star','⭐ الأهم (66)'],['all','الكل (146)']].map(([v,l])=>`<button data-v="${v}" class="${IF.f===v?'on':''}">${l}</button>`).join('');
   const openSet=store.get('igo',{special:true,aaa:true});
@@ -1559,7 +1585,7 @@ $('#iList').addEventListener('click',e=>{
   const h=e.target.closest('.ig>button'); if(h){const g=h.parentElement;g.classList.toggle('open');const o=store.get('igo',{special:true,aaa:true});o[g.dataset.g]=g.classList.contains('open');store.set('igo',o)}
 });
 $('#iFilter').onclick=e=>{const b=e.target.closest('button');if(!b)return;IF.f=b.dataset.v;store.set('irrf',IF);iP=null;$('#iPractice').innerHTML='';renderIrr()};
-$('#iSearch').addEventListener('input',renderIrr);
+$('#iSearch').addEventListener('input',renderSearch);
 $('#iListen').onclick=()=>{LS.src='irr';LS.t=IF.f;store.set('listen',LS);plStop(true);renderListen();go('listen')};
 
 let iP=null;
