@@ -58,7 +58,9 @@
 html{font-size:calc(16px * var(--scale))}
 *,*::before,*::after{box-sizing:border-box}
 html,body{height:100%;margin:0}
-html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%;background:var(--bg)}
+/* opaque strip under the phone status bar: content never scrolls behind clock/wifi */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:35;pointer-events:none}
 body{background:radial-gradient(120% 60% at 100% 0%,var(--bg2),transparent 60%),var(--bg);background-attachment:fixed;color:var(--ink);font-family:var(--ar);font-size:1.125rem;line-height:1.8;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
 button:focus-visible,.chip:focus-visible{outline:2px solid var(--cont);outline-offset:2px;border-radius:10px}
@@ -256,26 +258,41 @@ td.en,th.en{font-family:var(--en)}
 
 
 /* ===== Calm color layer ===== */
+/* Mixed text is split: Arabic explanation (right) | numbered English terms (left) */
+.mx{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.mx-ar{flex:1 1 150px;min-width:0}
+.mx-en{flex:0 1 auto;max-width:48%;min-width:90px;direction:ltr;text-align:left;border-right:2px solid var(--line);padding-right:10px;display:flex;flex-direction:column;gap:3px}
+.mx-item{display:flex;gap:6px;align-items:baseline;font-family:var(--en);line-height:1.45}
+.mx-item .lat,.mx-item .en{background:none!important;padding:0!important;margin:0!important;white-space:normal!important;color:var(--accent);font-size:.95em;font-weight:600}
+.ref{font-family:var(--en);font-size:.78em;font-weight:700;color:var(--accent2);flex:none}
+.mx-ar .ref{margin:0 2px}
+.set-pop{position:absolute;top:46px;left:0;z-index:40;width:250px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:8px 12px;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.set-pop[hidden]{display:none}
+.set-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:.92rem}
+.set-row:last-child{border-bottom:0}
+.set-ctl{display:flex;align-items:center;gap:6px}
 .fs-pop{position:absolute;top:46px;left:0;z-index:40;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.15)}
 .fs-pop[hidden]{display:none}
 #fsLvl{min-width:34px;text-align:center;font-weight:700;color:var(--accent2)}
-#updBtn.spin svg{animation:spin .8s linear infinite}
+#updBtn.spin{opacity:.6}
 @keyframes spin{to{transform:rotate(360deg)}}
-#updBtn.has::after{content:"";position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--pc)}
+#setBtn.has::after{content:"";position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--pc)}
+#setBtn{position:relative}
 #updBtn{position:relative}
-.upd-bar{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top,0px));transform:translate(-50%,-140%);transition:transform .4s var(--ease);z-index:90;display:flex;align-items:center;gap:10px;
-  background:var(--accent);color:var(--on-accent);padding:8px 8px 8px 14px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.2);font-size:.92rem;white-space:nowrap}
-.upd-bar.show{transform:translate(-50%,0)}
+.upd-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0 0;background:var(--accent);color:var(--on-accent);padding:8px 8px 8px 14px;border-radius:14px;font-size:.92rem;animation:pageIn .4s var(--ease)}
+.upd-bar[hidden]{display:none}
 .upd-bar button{background:var(--on-accent);color:var(--accent);border-radius:10px;padding:6px 12px;font-weight:700}
 /* ---- English-first: Arabic explanations hidden until tapped ---- */
 .u-en{display:block;font-size:.88rem;font-weight:700;color:var(--c,var(--accent));text-align:left}
 .en-use{color:var(--muted)!important;font-size:.85rem!important;text-align:right!important}
 .arline{color:var(--muted);font-size:.85rem}
-.enfirst .arx:not(.open){font-size:0!important;line-height:0!important;display:inline-block!important;background:none!important;border:0!important;padding:0!important;margin:3px 0!important;color:transparent!important;min-height:0!important;grid-column:auto}
+.enfirst .arx:not(.open){font-size:0!important;line-height:0!important;display:block!important;background:none!important;border:0!important;padding:0!important;margin:4px 0 2px!important;color:transparent!important;min-height:0!important}
 .enfirst .arx:not(.open) *{display:none!important}
-.enfirst .arx:not(.open)::before,.arpill{content:"ع";display:inline-grid;place-items:center;width:28px;height:22px;border-radius:7px;background:var(--surface2);border:1px dashed var(--accent2);color:var(--accent2);font:700 .8rem/1 var(--ar);cursor:pointer;vertical-align:middle}
-.enfirst .arx.open{animation:arIn .3s var(--ease)}
-@keyframes arIn{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+.enfirst .arx::before,.arpill{content:"عربي ▾";display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 10px;border-radius:999px;background:var(--surface2);border:1px solid var(--accent2);color:var(--accent2);font:700 .78rem/1 var(--ar);cursor:pointer;vertical-align:middle;white-space:nowrap}
+.enfirst .arx.open{display:block;background:var(--surface2);border:1px dashed color-mix(in srgb,var(--accent2) 60%,transparent);border-radius:12px;padding:8px 10px!important;margin:6px 0!important;animation:arIn .25s var(--ease)}
+.enfirst .arx.open::before{content:"إخفاء ▴";display:flex;width:max-content;margin:0 0 6px;background:var(--surface);font-size:.74rem;height:22px}
+.compare.arx.open,.itip.arx.open{border-inline-start-width:1px}
+@keyframes arIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 #arBtn{font-size:.82rem;letter-spacing:.5px}
 body:not(.enfirst) #arBtn{color:var(--muted)}
 .isearch{position:sticky;top:calc(6px + env(safe-area-inset-top,0px));z-index:6;display:flex;align-items:center;gap:8px;background:var(--surface);border:2px solid var(--accent);border-radius:16px;padding:4px 10px;margin:0 0 14px;box-shadow:0 4px 14px rgba(0,0,0,.08)}
@@ -408,7 +425,13 @@ body{background:var(--page-grad);background-attachment:fixed}
 body{--pagec:var(--simple)}
 body[data-page="build"]{--pagec:var(--cont)} body[data-page="decide"]{--pagec:var(--perf)}
 body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc)}
-.top h1{color:var(--accent2);font-size:1.15rem}
+.top h1{color:var(--accent2);font-size:1.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:calc(100vw - 170px)}
+.top>div:first-child{min-width:0;flex:1}
+.top-actions{gap:5px!important}
+.top .fs-btn,.top .icon-btn{width:36px;height:38px}
+.why-t{display:block;margin-top:4px}
+body:not([data-page="home"]) #topSub{display:none}
+.top{gap:8px}
 .nav{background:var(--nav-bg)}
 .nav button.on{color:var(--pagec)}
 .nav button.on::after{content:"";width:18px;height:3px;border-radius:3px;background:var(--pagec);margin-top:2px}
@@ -435,6 +458,7 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
 </head>
 <body>
 <div class="app">
+  <div class="upd-bar" id="updBar" hidden><span id="updTxt">✨ نسخة جديدة متاحة</span><button id="updGo">حدّث الآن</button></div>
   <header class="top">
     <div style="display:flex;align-items:center;gap:10px">
       <button class="icon-btn" id="backBtn" aria-label="الرجوع للرئيسية" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
@@ -442,12 +466,12 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
     </div>
     <div class="top-actions">
     <button class="fs-btn" id="arBtn" aria-label="إظهار أو إخفاء العربي">EN</button>
-    <div style="position:relative"><button class="fs-btn" id="fsMenu" dir="ltr" aria-label="حجم الخط" style="font-size:1rem">Aa</button>
-      <div class="fs-pop" id="fsPop" hidden><button class="fs-btn" id="fsDown" dir="ltr" aria-label="تصغير الخط"><small>A</small>−</button><span id="fsLvl" class="en"></span><button class="fs-btn" id="fsUp" dir="ltr" aria-label="تكبير الخط">A+</button></div></div>
-    <button class="icon-btn" id="updBtn" aria-label="تحديث التطبيق"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></button>
-    <button class="icon-btn" id="themeBtn" aria-label="تبديل درجة الأزرق">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-    </button>
+    <div style="position:relative"><button class="icon-btn" id="setBtn" aria-label="الإعدادات"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+      <div class="set-pop" id="setPop" hidden>
+        <div class="set-row"><span>حجم الخط</span><div class="set-ctl"><button class="fs-btn" id="fsDown" dir="ltr" aria-label="تصغير الخط">A−</button><span id="fsLvl" class="en"></span><button class="fs-btn" id="fsUp" dir="ltr" aria-label="تكبير الخط">A+</button></div></div>
+        <div class="set-row"><span>الوضع</span><button class="ghost" id="themeBtn" style="padding:7px 12px">🌙 ليلي</button></div>
+        <div class="set-row"><span>التحديث <small class="en" id="setVer"></small></span><button class="ghost" id="updBtn" style="padding:7px 12px">🔄 تحديث</button></div>
+      </div></div>
     </div>
   </header>
 
@@ -471,7 +495,7 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
       </div>
     </div>
 
-    <div class="hint-card"><span style="font-size:1.3rem">👆</span><span>اضغط على <b>أي كلمة إنجليزية</b> لترى معناها وتحفظها في <b>قاموسي</b>. الشرح العربي مخفي: اضغط <b class="arpill">ع</b> عندما تحتاجه.</span></div>
+    <div class="hint-card"><span style="font-size:1.3rem">👆</span><span>اضغط على <b>أي كلمة إنجليزية</b> لترى معناها وتحفظها في <b>قاموسي</b>. الشرح العربي مطوي: اضغط <span class="arpill">عربي ▾</span> لفتحه، واضغطه مرة أخرى لطيّه.</span></div>
     <div class="quick">
     <button class="cta alt" style="margin:0 0 10px" data-go="irr"><span class="q">📚</span><span><b>الأفعال الشاذة (التصريف الثاني والثالث)</b><span>146 فعلاً مقسّمة بالأنماط، مع بطاقات حفظ واختبار</span></span></button>
     <button class="cta alt" style="margin:0 0 10px" data-go="listen"><span class="q">🎧</span><span><b>وضع الاستماع</b><span>اسمع الدروس وردّد الجمل — في الطائرة أو الانتظار</span></span></button>
@@ -617,7 +641,7 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
   <div class="sheet-body" id="shBody"></div>
 </div>
 <div class="toast" id="toast"></div>
-<div class="upd-bar" id="updBar"><span id="updTxt">✨ نسخة جديدة متاحة</span><button id="updGo">حدّث الآن</button></div>
+
 <div class="wscrim" id="wscrim"></div>
 <div class="wpop" id="wpop" role="dialog" aria-modal="true">
   <div class="wp-top"><div style="flex:1"><div class="wp-word en" id="wpWord"></div><div class="wp-base" id="wpBase"></div></div><button class="icon-btn" id="wpSay" aria-label="استمع">🔊</button></div>
@@ -627,7 +651,7 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
 </div>
 
 <script>
-const APP_VERSION='2.1';
+const APP_VERSION='2.2';
 /* ================= DATA ================= */
 const GLYPH = {
   simple:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><g fill="currentColor"><circle cx="14" cy="20" r="3.5"/><circle cx="36" cy="20" r="3.5"/><circle cx="58" cy="20" r="3.5"/><circle cx="80" cy="20" r="3.5"/><circle cx="102" cy="20" r="3.5"/></g></svg>',
@@ -1238,17 +1262,17 @@ $('#bAllBtn').onclick=()=>{const a=$('#bAllAcc');a.classList.toggle('open');$('#
 /* ================= DECISION ================= */
 const DEC = {
   when:{q:'متى يقع الحدث الذي تتكلم عنه؟', h:'ابدأ بتحديد موقعه من «الآن».', o:[
-    {b:'في الماضي — وانتهى',s:'yesterday / last year / قصة حدثت',n:'past'},
+    {b:'في الماضي — وانتهى',s:'yesterday · last year · a story',n:'past'},
     {b:'في الحاضر أو مرتبط بالآن',s:'عادة، الآن، أو حدث نتيجته باقية',n:'start'},
     {b:'في المستقبل',s:'tomorrow / next week / by 2030',n:'future'}]},
   start:{q:'هل للحدث علاقة بالماضي؟', h:'بدأ قبل الآن، أو حدث قبل الآن ونتيجته باقية.', o:[
     {b:'لا — أتكلم عن الحاضر فقط',s:'عادة، حقيقة، أو شيء يحدث الآن',n:'present'},
     {b:'نعم — بدأ أو حدث قبل الآن',s:'وما زال مرتبطاً باللحظة الحالية',n:'ppast'}]},
   present:{q:'هل يحدث في هذه اللحظة أو مؤقتاً؟', h:'تخيّل أنك تصف ما تراه أمامك الآن.', o:[
-    {b:'نعم — الآن / هذه الأيام / خطة قريبة',s:'Look! … / this week / tomorrow (مرتّب)',n:'stative'},
-    {b:'لا — عادة أو حقيقة دائمة',s:'every day / always / حقيقة علمية / جدول',r:'simple'}]},
+    {b:'نعم — الآن / هذه الأيام / خطة قريبة',s:'Look! · this week · an arranged plan',n:'stative'},
+    {b:'لا — عادة أو حقيقة دائمة',s:'every day · always · facts · timetables',r:'simple'}]},
   stative:{q:'هل الفعل يصف حالة لا حركة؟', h:'مثل: know, like, want, need, understand, own.', o:[
-    {b:'نعم — فعل حالة',s:'لا يأخذ ing',r:'simple',why:'أفعال الحالة تبقى في Simple حتى لو كان المعنى «الآن».'},
+    {b:'نعم — فعل حالة',s:'no -ing',r:'simple',why:'أفعال الحالة تبقى في Simple حتى لو كان المعنى «الآن».'},
     {b:'لا — فعل حركة أو نشاط',s:'work, write, run, eat…',r:'cont'}]},
   ppast:{q:'هل ذكرت وقتاً منتهياً محدداً؟', h:'مثل: yesterday, last week, in 2020, two days ago.', o:[
     {b:'نعم — ذكرت وقتاً منتهياً',s:'yesterday / ago / last…',r:'psimple',why:'مع وقت منتهٍ محدد لا نستخدم Present Perfect.'},
@@ -1263,13 +1287,13 @@ const DEC = {
     {b:'نعم — هو الأسبق',s:'before / by the time / already',n:'pfocus'},
     {b:'لا',s:'حدث واحد أو أحداث بالترتيب',n:'pprog'}]},
   pprog:{q:'هل كان جارياً في لحظة معيّنة أو قاطعه حدث؟', h:'At 8 last night… / I was … when …', o:[
-    {b:'نعم — كان في منتصفه',s:'while / when + حدث قصير',r:'pcont'},
+    {b:'نعم — كان في منتصفه',s:'while / when + a short action',r:'pcont'},
     {b:'لا — حدث مكتمل',s:'yesterday / last year / ago',r:'psimple'}]},
   pfocus:{q:'على ماذا تركّز؟', h:'النتيجة أم المدة قبل تلك اللحظة؟', o:[
     {b:'أنه اكتمل قبله',s:'the train had left',r:'pperf'},
     {b:'كم استمر قبله',s:'I had been waiting for an hour',r:'ppc'}]},
   future:{q:'هل سيكون منتهياً أو مستمراً حتى موعد معيّن (by…)؟', h:'By 6 p.m. / By next year…', o:[
-    {b:'نعم — حتى موعد محدد',s:'by + وقت',n:'ffocus'},
+    {b:'نعم — حتى موعد محدد',s:'by + a time',n:'ffocus'},
     {b:'لا',s:'',n:'fprog'}]},
   ffocus:{q:'على ماذا تركّز؟', h:'', o:[
     {b:'أنه سيكون قد اكتمل',s:'I will have finished by 6',r:'fperf'},
@@ -1370,8 +1394,8 @@ $('#rulesAll').onclick=()=>{const rs=[...document.querySelectorAll('.rule-acc')]
     $('#fsDown').disabled=i===0;$('#fsUp').disabled=i===STEPS.length-1;
     $('#fsDown').style.opacity=i===0?.4:1;$('#fsUp').style.opacity=i===STEPS.length-1?.4:1;$('#fsLvl').textContent=(i+1)+'/'+STEPS.length;
     if(say)toast('حجم الخط '+(i+1)+' / '+STEPS.length)};
-  $('#fsMenu').onclick=e=>{e.stopPropagation();$('#fsPop').hidden=!$('#fsPop').hidden};
-  document.addEventListener('click',e=>{if(!e.target.closest('#fsPop,#fsMenu'))$('#fsPop').hidden=true});
+  $('#setBtn').onclick=e=>{e.stopPropagation();$('#setPop').hidden=!$('#setPop').hidden;$('#setVer').textContent=APP_VERSION};
+  document.addEventListener('click',e=>{if(!e.target.closest('#setPop,#setBtn'))$('#setPop').hidden=true});
   $('#fsUp').onclick=()=>{if(i<STEPS.length-1){i++;apply(true)}};
   $('#fsDown').onclick=()=>{if(i>0){i--;apply(true)}};
   apply(false);
@@ -1674,7 +1698,7 @@ async function doUpdate(){
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
   location.replace(location.pathname+'?v='+Date.now());
 }
-function showUpd(v){newVer=v;$('#updTxt').textContent='✨ نسخة جديدة ('+v+') متاحة';$('#updBar').classList.add('show');$('#updBtn').classList.add('has')}
+function showUpd(v){newVer=v;$('#updTxt').textContent='✨ نسخة جديدة ('+v+') متاحة';$('#updBar').hidden=false;$('#setBtn').classList.add('has')}
 $('#updGo').onclick=doUpdate;
 $('#updBtn').onclick=async()=>{
   if(location.protocol==='file:'){toast('لديك أحدث نسخة ✓');return}
@@ -1689,6 +1713,29 @@ setTimeout(autoCheck,1500);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)autoCheck()});
 if(/[?&]v=\d/.test(location.search))history.replaceState(history.state,'',location.pathname);
 
+/* ================= SEPARATE ARABIC / ENGLISH ================= */
+const MX_EXCL='table,.rule-acc>button,.dec-opt b,.top,.nav,.seg,.chip,.pat,.tcard,.vhead,.rl,.stat,.isearch,.ex-head,.form-btn,.sheet-head,.gname,.pl-label,.qmeta,.irr-q,.rv-word,.wp-top,.wp-base,.legend,.cta,h2,h3,label,.swipe,.hint-card,.grp-head,.ntag,.sign,.lp-badge,.upd-bar,.mx,.qopt,.dict-item .dw,.sentence,.pl-en';
+const CIRC='①②③④⑤⑥⑦⑧⑨⑩⑪⑫';
+const isInline=el=>{const d=getComputedStyle(el).display;return d==='inline'};
+function blockOf(el){let c=el.parentElement;while(c&&c!==document.body&&isInline(c))c=c.parentElement;return c}
+function inlineHasAr(c,skip){for(const n of c.childNodes){if(n.nodeType===3){if(HAS_AR.test(n.nodeValue))return true}else if(n.nodeType===1&&!skip.has(n)&&isInline(n)&&!n.matches('.lat,.en')){if(inlineHasAr(n,skip))return true}}return false}
+function separateMixed(root){
+  if(!root||!root.querySelectorAll)return;
+  const runs=[...root.querySelectorAll('bdi.lat,.en')].filter(r=>!r.closest('.mx,.mx-en')&&!(r.parentElement&&r.parentElement.closest('.en'))&&isInline(r)&&r.textContent.trim());
+  const map=new Map();
+  runs.forEach(r=>{const c=blockOf(r);if(!c||c===document.body||c.dataset.mx||c.closest(MX_EXCL)||c.closest('.en'))return;(map.get(c)||map.set(c,[]).get(c)).push(r)});
+  map.forEach((rs,c)=>{
+    if(!inlineHasAr(c,new Set(rs)))return;
+    c.dataset.mx='1';
+    const ar=document.createElement('div');ar.className='mx-ar';
+    const en=document.createElement('div');en.className='mx-en';
+    rs.forEach((r,i)=>{const num=CIRC[i]||('('+(i+1)+')');const ref=document.createElement('span');ref.className='ref';ref.textContent=num;
+      r.replaceWith(ref);const it=document.createElement('div');it.className='mx-item';const r2=document.createElement('span');r2.className='ref';r2.textContent=num;it.append(r2,r);en.appendChild(it)});
+    while(c.firstChild)ar.appendChild(c.firstChild);
+    const mx=document.createElement('div');mx.className='mx';mx.append(ar,en);c.appendChild(mx);
+  });
+}
+
 /* ================= ENGLISH FIRST ================= */
 const ARX_SEL='.xar,.note>span:not(.ntag),.ex small,.compare,.fnote,#bMeaning,.mis .why,.vrow .var,.itip,.dict-item .dm,#plAr,.uses .u,.arline,.why-t,.grid-row small';
 function markArx(root){(root||document).querySelectorAll(ARX_SEL).forEach(el=>{if(!el.classList.contains('arx'))el.classList.add('arx')})}
@@ -1697,14 +1744,15 @@ function setEnFirst(on,say){document.body.classList.toggle('enfirst',on);store.s
   if(say)toast(on?'الإنجليزي أولاً: اضغط «ع» عند الحاجة':'العربي ظاهر')}
 document.addEventListener('click',e=>{
   if(!document.body.classList.contains('enfirst'))return;
-  const a=e.target.closest('.arx:not(.open)'); if(!a)return;
-  e.preventDefault(); e.stopPropagation(); a.classList.add('open');
+  const a=e.target.closest('.arx'); if(!a)return;
+  if(a.classList.contains('open')&&e.target.closest('.w,.spk,a,input,.mini'))return;
+  e.preventDefault(); e.stopPropagation(); a.classList.toggle('open');
 },true);
 $('#arBtn').onclick=()=>setEnFirst(!document.body.classList.contains('enfirst'),true);
 setEnFirst(store.get('enfirst',true),false);
 
 /* ================= BIDI FIX (Arabic + English) ================= */
-const LAT_RE=/\(?-?[A-Za-z][A-Za-z0-9'’()]*(?:(?:\s*[\/+–]\s*|[\-\s])\(?-?[A-Za-z0-9][A-Za-z0-9'’()]*)*(?:\.\.\.|…)?/g;
+const LAT_RE=/\(?-?[A-Za-z][A-Za-z0-9'’()]*(?:(?:\s*[\/+–,]\s*|[\-\s])\(?-?[A-Za-z0-9][A-Za-z0-9'’()]*)*(?:\.\.\.|…)?/g;
 const HAS_AR=/[\u0600-\u06FF]/;
 function isolateLatin(root){
   const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{
@@ -1727,22 +1775,22 @@ function isolateLatin(root){
 let bidiQueued=false;
 const bidiPending=new Set();
 const bidiObs=new MutationObserver(muts=>{
-  muts.forEach(m=>m.addedNodes.forEach(n=>{const el=n.nodeType===1?n:n.parentElement;if(el&&!el.closest('.lat,.w'))bidiPending.add(el)}));
+  muts.forEach(m=>m.addedNodes.forEach(n=>{const el=n.nodeType===1?n:n.parentElement;if(el&&!el.closest('.lat,.w,.mx'))bidiPending.add(el)}));
   if(bidiQueued||!bidiPending.size)return;bidiQueued=true;
   requestAnimationFrame(()=>{bidiQueued=false;const els=[...bidiPending];bidiPending.clear();
-    els.forEach(el=>{if(!el.isConnected)return;if(els.some(o=>o!==el&&o.isConnected&&o.contains(el)))return;isolateLatin(el);markArx(el);if(el.matches&&el.matches(ARX_SEL))el.classList.add('arx')})});
+    els.forEach(el=>{if(!el.isConnected)return;if(els.some(o=>o!==el&&o.isConnected&&o.contains(el)))return;isolateLatin(el);separateMixed(el.parentElement||el);markArx(el);if(el.matches&&el.matches(ARX_SEL))el.classList.add('arx')})});
 });
 bidiObs.observe(document.body,{childList:true,subtree:true,characterData:false});
 isolateLatin(document.body);
+separateMixed(document.body);
 markArx(document);
 
 /* ================= THEME ================= */
 (function(){
-  const sun='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
-  const moon=$('#themeBtn').innerHTML;
+  const sun0='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
   const apply=t=>{
     if(t==='night')document.documentElement.dataset.theme='night'; else delete document.documentElement.dataset.theme;
-    $('#themeBtn').innerHTML=t==='night'?sun:moon;
+    $('#themeBtn').textContent=t==='night'?'☀️ نهاري':'🌙 ليلي';
     $('#themeBtn').setAttribute('aria-label',t==='night'?'الوضع النهاري':'وضع القراءة الليلية');
     $('#themeMeta').setAttribute('content',t==='night'?'#031634':'#E6ECF0');
   };
