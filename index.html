@@ -425,6 +425,10 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
     </div>
 
     <div class="hint-card"><span style="font-size:1.3rem">👆</span><span>اضغط على <b>أي كلمة إنجليزية</b> في الأمثلة لترى معناها وتحفظها في <b>قاموسي</b>.</span></div>
+    <div class="quick">
+    <button class="cta alt" style="margin:0 0 10px" data-go="irr"><span class="q">📚</span><span><b>الأفعال الشاذة (التصريف الثاني والثالث)</b><span>146 فعلاً مقسّمة بالأنماط، مع بطاقات حفظ واختبار</span></span></button>
+    <button class="cta alt" style="margin:0 0 10px" data-go="listen"><span class="q">🎧</span><span><b>وضع الاستماع</b><span>اسمع الدروس وردّد الجمل — في الطائرة أو الانتظار</span></span></button>
+    </div>
     <div class="tense-list" id="tenseList"></div>
 
     <button class="cta" data-go="decide">
@@ -432,8 +436,6 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
       <span><b>أي زمن أستخدم الآن؟</b><span>أجب عن سؤالين وتعرف الزمن الصحيح لجملتك</span></span>
     </button>
 
-    <button class="cta alt" data-go="irr"><span class="q">📚</span><span><b>الأفعال الشاذة (التصريف الثاني والثالث)</b><span>146 فعلاً مقسّمة بالأنماط، مع بطاقات حفظ واختبار</span></span></button>
-    <button class="cta alt" data-go="listen"><span class="q">🎧</span><span><b>وضع الاستماع</b><span>اسمع الدروس وردّد الجمل — في الطائرة أو الانتظار</span></span></button>
 
     <h3 class="section-h">لماذا تتغير الحروف؟</h3>
     <div class="block">
@@ -574,7 +576,7 @@ body[data-page="quiz"]{--pagec:var(--ok)} body[data-page="fix"]{--pagec:var(--pc
 </div>
 
 <script>
-const APP_VERSION='1.8';
+const APP_VERSION='1.8.1';
 /* ================= DATA ================= */
 const GLYPH = {
   simple:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><g fill="currentColor"><circle cx="14" cy="20" r="3.5"/><circle cx="36" cy="20" r="3.5"/><circle cx="58" cy="20" r="3.5"/><circle cx="80" cy="20" r="3.5"/><circle cx="102" cy="20" r="3.5"/></g></svg>',
