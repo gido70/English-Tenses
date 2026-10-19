@@ -258,6 +258,47 @@ td.en,th.en{font-family:var(--en)}
 
 
 /* ===== Calm color layer ===== */
+.path-card{display:block;width:100%;text-align:right;background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 70%,#0b3a52));color:var(--on-accent);border-radius:18px;padding:14px 16px;margin:0 0 10px}
+.path-card .pc-top{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;opacity:.9}
+.path-card b{display:block;font-size:1.08rem;margin:4px 0 2px}
+.path-card .pc-task{font-size:.88rem;opacity:.92}
+.pbar{height:6px;border-radius:6px;background:rgba(255,255,255,.25);overflow:hidden;margin-top:10px}
+.pbar i{display:block;height:100%;background:var(--on-accent);border-radius:6px;transition:width .5s var(--ease)}
+.path-hero{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:12px}
+.path-hero .ph-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;text-align:center}
+.path-hero .ph-row b{display:block;font-family:var(--en);font-size:1.3rem;color:var(--accent2)}
+.path-hero .ph-row span{font-size:.78rem;color:var(--muted)}
+.path-hero .pbar{background:var(--surface2)} .path-hero .pbar i{background:var(--accent)}
+.routine .rt{display:grid;grid-template-columns:44px 1fr auto;gap:8px;align-items:center;padding:7px 0;border-bottom:1px dashed var(--line);font-size:.92rem}
+.routine .rt:last-child{border-bottom:0}
+.routine .rt b{font-family:var(--en);color:var(--accent2);font-size:.85rem;direction:rtl}
+.routine .ghost{padding:6px 12px;font-size:.82rem}
+.stg{background:var(--surface);border:1px solid var(--line);border-radius:16px;margin-bottom:10px;overflow:hidden}
+.stg.cur{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 18%,transparent)}
+.stg>button{width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;text-align:right}
+.stg .num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--en);font-weight:700;background:var(--surface2);color:var(--muted);flex:none;border:1px solid var(--line)}
+.stg.cur .num{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.stg.done .num{background:var(--simple-bg);color:var(--simple);border-color:transparent}
+.stg .st{flex:1;min-width:0;display:flex;flex-direction:column}
+.stg .st b{font-size:1rem}
+.stg .st small{color:var(--muted);font-size:.8rem}
+.stg .st .en{display:block;font-size:.85rem;color:var(--accent);font-weight:600;text-align:left}
+.stg.open .chev{transform:rotate(180deg)} .stg.open .acc{grid-template-rows:1fr} .stg.open .acc>div>*{transform:none;opacity:1}
+.stg .goal{margin:0 14px 6px;font-size:.88rem;background:var(--surface2);border-radius:10px;padding:7px 10px}
+.task{display:grid;grid-template-columns:30px 1fr auto;gap:8px;align-items:center;padding:9px 14px;border-top:1px dashed var(--line)}
+.tick{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:.8rem;color:transparent;background:var(--surface)}
+.task.ok .tick{background:var(--simple);border-color:var(--simple);color:#fff}
+.task.ok .tl{color:var(--muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--muted) 50%,transparent)}
+.task .tl{font-size:.93rem;line-height:1.5}
+.task .tl small{display:block;color:var(--muted);font-size:.78rem;text-decoration:none}
+.task .go{padding:6px 10px;font-size:.8rem;border-radius:10px;background:var(--surface2);border:1px solid var(--line);white-space:nowrap}
+.jbox{grid-column:1 / span 3;display:none}
+.task.wopen .jbox{display:block}
+.jbox textarea{width:100%;min-height:96px;font:inherit;font-family:var(--en);direction:ltr;text-align:left;color:var(--ink);background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:10px;font-size:1rem;resize:vertical}
+.jbox .jrow{display:flex;gap:8px;margin-top:6px}
+.why-list li{margin-bottom:8px}
+.task .te,.goal .ge{display:block;text-align:left;color:var(--accent);font-weight:600;font-size:.9rem;margin-top:2px}
+.task.ok .te{color:var(--muted)}
 /* Mixed text is split: Arabic explanation (right) | numbered English terms (left) */
 .mx{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
 .mx-ar{flex:1 1 150px;min-width:0}
@@ -477,6 +518,7 @@ body:not([data-page="home"]) #topSub{display:none}
 
   <!-- HOME -->
   <section class="page active" id="p-home">
+    <button class="path-card" data-go="path" id="homePath" style="margin-top:6px"></button>
     <div class="hero">
       <h2>كل زمن له شكل على خط الوقت</h2>
       <p>انظر أين يقع الحدث بالنسبة لـ «الآن» — هذا وحده يحسم 80% من اختيارك.</p>
@@ -550,6 +592,18 @@ body:not([data-page="home"]) #topSub{display:none}
     <p class="page-sub">10 أسئلة في كل جولة من الأقسام المفتوحة فقط، مع سبب كل إجابة.</p>
     <div class="stats"><div class="stat"><b id="sBest">0/10</b><span>أفضل نتيجة</span></div><div class="stat"><b id="sRounds">0</b><span>جولات مكتملة</span></div></div>
     <div id="quizBox"></div>
+  </section>
+
+  <!-- LEARNING PATH -->
+  <section class="page" id="p-path">
+    <div class="path-hero" id="pathHero"></div>
+    <div class="block routine"><h3>⏱ روتين 15 دقيقة يومياً</h3>
+      <div class="rt"><b>3 د</b><span>راجع ما حان وقته</span><button class="ghost" id="rtReview">ابدأ</button></div>
+      <div class="rt"><b>7 د</b><span>مهمة واحدة جديدة من المسار</span><button class="ghost" id="rtNext">التالية</button></div>
+      <div class="rt"><b>5 د</b><span>اكتب جملتين عن حياتك وقلهما بصوتك</span><button class="ghost" id="rtWrite">اكتب</button></div>
+    </div>
+    <div id="pathList"></div>
+    <div class="rule-acc" id="whyAcc"><button><span>لماذا هذه الطريقة؟<small>8 مبادئ تناسب المتعلّم الكبير</small></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="acc"><div><div class="acc-in" id="whyBody"></div></div></div></div>
   </section>
 
   <!-- IRREGULAR VERBS -->
@@ -651,7 +705,7 @@ body:not([data-page="home"]) #topSub{display:none}
 </div>
 
 <script>
-const APP_VERSION='2.2';
+const APP_VERSION='2.3';
 /* ================= DATA ================= */
 const GLYPH = {
   simple:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><g fill="currentColor"><circle cx="14" cy="20" r="3.5"/><circle cx="36" cy="20" r="3.5"/><circle cx="58" cy="20" r="3.5"/><circle cx="80" cy="20" r="3.5"/><circle cx="102" cy="20" r="3.5"/></g></svg>',
@@ -1007,8 +1061,8 @@ const T = id => TENSES.find(t=>t.id===id);
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1600)}
 
 /* ================= NAV ================= */
-const ORDER=['home','build','decide','listen','irr','quiz','fix','dict'];
-const TITLES={home:['English Tense','دليلي اليومي للكلام الصحيح'],build:['مُركِّب الجمل','ابنِ الجملة وراقب التغيير'],decide:['أي زمن أستخدم؟','سؤالان يحسمان اختيارك'],quiz:['تمرّن','10 أسئلة في كل جولة'],fix:['أخطاء وقواعد','صحّح نفسك قبل الكلام'],dict:['قاموسي','كلماتك الجديدة للمراجعة'],listen:['وضع الاستماع','اسمع وردّد'],irr:['الأفعال الشاذة','V1 – V2 – V3 بالأنماط']};
+const ORDER=['home','path','build','decide','listen','irr','quiz','fix','dict'];
+const TITLES={home:['English Tense','دليلي اليومي للكلام الصحيح'],build:['مُركِّب الجمل','ابنِ الجملة وراقب التغيير'],decide:['أي زمن أستخدم؟','سؤالان يحسمان اختيارك'],quiz:['تمرّن','10 أسئلة في كل جولة'],fix:['أخطاء وقواعد','صحّح نفسك قبل الكلام'],dict:['قاموسي','كلماتك الجديدة للمراجعة'],listen:['وضع الاستماع','اسمع وردّد'],irr:['الأفعال الشاذة','V1 – V2 – V3 بالأنماط'],path:['مسار التعلّم','خطوة بخطوة']};
 let cur='home';
 function show(page){
   if(page===cur)return;
@@ -1020,6 +1074,7 @@ function show(page){
   window.scrollTo({top:0,behavior:'instant'});
   document.body.dataset.page=page; $('#topLogo').style.display=page==='home'?'':'none';
   cur=page; store.set('page',page);
+  if(page==='path')renderPath(); if(page==='home')renderPathCard();
 }
 /* history: home is the base; any other page sits one step above it, so phone "back" always returns home */
 function go(page){
@@ -1713,6 +1768,114 @@ setTimeout(autoCheck,1500);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)autoCheck()});
 if(/[?&]v=\d/.test(location.search))history.replaceState(history.state,'',location.pathname);
 
+/* ================= LEARNING PATH ================= */
+const PATH=[
+ {id:'s0',t:'الأساس: خط الزمن',en:'The timeline + V1 / V2 / V3',d:'اليوم 1',goal:'كل زمن = <b>متى</b> (حاضر / ماضٍ / مستقبل) + <b>كيف</b> (بسيط / مستمر / تام / تام مستمر).',ge:'V1 = go · V2 = went · V3 = gone',tasks:[
+   {l:'تأمّل خط الزمن في الرئيسية',a:{go:'home'}},
+   {l:'افتح جدول الحاضر الشامل: لاحظ الأعمدة الأربعة والصفوف الثلاثة',e:'A · N · Q',a:{grid:'present'}},
+   {l:'احفظ أهم 3 أفعال شاذة',e:'be · do · go',a:{irr:'special'}}]},
+ {id:'s1',t:'الحاضر البسيط مقابل المستمر',en:'Present Simple vs Present Continuous',d:'الأيام 2–4',goal:'الفرق: <b>عادة</b> مقابل <b>الآن / مؤقت</b>. تعلّمهما معاً لأنهما أكثر ما يُخلط.',tasks:[
+   {l:'اقرأ الدرس',e:'Present Simple',a:{tense:'simple'}},{l:'تدريب الدرس (4 من 6 على الأقل)',auto:'simple',a:{tense:'simple'}},
+   {l:'اقرأ الدرس',e:'Present Continuous',a:{tense:'cont'}},{l:'تدريب الدرس',auto:'cont',a:{tense:'cont'}},
+   {l:'استمع للدرسين وردّد',a:{listen:'present'}},
+   {l:'اكتب: جملتان عن روتينك + جملتان عمّا تفعله الآن',w:1,ph:'I work at …\nI usually …\nRight now I am …'},
+   {l:'الأفعال الشاذة: مجموعة «لا يتغيّر»',a:{irr:'aaa'}}]},
+ {id:'s2',t:'الماضي البسيط',en:'Past Simple',d:'الأيام 5–7',unlock:'past',goal:'حدث <b>انتهى</b> في وقت معروف. سرّه: الأفعال الشاذة.',tasks:[
+   {l:'اقرأ الدرس',e:'Past Simple',a:{tense:'psimple'}},{l:'تدريب الدرس',auto:'psimple',a:{tense:'psimple'}},
+   {l:'الأفعال الشاذة: مجموعتان',e:'‑aid / ‑ade · ‑old',a:{irr:'aid'}},{l:'الأفعال الشاذة: مجموعة',e:'‑t',a:{irr:'t'}},
+   {l:'اكتب 3 جمل عمّا فعلته أمس (إثبات + نفي + سؤال)',w:1,ph:'Yesterday I went …\nI didn\'t …\nDid you …?'}]},
+ {id:'s3',t:'التام مقابل الماضي البسيط',en:'Present Perfect vs Past Simple',d:'الأيام 8–11',goal:'أصعب نقطة لمعظم المتعلمين: <b>النتيجة الآن / التجربة</b> مقابل <b>وقت منتهٍ محدد</b>.',tasks:[
+   {l:'اقرأ الدرس',e:'Present Perfect',a:{tense:'perf'}},{l:'تدريب الدرس',auto:'perf',a:{tense:'perf'}},
+   {l:'صفحة الأخطاء: افهم لماذا هذه الجملة خطأ',e:'I have seen him yesterday ✗',a:{go:'fix'}},
+   {l:'الأفعال الشاذة: مجموعة',e:'‑ought / ‑aught',a:{irr:'ought'}},{l:'الأفعال الشاذة: الحرف يقصُر',a:{irr:'short'}},
+   {l:'اكتب 3 جمل عن تجاربك',e:'I have never … · I have visited …',w:1,ph:'I have never …\nI have visited …\nHave you ever …?'}]},
+ {id:'s4',t:'الماضي المستمر ونمط المقاطعة',en:'Past Continuous + when',d:'الأيام 12–13',goal:'حدث <b>طويل</b> قطعه حدث <b>قصير</b>.',ge:'I was … when …',tasks:[
+   {l:'اقرأ الدرس وانتبه للنمط الخاص',e:'Past Continuous · when',a:{tense:'pcont'}},{l:'تدريب الدرس',auto:'pcont',a:{tense:'pcont'}},
+   {l:'الأفعال الشاذة: مجموعة',e:'→ u (hang → hung)',a:{irr:'u'}},
+   {l:'اكتب موقفاً حقيقياً قُوطعت فيه',w:1,ph:'I was … when …'}]},
+ {id:'s5',t:'المستقبل: القرار مقابل الخطة',en:'will vs going to',d:'الأيام 14–16',unlock:'future',goal:'<b>قرار الآن أو وعد</b> ← الأول. <b>خطة سابقة أو دليل</b> ← الثاني.',ge:'will  ·  going to',tasks:[
+   {l:'اقرأ الدرس',e:'will',a:{tense:'will'}},{l:'تدريب الدرس',auto:'will',a:{tense:'will'}},
+   {l:'اقرأ الدرس',e:'going to',a:{tense:'goto'}},{l:'تدريب الدرس',auto:'goto',a:{tense:'goto'}},
+   {l:'جرّب صفحة «أي زمن أستخدم؟» على 3 جمل من رأسك',a:{go:'decide'}},
+   {l:'الأفعال الشاذة: مجموعة',e:'‑ew / ‑own',a:{irr:'own'}},
+   {l:'اكتب خطتك للأسبوع ووعداً',e:'going to · will',w:1,ph:'This weekend I am going to …\nI will …'}]},
+ {id:'s6',t:'التام المستمر',en:'Present Perfect Continuous',d:'الأيام 17–18',goal:'<b>منذ متى؟</b> التركيز على المدة لا النتيجة.',tasks:[
+   {l:'اقرأ الدرس',e:'Present Perfect Continuous',a:{tense:'pc'}},{l:'تدريب الدرس',auto:'pc',a:{tense:'pc'}},
+   {l:'الأفعال الشاذة: مجموعة',e:'‑o / ‑en (break → broken)',a:{irr:'oken'}},
+   {l:'أجب عن نفسك',e:'How long have you been …?',w:1,ph:'I have been learning English for …\nI have been working …'}]},
+ {id:'s7',t:'الماضي التام',en:'Past Perfect',d:'الأيام 19–20',goal:'<b>أيّ الحدثين أولاً؟</b> الأسبق يأخذ الصيغة التامة.',ge:'had + V3',tasks:[
+   {l:'اقرأ الدرس',e:'Past Perfect',a:{tense:'pperf'}},{l:'تدريب الدرس',auto:'pperf',a:{tense:'pperf'}},
+   {l:'الأفعال الشاذة: مجموعة',e:'‑en (take → taken)',a:{irr:'en'}},
+   {l:'اكتب جملتين',e:'When I arrived, … had …',w:1,ph:'When I arrived, …'}]},
+ {id:'s8',t:'المستقبل المستمر والتام (للفهم)',en:'Future Continuous & Perfect',d:'اليوم 21',goal:'أقل استخداماً في الكلام. الهدف أن <b>تفهمها</b> عندما تسمعها.',tasks:[
+   {l:'اقرأ الدرس',e:'Future Continuous',a:{tense:'fcont'}},{l:'اقرأ الدرس',e:'Future Perfect',a:{tense:'fperf'}},
+   {l:'استمع لدروس المستقبل',a:{listen:'future'}}]},
+ {id:'s9',t:'مراجعة مختلطة',en:'Mixed review',d:'من اليوم 22',goal:'في الكلام الحقيقي لا يقال لك أي زمن؛ أنت تختار. التمرين المختلط يدرّبك على الاختيار.',tasks:[
+   {l:'الاختبار العام: جولة بنتيجة 8 أو أكثر',a:{go:'quiz'},auto:'quiz8'},
+   {l:'اختبار الأفعال الشاذة: الكل',a:{irrquiz:1}},
+   {l:'جدول الماضي والمستقبل الشامل: اقرأهما بصوتك',a:{grid:'past'}},
+   {l:'اكتب فقرة قصيرة عن أسبوعك: ماضٍ + حاضر + مستقبل',w:1,ph:'Last week I …\nThese days I am …\nNext week I am going to …'}]}
+];
+const WHY=[
+ ['افهم قبل أن تحفظ','الكبار يتذكرون بالمنطق والأنماط أكثر من التكرار الأعمى، لذلك المسار يبدأ بخط الزمن، والأفعال الشاذة مقسّمة بالأنماط.'],
+ ['تعلّم الزوج الذي يُخلط معاً','المقارنة المباشرة (البسيط مقابل المستمر، التام مقابل الماضي) تثبّت الفرق أسرع من دراسة كل زمن وحده.'],
+ ['اختبر نفسك بدل إعادة القراءة','محاولة التذكّر قبل رؤية الإجابة هي أقوى طريقة مثبتة للحفظ، حتى لو أخطأت.'],
+ ['المراجعة المتباعدة','تراجع بعد يوم، ثم يومين، ثم 4، ثم أسبوع. التطبيق يجدول ذلك عنك في القاموس وبطاقات الأفعال.'],
+ ['جملك أنت','جملة عن حياتك تُحفظ أسرع بكثير من جملة كتاب، لأنها مرتبطة بذاكرتك الشخصية.'],
+ ['قلها بصوتك','النطق والترديد يضيفان طريقاً آخر للذاكرة. استخدم 🔊 ووضع الاستماع.'],
+ ['قليل كل يوم','15 دقيقة يومياً أفضل من ساعتين مرة في الأسبوع، والنوم بعد التعلّم يثبّت ما تعلمته.'],
+ ['ما مرّ عليك سابقاً يعود أسرع','إعادة تعلّم شيء تعرفه قديماً أسرع من تعلّمه أول مرة. أنت تنعش معرفة موجودة، ولا تبدأ من الصفر.']];
+const PS=()=>Object.assign({done:{},journal:{},days:[]},store.get('path',{}));
+const savePS=x=>store.set('path',x);
+function taskDone(st,i,ps){const tk=st.tasks[i],k=st.id+':'+i;
+  if(tk.auto==='quiz8')return ps.done[k]||store.get('best',0)>=8;
+  if(tk.auto)return ps.done[k]||(store.get('lp_'+tk.auto,0)>=4);
+  if(tk.w)return ps.done[k]||((ps.journal[st.id]||'').trim().split('\n').filter(x=>x.trim()).length>=2);
+  return !!ps.done[k]}
+function pathStats(){const ps=PS();let tot=0,dn=0,cur=null;PATH.forEach(st=>{let c=0;st.tasks.forEach((t,i)=>{tot++;if(taskDone(st,i,ps)){dn++;c++}});st._c=c;if(!cur&&c<st.tasks.length)cur=st});return {tot,dn,cur:cur||PATH[PATH.length-1],ps}}
+function markDay(ps){const d=new Date().toISOString().slice(0,10);if(!ps.days.includes(d))ps.days.push(d)}
+function renderPathCard(){const {tot,dn,cur,ps}=pathStats();const ix=PATH.indexOf(cur);
+  const nt=cur.tasks.findIndex((t,i)=>!taskDone(cur,i,ps));
+  $('#homePath').innerHTML=`<span class="pc-top"><span>🧭 مسار التعلّم</span><span class="en">${dn}/${tot}</span></span><b>المرحلة ${ix+1}: ${cur.t}</b><span class="pc-task">التالي: ${nt>=0?cur.tasks[nt].l:'المرحلة مكتملة ✓'}</span><span class="pbar"><i style="width:${dn/tot*100}%"></i></span>`}
+function renderPath(){
+  const {tot,dn,cur,ps}=pathStats(); const exp=store.get('pexp',{});
+  $('#pathHero').innerHTML=`<div style="font-weight:700">أنت في المرحلة ${PATH.indexOf(cur)+1} من ${PATH.length}</div><div class="pbar"><i style="width:${dn/tot*100}%"></i></div>
+    <div class="ph-row"><div><b>${dn}</b><span>مهمة أنجزتها</span></div><div><b>${ps.days.length}</b><span>يوم تعلّم</span></div><div><b>${Math.max(0,tot-dn)}</b><span>مهمة متبقية</span></div></div>`;
+  $('#pathList').innerHTML=PATH.map((st,si)=>{const full=st._c===st.tasks.length,isCur=st===cur,open=exp[st.id]??isCur;
+    return `<div class="stg${isCur?' cur':''}${full?' done':''}${open?' open':''}" data-s="${st.id}"><button><span class="num">${full?'✓':si+1}</span><span class="st"><b>${st.t}</b><span class="en">${st.en}</span><small>${st.d} · ${st._c}/${st.tasks.length}</small></span>${chevSVG}</button>
+     <div class="acc"><div><div><div class="goal">🎯 ${st.goal}${st.ge?`<span class="ge en">${st.ge}</span>`:''}</div>
+     ${st.tasks.map((t,i)=>{const ok=taskDone(st,i,ps);return `<div class="task${ok?' ok':''}" data-i="${i}"><button class="tick" aria-label="تم">✓</button><span class="tl">${t.l}${t.e?`<span class="te en">${t.e}</span>`:''}${t.auto&&t.auto!=='quiz8'?'<small>يُعلَّم تلقائياً عند نجاحك في التدريب</small>':''}${t.w?'<small>يُعلَّم تلقائياً عند كتابة سطرين</small>':''}</span>${t.w?'<button class="go" data-w="1">✎ اكتب</button>':t.a?'<button class="go" data-a="1">افتح ←</button>':''}
+       ${t.w?`<div class="jbox"><textarea placeholder="${t.ph}" data-j="${st.id}">${(ps.journal[st.id]||'').replace(/</g,'&lt;')}</textarea><div class="jrow"><button class="ghost" data-jsay="${st.id}">🔊 استمع لجملك</button><button class="ghost" data-jsave="${st.id}">حفظ</button></div></div>`:''}</div>`}).join('')}
+     </div></div></div></div>`}).join('');
+  $('#whyBody').innerHTML='<ul class="uses why-list">'+WHY.map((w,i)=>`<li><span class="u" style="font-weight:700">${i+1}. ${w[0]}</span><span class="x">${w[1]}</span></li>`).join('')+'</ul>';
+  renderPathCard();
+}
+function runAction(a,st){
+  if(st&&st.unlock&&!isOpenG(st.unlock)){const u=store.get('unlocked',{});u[st.unlock]=true;store.set('unlocked',u);renderHome();renderBuilder();renderLists();renderListen()}
+  if(a.go){go(a.go);return}
+  if(a.tense){openSheet(a.tense);return}
+  if(a.grid){openGrid(a.grid);return}
+  if(a.listen){LS.src=a.listen;LS.t='all';store.set('listen',LS);plStop(true);renderListen();go('listen');return}
+  if(a.irr){IF.f='all';store.set('irrf',IF);const o=store.get('igo',{});o[a.irr]=true;store.set('igo',o);renderIrr();go('irr');setTimeout(()=>{const g=document.querySelector(`.ig[data-g="${a.irr}"]`);if(g)g.scrollIntoView({behavior:'smooth',block:'start'})},450);return}
+  if(a.irrquiz){IF.f='all';store.set('irrf',IF);renderIrr();go('irr');setTimeout(()=>$('#iQuiz').click(),300)}
+}
+$('#pathList').addEventListener('click',e=>{
+  const sb=e.target.closest('.stg>button'); if(sb){const g=sb.parentElement;g.classList.toggle('open');const x=store.get('pexp',{});x[g.dataset.s]=g.classList.contains('open');store.set('pexp',x);return}
+  const row=e.target.closest('.task'); if(!row)return; const st=PATH.find(x=>x.id===row.closest('.stg').dataset.s), i=+row.dataset.i, ps=PS();
+  if(e.target.closest('.tick')){const k=st.id+':'+i;ps.done[k]=!taskDone(st,i,ps);markDay(ps);savePS(ps);renderPath();return}
+  if(e.target.closest('[data-a]')){const k=st.id+':'+i;if(!st.tasks[i].auto){ps.done[k]=true;markDay(ps);savePS(ps)}runAction(st.tasks[i].a,st);setTimeout(renderPath,600);return}
+  if(e.target.closest('[data-w]')){row.classList.toggle('wopen');const ta=row.querySelector('textarea');if(row.classList.contains('wopen'))ta.focus();return}
+  if(e.target.closest('[data-jsay]')){const t=row.querySelector('textarea').value.trim();if(t)say(t);else toast('اكتب جملك أولاً');return}
+  if(e.target.closest('[data-jsave]')){ps.journal[st.id]=row.querySelector('textarea').value;markDay(ps);savePS(ps);toast('حُفظت جملك ✓');renderPath()}
+});
+$('#pathList').addEventListener('input',e=>{const ta=e.target.closest('textarea[data-j]');if(!ta)return;const ps=PS();ps.journal[ta.dataset.j]=ta.value;savePS(ps)});
+$('#whyAcc>button').onclick=()=>$('#whyAcc').classList.toggle('open');
+$('#rtReview').onclick=()=>{if(dueList().length){go('dict');setTimeout(()=>{const b=$('#rvStart');if(b)b.click()},350)}else{go('irr');setTimeout(()=>$('#iFlash').click(),350)}};
+$('#rtNext').onclick=()=>{const {cur,ps}=pathStats();const i=cur.tasks.findIndex((t,j)=>!taskDone(cur,j,ps));if(i<0){toast('أحسنت، المرحلة مكتملة');return}
+  const t=cur.tasks[i];if(t.w){const st=document.querySelector(`.stg[data-s="${cur.id}"]`);st.classList.add('open');const row=st.querySelector(`.task[data-i="${i}"]`);row.classList.add('wopen');row.scrollIntoView({behavior:'smooth',block:'center'});return}
+  if(!t.auto){ps.done[cur.id+':'+i]=true;markDay(ps);savePS(ps)}runAction(t.a,cur)};
+$('#rtWrite').onclick=()=>{const {cur}=pathStats();const st=document.querySelector(`.stg[data-s="${cur.id}"]`);const i=cur.tasks.findIndex(t=>t.w);if(!st||i<0)return;st.classList.add('open');const row=st.querySelector(`.task[data-i="${i}"]`);row.classList.add('wopen');row.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>row.querySelector('textarea').focus(),400)};
+
 /* ================= SEPARATE ARABIC / ENGLISH ================= */
 const MX_EXCL='table,.rule-acc>button,.dec-opt b,.top,.nav,.seg,.chip,.pat,.tcard,.vhead,.rl,.stat,.isearch,.ex-head,.form-btn,.sheet-head,.gname,.pl-label,.qmeta,.irr-q,.rv-word,.wp-top,.wp-base,.legend,.cta,h2,h3,label,.swipe,.hint-card,.grp-head,.ntag,.sign,.lp-badge,.upd-bar,.mx,.qopt,.dict-item .dw,.sentence,.pl-en';
 const CIRC='①②③④⑤⑥⑦⑧⑨⑩⑪⑫';
@@ -1799,7 +1962,7 @@ markArx(document);
 })();
 
 /* ================= INIT ================= */
-renderHome(); renderBuilder(); renderDec(); updateStats(); renderQ(); updateDictUI(); $('#appVer').textContent=APP_VERSION; renderListen(); renderIrr();
+renderHome(); renderBuilder(); renderDec(); updateStats(); renderQ(); updateDictUI(); $('#appVer').textContent=APP_VERSION; renderListen(); renderIrr(); renderPath();
 if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(()=>{})}
 history.replaceState({page:'home'},'');
 const lastPage=store.get('page','home'); if(ORDER.includes(lastPage)&&lastPage!=='home')go(lastPage);
