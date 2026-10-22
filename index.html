@@ -258,6 +258,15 @@ td.en,th.en{font-family:var(--en)}
 
 
 /* ===== Calm color layer ===== */
+.rlinks{margin-top:14px;border-top:1px dashed var(--line);padding-top:10px}
+.rl-h{font-weight:700;margin-bottom:2px}
+.rl-sub{font-size:.8rem;color:var(--muted);margin-bottom:8px}
+.rlink{display:block;text-decoration:none;color:var(--ink);background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:7px}
+.rl-top{display:flex;align-items:center;gap:8px;direction:ltr}
+.rl-top b{flex:1;color:var(--accent);font-size:.98rem;text-align:left}
+.rl-lv{font-size:.72rem;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--cont-bg);color:var(--cont);white-space:nowrap}
+.rl-go{color:var(--accent2);font-weight:700}
+.rl-ar{display:block;font-size:.86rem;color:var(--muted);margin-top:3px}
 .story{border-color:color-mix(in srgb,var(--c) 45%,var(--line));padding:0;overflow:hidden}
 .story-btn{width:100%;display:flex;align-items:center;gap:10px;padding:14px;text-align:right;background:var(--cbg)}
 .sb-t{flex:1;display:flex;flex-direction:column;gap:2px}
@@ -666,6 +675,7 @@ body:not([data-page="home"]) #topSub{display:none}
       <div class="rt"><b>5 د</b><span>اكتب جملتين عن حياتك وقلهما بصوتك</span><button class="ghost" id="rtWrite">اكتب</button></div>
     </div>
     <div id="pathList"></div>
+    <div class="rule-acc" id="linksAcc"><button><span>🔗 قراءات حقيقية متدرّجة<small>مواقع موثوقة لقصص وأخبار حسب مستواك</small></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="acc"><div><div class="acc-in" id="linksBody"></div></div></div></div>
     <div class="rule-acc" id="whyAcc"><button><span>لماذا هذه الطريقة؟<small>8 مبادئ تناسب المتعلّم الكبير</small></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="acc"><div><div class="acc-in" id="whyBody"></div></div></div></div>
   </section>
 
@@ -768,7 +778,7 @@ body:not([data-page="home"]) #topSub{display:none}
 </div>
 
 <script>
-const APP_VERSION='2.5';
+const APP_VERSION='2.5.1';
 /* ================= DATA ================= */
 const GLYPH = {
   simple:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><g fill="currentColor"><circle cx="14" cy="20" r="3.5"/><circle cx="36" cy="20" r="3.5"/><circle cx="58" cy="20" r="3.5"/><circle cx="80" cy="20" r="3.5"/><circle cx="102" cy="20" r="3.5"/></g></svg>',
@@ -1216,12 +1226,21 @@ function openSheet(id){
   document.body.style.overflow='hidden';
   history.pushState({sheet:1,page:cur},'');
 }
+const READ_LINKS=[
+ {n:'ESL Fast',u:'https://www.eslfast.com/',lv:'A2 – B1',ar:'أكثر من 600 قصة قصيرة بالصوت في 6 مستويات، والنص يتلوّن أثناء القراءة.'},
+ {n:'Linguapress Short Stories',u:'https://linguapress.com/short-stories',lv:'B1 – B2',ar:'قصص متدرّجة أقل من 1000 كلمة، ومعظمها بتسجيل صوتي.'},
+ {n:'British Council — B1 Reading',u:'https://learnenglish.britishcouncil.org/free-resources/reading/b1',lv:'B1',ar:'نصوص يومية ومهنية (مقالات، رسائل، أدلة سفر) مع تمارين فهم.'},
+ {n:'News in Levels',u:'https://www.newsinlevels.com/',lv:'A2 – B2',ar:'أخبار حقيقية من العالم بثلاثة مستويات، مع صوت والكلمات المهمة بخط عريض.'},
+ {n:'VOA Learning English',u:'https://learningenglish.voanews.com/',lv:'A2 – B1',ar:'أخبار وقصص بإنجليزية مبسّطة ونطق بطيء.'},
+ {n:'BBC Learning English',u:'https://www.bbc.co.uk/learningenglish/',lv:'B1 – B2',ar:'دروس قصيرة، ومقالات وبرامج صوتية من BBC.'}];
+function linksHTML(){return `<div class="rlinks"><div class="rl-h">🔗 قراءات حقيقية متدرّجة</div><div class="rl-sub">تفتح في المتصفح، وتحتاج إنترنت.</div>${READ_LINKS.map(l=>`<a class="rlink" href="${l.u}" target="_blank" rel="noopener"><span class="rl-top"><b class="en">${l.n}</b><span class="rl-lv en">${l.lv}</span><span class="rl-go">↗</span></span><span class="rl-ar">${l.ar}</span></a>`).join('')}</div>`}
 function storyHTML(t){const S=STORIES[t.id];return `<div class="block story" id="storyBlk"><button class="story-btn" data-story="1"><span class="sb-t"><span class="sb-ar">📖 قصة الدرس — للقراءة والمفردات</span><span class="sb-en en">${S.title}</span></span>${chevSVG}</button>
  <div class="acc"><div><div class="story-in">
   <div class="story-tools"><button class="ghost" data-splay="1">🔊 استمع للقصة</button><span class="story-key en"><mark>verb</mark> = ${t.en}</span></div>
   <div class="story-text en">${S.text.map(p=>`<p>${p}</p>`).join('')}</div>
   <div class="story-sum">${S.ar}</div>
   <div class="story-q"><div class="sq-h en">Check your understanding</div>${S.q.map((q,qi)=>`<div class="sq" data-q="${qi}"><div class="sq-t en">${qi+1}. ${q[0]}</div><div class="sq-opts">${shuffle(q[1].map((o,oi)=>[o,oi])).map(([o,oi])=>`<button class="sq-o en" data-ok="${oi===0?1:0}">${o}</button>`).join('')}</div></div>`).join('')}</div>
+  ${linksHTML()}
  </div></div></div></div>`}
 let storyOn=false;
 function storyStop(){try{speechSynthesis.cancel()}catch(e){}storyOn=false;const b=document.querySelector('[data-splay]');if(b)b.textContent='🔊 استمع للقصة'}
@@ -1956,6 +1975,8 @@ $('#pathList').addEventListener('click',e=>{
 });
 $('#pathList').addEventListener('input',e=>{const ta=e.target.closest('textarea[data-j]');if(!ta)return;const ps=PS();ps.journal[ta.dataset.j]=ta.value;savePS(ps)});
 $('#whyAcc>button').onclick=()=>$('#whyAcc').classList.toggle('open');
+$('#linksAcc>button').onclick=()=>$('#linksAcc').classList.toggle('open');
+$('#linksBody').innerHTML=linksHTML();
 $('#rtReview').onclick=()=>{if(dueList().length){go('dict');setTimeout(()=>{const b=$('#rvStart');if(b)b.click()},350)}else{go('irr');setTimeout(()=>$('#iFlash').click(),350)}};
 $('#rtNext').onclick=()=>{const {cur,ps}=pathStats();const i=cur.tasks.findIndex((t,j)=>!taskDone(cur,j,ps));if(i<0){toast('أحسنت، المرحلة مكتملة');return}
   const t=cur.tasks[i];if(t.w){const st=document.querySelector(`.stg[data-s="${cur.id}"]`);st.classList.add('open');const row=st.querySelector(`.task[data-i="${i}"]`);row.classList.add('wopen');row.scrollIntoView({behavior:'smooth',block:'center'});return}
@@ -1963,7 +1984,7 @@ $('#rtNext').onclick=()=>{const {cur,ps}=pathStats();const i=cur.tasks.findIndex
 $('#rtWrite').onclick=()=>{const {cur}=pathStats();const st=document.querySelector(`.stg[data-s="${cur.id}"]`);const i=cur.tasks.findIndex(t=>t.w);if(!st||i<0)return;st.classList.add('open');const row=st.querySelector(`.task[data-i="${i}"]`);row.classList.add('wopen');row.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>row.querySelector('textarea').focus(),400)};
 
 /* ================= SEPARATE ARABIC / ENGLISH ================= */
-const MX_EXCL='.itip,table,.rule-acc>button,.dec-opt b,.top,.nav,.seg,.chip,.pat,.tcard,.vhead,.rl,.stat,.isearch,.ex-head,.form-btn,.sheet-head,.gname,.pl-label,.qmeta,.irr-q,.rv-word,.wp-top,.wp-base,.legend,.cta,h2,h3,label,.swipe,.hint-card,.grp-head,.ntag,.sign,.lp-badge,.upd-bar,.mx,.qopt,.dict-item .dw,.sentence,.pl-en';
+const MX_EXCL='.rlinks,.itip,table,.rule-acc>button,.dec-opt b,.top,.nav,.seg,.chip,.pat,.tcard,.vhead,.rl,.stat,.isearch,.ex-head,.form-btn,.sheet-head,.gname,.pl-label,.qmeta,.irr-q,.rv-word,.wp-top,.wp-base,.legend,.cta,h2,h3,label,.swipe,.hint-card,.grp-head,.ntag,.sign,.lp-badge,.upd-bar,.mx,.qopt,.dict-item .dw,.sentence,.pl-en';
 const CIRC='①②③④⑤⑥⑦⑧⑨⑩⑪⑫';
 const isInline=el=>{const d=getComputedStyle(el).display;return d==='inline'};
 function blockOf(el){let c=el.parentElement;while(c&&c!==document.body&&isInline(c))c=c.parentElement;return c}
@@ -1986,7 +2007,7 @@ function separateMixed(root){
 }
 
 /* ================= ENGLISH FIRST ================= */
-const ARX_SEL='.story-sum,.xar,.note>span:not(.ntag),.ex small,.compare,.fnote,#bMeaning,.mis .why,.vrow .var,.it-ar,.dict-item .dm,#plAr,.uses .u,.arline,.why-t,.grid-row small';
+const ARX_SEL='.rl-ar,.story-sum,.xar,.note>span:not(.ntag),.ex small,.compare,.fnote,#bMeaning,.mis .why,.vrow .var,.it-ar,.dict-item .dm,#plAr,.uses .u,.arline,.why-t,.grid-row small';
 function markArx(root){(root||document).querySelectorAll(ARX_SEL).forEach(el=>{if(!el.classList.contains('arx'))el.classList.add('arx')})}
 function setEnFirst(on,say){document.body.classList.toggle('enfirst',on);store.set('enfirst',on);$('#arBtn').textContent=on?'EN':'ع';
   if(!on)document.querySelectorAll('.arx.open').forEach(e=>e.classList.remove('open'));
