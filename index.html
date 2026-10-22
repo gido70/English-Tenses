@@ -498,6 +498,45 @@ body:not([data-page="home"]) #topSub{display:none}
 .top-actions{display:flex;gap:6px;align-items:center}
 .fs-btn{flex:none;white-space:nowrap;width:38px;height:40px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-family:var(--en);font-weight:700;color:var(--accent2);line-height:1}
 .fs-btn small{font-size:.7em}
+/* ===== Wide screens & phone landscape ===== */
+.rot-hint{display:none;text-align:center;font-size:.85rem;color:var(--accent2);background:var(--surface);border:1px dashed var(--accent2);border-radius:12px;padding:8px;margin:0 0 10px}
+@media (orientation:portrait) and (max-width:699px){.rot-hint{display:block}}
+@media (min-width:700px){
+  .app{max-width:1100px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+  .grp .tense-list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .quick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+  .quick .cta{margin:0!important}
+  .stats{max-width:none}
+  .nav-in{max-width:900px}
+  .nav{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+  .sheet{max-width:min(1100px,96vw);height:94%}
+  .sheet-body{padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+  .tgrid{min-width:0;width:100%;table-layout:fixed}
+  .tgrid .rl{width:84px}
+  .tgrid thead .rl{font-size:.95rem!important}
+  .tgrid td .fx{font-size:.95rem}
+  .tgrid td .gx{font-size:.9rem}
+  .swipe{display:none}
+  .uses{grid-template-columns:1fr 1fr;column-gap:24px}
+  #pathList,.dict-wrap{max-width:none}
+  .player{max-width:none}
+}
+/* phone held sideways: short screen, so save vertical space */
+@media (min-width:700px) and (max-height:500px){
+  .top{padding-top:8px;padding-bottom:4px}
+  .nav button{flex-direction:row;justify-content:center;gap:6px;padding:6px 0 5px;font-size:.78rem}
+  .nav button svg{width:19px;height:19px}
+  .nav button.on::after{display:none}
+  .app{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+  .sheet{height:96%;border-radius:18px 18px 0 0}
+  .handle{margin:0 auto 4px}
+  .sheet-head{padding:4px 18px 6px}
+  #shSub{display:none}
+  .sheet h2{font-size:1.15rem}
+  .hero .big-line svg{max-height:120px}
+  .builder-out{position:static}
+  .isearch{position:static}
+}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -709,7 +748,7 @@ body:not([data-page="home"]) #topSub{display:none}
 </div>
 
 <script>
-const APP_VERSION='2.3.1';
+const APP_VERSION='2.4';
 /* ================= DATA ================= */
 const GLYPH = {
   simple:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><g fill="currentColor"><circle cx="14" cy="20" r="3.5"/><circle cx="36" cy="20" r="3.5"/><circle cx="58" cy="20" r="3.5"/><circle cx="80" cy="20" r="3.5"/><circle cx="102" cy="20" r="3.5"/></g></svg>',
@@ -1160,6 +1199,7 @@ function openGrid(g){
   const rows=[['+','A','إثبات'],['−','N','نفي'],['?','Q','سؤال']];
   const openG=GROUPS.filter(x=>isOpenG(x.g));
   $('#shBody').innerHTML=`${openG.length>1?`<div class="seg seg3" style="margin-bottom:12px;grid-template-columns:repeat(${openG.length},1fr)">${openG.map(x=>`<button data-grid="${x.g}" class="${x.g===g?'on':''}" style="--c:var(--accent);--cbg:var(--cont-bg)">${x.ar}</button>`).join('')}</div>`:''}
+   <div class="rot-hint">📱 أدِر الهاتف أفقياً لترى الجدول كاملاً وبوضوح</div>
    <div class="grid-wrap"><table class="tgrid"><thead><tr><th class="rl" style="color:var(--ink)">${G.en}</th>${ts.map(t=>`<th class="t-${t.id}">${t.short==='will'?'Simple (will)':t.short==='going to'?'going to':t.short.replace('Perf. Cont.','Perfect Continuous')}</th>`).join('')}</tr></thead>
    <tbody>${rows.map(([s,L,ar])=>`<tr><th class="rl">${L}<small>${ar}</small></th>${ts.map(t=>{const f=t.forms.find(x=>x.s===s);return `<td class="t-${t.id}"><span class="fx">${f.fx}</span><span class="gx en">${f.ex[0][0]}</span></td>`}).join('')}</tr>`).join('')}</tbody></table></div>
    <p class="swipe">⟵ اسحب الجدول يميناً ويساراً لرؤية كل الأعمدة ⟶</p>
