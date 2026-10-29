@@ -258,6 +258,23 @@ td.en,th.en{font-family:var(--en)}
 
 
 /* ===== Calm color layer ===== */
+.car{position:fixed;inset:0;z-index:95;background:#0a1420;color:#efe6d6;display:flex;flex-direction:column;padding:calc(12px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.car[hidden]{display:none}
+.car-top{display:flex;align-items:center;gap:10px;font-size:.85rem;color:#9fb0c0}
+.car-top #carSec{flex:1;text-align:center;direction:ltr;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.car-top button{background:#18263a;color:#efe6d6;border-radius:12px;padding:8px 12px;font-weight:700}
+.car-text{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;overflow:auto}
+#carEn{font-size:clamp(1.6rem,6vw,2.6rem);line-height:1.4;font-weight:600;text-align:left}
+#carEn2{font-size:1.1rem;color:#9fb0c0;text-align:left}
+#carAr{font-size:1.25rem;color:#d9b86a;text-align:right}
+.car-bar{height:6px;background:#18263a;border-radius:6px;overflow:hidden;margin:10px 0}
+.car-bar i{display:block;height:100%;background:#d9b86a;width:0;transition:width .4s}
+.car-ctrls{display:grid;grid-template-columns:1fr 1fr 1.6fr 1fr 1fr;gap:10px;direction:ltr}
+.car-ctrls button{height:72px;border-radius:20px;background:#18263a;color:#efe6d6;font-size:1.6rem}
+.car-ctrls .big{background:#0f6b66;font-size:2.2rem}
+.car-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.car-opts button{background:#121e2e;color:#c9d4de;border-radius:14px;padding:10px 4px;font-size:.85rem;border:1px solid #22344c}
+@media (min-width:700px) and (max-height:500px){.car-ctrls button{height:56px}#carEn{font-size:1.7rem}}
 .rlinks{margin-top:14px;border-top:1px dashed var(--line);padding-top:10px}
 .rl-h{font-weight:700;margin-bottom:2px}
 .rl-sub{font-size:.8rem;color:var(--muted);margin-bottom:8px}
@@ -583,6 +600,7 @@ body:not([data-page="home"]) #topSub{display:none}
       <div class="set-pop" id="setPop" hidden>
         <div class="set-row"><span>حجم الخط</span><div class="set-ctl"><button class="fs-btn" id="fsDown" dir="ltr" aria-label="تصغير الخط">A−</button><span id="fsLvl" class="en"></span><button class="fs-btn" id="fsUp" dir="ltr" aria-label="تكبير الخط">A+</button></div></div>
         <div class="set-row"><span>الوضع</span><button class="ghost" id="themeBtn" style="padding:7px 12px">🌙 ليلي</button></div>
+        <div class="set-row" style="flex-wrap:wrap"><span>الصوت الإنجليزي</span><div class="set-ctl" style="width:100%"><select class="inp en" id="voiceSel" style="padding:6px 8px;font-size:.85rem"></select><button class="fs-btn" id="voiceTest" aria-label="تجربة">🔊</button></div></div>
         <div class="set-row"><span>التحديث <small class="en" id="setVer"></small></span><button class="ghost" id="updBtn" style="padding:7px 12px">🔄 تحديث</button></div>
       </div></div>
     </div>
@@ -647,6 +665,7 @@ body:not([data-page="home"]) #topSub{display:none}
     <div class="ctrl"><label>الصيغة</label><div class="seg seg3" id="bForm"></div></div>
     <div class="ctrl"><label>الفاعل</label><div class="chips" id="bSubj"></div></div>
     <div class="ctrl"><label>الفعل</label><div class="chips" id="bVerb"></div></div>
+    <button class="all-btn" id="bListen" style="margin-bottom:8px">🚗 استمع لهذا الفعل في كل الأزمنة المفتوحة</button>
     <button class="all-btn" id="bAllBtn">اعرض هذا الفعل في كل أزمنة المجموعة</button>
     <div class="acc" id="bAllAcc"><div><div class="grid-table" id="bAll"></div></div></div>
   </section>
@@ -703,14 +722,18 @@ body:not([data-page="home"]) #topSub{display:none}
       <div class="qbar" style="margin:10px 0 0"><i id="plBar"></i></div>
       <div class="pl-ctrls"><button id="plStop" aria-label="إيقاف">⏹</button><button id="plPrev" aria-label="السابق">⏮</button><button class="pl-main" id="plPlay" aria-label="تشغيل">▶</button><button id="plNext" aria-label="التالي">⏭</button><button id="plRep" aria-label="أعد الجملة">↺</button></div>
     </div>
+    <button class="cta" id="carOpen" style="margin:0 0 14px"><span class="q">🚗</span><span><b>وضع السيارة — ملء الشاشة</b><span id="lEst"></span></span></button>
     <div class="ctrl"><label>ماذا تسمع؟</label><div class="seg" id="lSrc"></div></div>
     <div class="ctrl" id="lTenseWrap"><label>الدرس</label><div class="chips" id="lTense"></div></div>
     <div class="ctrl"><label>تكرار كل جملة إنجليزية</label><div class="seg seg3" id="lReps"></div></div>
     <div class="ctrl"><label>السرعة</label><div class="seg seg3" id="lRate"></div></div>
     <div class="ctrl"><label>الترجمة العربية بالصوت</label><div class="seg seg3" id="lAr"></div></div>
     <div class="ctrl"><label>وقف قصير لتردّد الجملة بعده</label><div class="seg seg3" id="lShadow"></div></div>
+    <div class="ctrl"><label>إعادة القائمة من أولها عند انتهائها (للمشاوير الطويلة)</label><div class="seg seg3" id="lLoop"></div></div>
     <div class="block" style="--c:var(--muted)"><h3>قبل أن تبدأ</h3>
       <ul class="uses" style="font-size:.92rem">
+        <li><span>🚗 <b>في السيارة:</b> ثبّت الهاتف واتركه على الشاحن، واربطه بسماعات السيارة عبر البلوتوث. «وضع السيارة» يعرض أزراراً كبيرة وشاشة داكنة.</span></li>
+        <li><span>🗣 <b>صوت أوضح:</b> اختر أفضل صوت من ⚙︎ ← «الصوت الإنجليزي». في آيفون يمكنك تنزيل أصوات «Enhanced» مجاناً من: الإعدادات ← تسهيلات الاستخدام ← المحتوى المنطوق ← الأصوات.</span></li>
         <li><span>📱 <b>أبقِ الشاشة مفتوحة.</b> الصوت يتوقف إذا قفلت الهاتف أو خرجت من التطبيق؛ والتطبيق يمنع الشاشة من الانطفاء أثناء التشغيل.</span></li>
         <li><span>✈️ <b>للطائرة:</b> افتح التطبيق مرة واحدة وأنت متصل بالإنترنت، فيُحفظ للعمل بدونه بعد ذلك.</span></li>
         <li><span>🗣 <b>الصوت العربي</b> يعتمد على هاتفك. إن لم يوجد، تُعرض الترجمة مكتوبة فقط.</span></li>
@@ -761,13 +784,21 @@ body:not([data-page="home"]) #topSub{display:none}
   <div class="sheet-head" id="sheetHead">
     <div class="handle"></div>
     <div class="sheet-head-row">
-      <div><h2 id="shTitle"></h2><div class="sub-ar" id="shSub"></div></div>
+      <div style="flex:1;min-width:0"><h2 id="shTitle"></h2><div class="sub-ar" id="shSub"></div></div>
+      <button class="icon-btn" id="shListen" aria-label="استمع لهذه الصفحة" style="margin-inline-end:6px">🎧</button>
       <button class="icon-btn" id="shClose" aria-label="إغلاق"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
   </div>
   <div class="sheet-body" id="shBody"></div>
 </div>
 <div class="toast" id="toast"></div>
+<div class="car" id="car" hidden>
+  <div class="car-top"><button id="carExit">✕ خروج</button><span id="carSec" class="en"></span><span id="carPos" class="en"></span></div>
+  <div class="car-text"><div id="carEn" class="en"></div><div id="carEn2" class="en"></div><div id="carAr"></div></div>
+  <div class="car-bar"><i id="carBar"></i></div>
+  <div class="car-ctrls"><button id="carPrev" aria-label="السابق">⏮</button><button id="carRep" aria-label="أعد">↺</button><button id="carPlay" class="big" aria-label="تشغيل">⏸</button><button id="carNext" aria-label="التالي">⏭</button><button id="carSkip" aria-label="القسم التالي">⏩</button></div>
+  <div class="car-opts"><button id="carRate"></button><button id="carArT"></button><button id="carLoop"></button></div>
+</div>
 
 <div class="wscrim" id="wscrim"></div>
 <div class="wpop" id="wpop" role="dialog" aria-modal="true">
@@ -778,7 +809,7 @@ body:not([data-page="home"]) #topSub{display:none}
 </div>
 
 <script>
-const APP_VERSION='2.5.1';
+const APP_VERSION='2.6';
 /* ================= DATA ================= */
 const GLYPH = {
   simple:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><g fill="currentColor"><circle cx="14" cy="20" r="3.5"/><circle cx="36" cy="20" r="3.5"/><circle cx="58" cy="20" r="3.5"/><circle cx="80" cy="20" r="3.5"/><circle cx="102" cy="20" r="3.5"/></g></svg>',
@@ -1196,8 +1227,9 @@ $('#tenseList').addEventListener('click',e=>{const gb=e.target.closest('[data-gr
 
 /* ================= SHEET ================= */
 const sheet=$('#sheet'), scrim=$('#scrim');
+let sheetMode={};
 function openSheet(id){
-  const t=T(id);
+  const t=T(id); sheetMode={type:'lesson',id};
   sheet.className='sheet t-'+id; sheet.style.removeProperty('--c');
   $('#shTitle').textContent=t.en; $('#shSub').innerHTML=`<span class="en" style="display:block;text-align:right">${t.enUse}</span><span class="arline">${t.ar} — ${t.use}</span>`;
   $('#shBody').innerHTML=`
@@ -1250,7 +1282,7 @@ function storyPlay(btn){if(storyOn){storyStop();return}
   try{speechSynthesis.cancel();const v=pickVoice('en');parts.forEach((x,i)=>{const u=new SpeechSynthesisUtterance(x.trim());if(v)u.voice=v;u.lang=v?v.lang:'en-US';u.rate=.88;if(i===parts.length-1)u.onend=()=>storyStop();speechSynthesis.speak(u)});storyOn=true;btn.textContent='⏹ إيقاف'}catch(e){toast('الصوت غير متاح')}}
 function signOf(en){const t=en.replace(/<[^>]+>/g,'').trim();if(/\?$/.test(t))return 'Q';if(/n't\b|\bnot\b/i.test(t))return 'N';return 'A'}
 function openGrid(g){
-  const G=GROUPS.find(x=>x.g===g), ts=TENSES.filter(t=>t.g===g);
+  const G=GROUPS.find(x=>x.g===g), ts=TENSES.filter(t=>t.g===g); sheetMode={type:'grid',g};
   sheet.className='sheet'; sheet.style.setProperty('--c','var(--accent)');
   $('#shTitle').textContent=G.en+' Tenses'; $('#shSub').textContent='جدول '+G.ar+' الشامل — كل زمن في عمود، والصيغ الثلاث في صفوف';
   const rows=[['+','A','إثبات'],['−','N','نفي'],['?','Q','سؤال']];
@@ -1275,10 +1307,12 @@ function closeSheet(fromPop){
   if(!fromPop && history.state && history.state.sheet) history.back();
 }
 window.addEventListener('popstate',e=>{
+  if(!$('#car').hidden){closeCar()}
   if(sheet.classList.contains('show')){hideSheetUI();return}
   show((e.state&&e.state.page)||'home');
 });
-$('#shClose').onclick=()=>closeSheet(); scrim.onclick=()=>closeSheet();
+$('#shClose').onclick=()=>closeSheet();
+$('#shListen').onclick=()=>{if(sheetMode.type==='lesson')openCar(itemsLesson(sheetMode.id,true));else if(sheetMode.type==='grid')openCar(itemsCompare([bs.verb],TENSES.filter(t=>t.g===sheetMode.g).map(t=>t.id)))}; scrim.onclick=()=>closeSheet();
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
 $('#shBody').addEventListener('click',e=>{
   const fb=e.target.closest('.form-btn');
@@ -1416,6 +1450,7 @@ function renderBuilder(){
   tokenize($('#bSentence')); tokenize($('#bAll'));
   store.set('builder',bs);
 }
+$('#bListen').onclick=()=>openCar(itemsCompare([bs.verb],openTenseIds(),bs.subj));
 $('#bAllBtn').onclick=()=>{const a=$('#bAllAcc');a.classList.toggle('open');$('#bAllBtn').textContent=a.classList.contains('open')?'إخفاء المقارنة':'اعرض هذا الفعل في كل أزمنة المجموعة'};
 
 /* ================= DECISION ================= */
@@ -1553,7 +1588,7 @@ $('#rulesAll').onclick=()=>{const rs=[...document.querySelectorAll('.rule-acc')]
     $('#fsDown').disabled=i===0;$('#fsUp').disabled=i===STEPS.length-1;
     $('#fsDown').style.opacity=i===0?.4:1;$('#fsUp').style.opacity=i===STEPS.length-1?.4:1;$('#fsLvl').textContent=(i+1)+'/'+STEPS.length;
     if(say)toast('حجم الخط '+(i+1)+' / '+STEPS.length)};
-  $('#setBtn').onclick=e=>{e.stopPropagation();$('#setPop').hidden=!$('#setPop').hidden;$('#setVer').textContent=APP_VERSION};
+  $('#setBtn').onclick=e=>{e.stopPropagation();$('#setPop').hidden=!$('#setPop').hidden;$('#setVer').textContent=APP_VERSION;fillVoices()};
   document.addEventListener('click',e=>{if(!e.target.closest('#setPop,#setBtn'))$('#setPop').hidden=true});
   $('#fsUp').onclick=()=>{if(i<STEPS.length-1){i++;apply(true)}};
   $('#fsDown').onclick=()=>{if(i>0){i--;apply(true)}};
@@ -1580,7 +1615,7 @@ function tokenize(root){
     n.parentNode.replaceChild(frag,n);
   });
 }
-function say(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.88;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){toast('الاستماع غير متاح في هذا المتصفح')}}
+function say(t){try{const u=new SpeechSynthesisUtterance(t);const v=pickVoice('en');if(v)u.voice=v;u.lang=v?v.lang:'en-US';u.rate=.88;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){toast('الاستماع غير متاح في هذا المتصفح')}}
 let wpCur=null;
 function openWord(el){
   const w=el.dataset.w, base=lemma(w), key=base||w.toLowerCase(), d=dict(), saved=d[key];
@@ -1670,12 +1705,15 @@ function renderReview(){
 }
 
 /* ================= LISTENING MODE ================= */
-const LS=Object.assign({src:'present',t:'all',reps:2,rate:0.85,ar:1,shadow:1},store.get('listen',{}));
+const LS=Object.assign({src:'present',t:'all',reps:2,rate:0.85,ar:1,shadow:1,loop:0,cv:'drink'},store.get('listen',{}));
 const PL={items:[],i:0,playing:false,tok:0};
 let wakeLock=null;
 const plain=h=>{const d=document.createElement('div');d.innerHTML=h;return d.textContent.replace(/\s+/g,' ').trim()};
-function pickVoice(lang){const vs=speechSynthesis.getVoices();const c=vs.filter(v=>v.lang&&v.lang.toLowerCase().startsWith(lang));
-  return c.find(v=>/en-us|en_us/i.test(v.lang)&&v.localService)||c.find(v=>v.localService)||c[0]||null}
+function voiceScore(v){let sc=0;const n=v.name||'';if(/premium|enhanced|natural|neural|siri/i.test(n))sc+=50;if(/google us english|samantha|daniel|karen|moira|serena|ava|zoe|evan|nathan|allison/i.test(n))sc+=20;if(/en[-_]us/i.test(v.lang))sc+=8;else if(/en[-_]gb/i.test(v.lang))sc+=6;if(v.localService)sc+=3;if(/compact|eloquence|bad news|bells|boing|bubbles|cellos|whisper|zarvox|trinoids|organ|jester|superstar|wobble|albert|bahh|fred|junior|ralph|kathy|grandma|grandpa|rocko|shelley|sandy|flo|eddy|reed/i.test(n))sc-=60;return sc}
+function enVoices(){try{return speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang)).sort((a,b)=>voiceScore(b)-voiceScore(a))}catch(e){return []}}
+function pickVoice(lang){const vs=speechSynthesis.getVoices();
+  if(lang==='en'){const want=store.get('voiceEn','');const w=want&&vs.find(v=>v.name===want);if(w)return w;return enVoices()[0]||null}
+  const c=vs.filter(v=>v.lang&&v.lang.toLowerCase().startsWith(lang)).sort((a,b)=>voiceScore(b)-voiceScore(a));return c[0]||null}
 try{speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>{}}catch(e){}
 function speakP(text,lang,tok){return new Promise(res=>{
   if(!text||tok!==PL.tok)return res();
@@ -1684,27 +1722,49 @@ function speakP(text,lang,tok){return new Promise(res=>{
     let done=false;const fin=()=>{if(!done){done=true;res()}};u.onend=fin;u.onerror=fin;
     setTimeout(fin,2500+text.length*140/LS.rate);speechSynthesis.speak(u)}catch(e){res()}})}
 const wait=(ms,tok)=>new Promise(r=>setTimeout(r,tok===PL.tok?ms:0));
+function sentencesOf(txt){return (txt.match(/[^.!?]+[.!?]+["”]?/g)||[txt]).map(x=>x.trim()).filter(Boolean)}
+function itemsLesson(id,withStory=true){const t=T(id),items=[];
+  items.push({tag:t.en,head:true,en:t.en,ar:t.ar+'. '+plain(t.use)});
+  t.uses.forEach(u=>items.push({tag:t.en+' · Use',en:plain(u.x),ar:plain(u.u),arFirst:true}));
+  t.forms.forEach(f=>f.ex.forEach(x=>items.push({tag:t.en+' · '+{'+':'A','−':'N','?':'Q'}[f.s],en:plain(x[0]),ar:f.l,arFirst:true})));
+  (EXTRA[t.id]||[]).forEach(x=>items.push({tag:t.en+' · Example',en:plain(x[0]),ar:x[1]}));
+  if(withStory)items.push(...itemsStory(id));
+  return items}
+function itemsStory(id){const S=STORIES[id];if(!S)return [];const t=T(id);const items=[{tag:'Story · '+S.title,head:true,en:'Story. '+S.title,ar:S.ar}];
+  S.text.forEach(p=>sentencesOf(plain(p)).forEach(x=>items.push({tag:'Story · '+t.en,en:x,ar:'',story:true})));return items}
+function itemsCompare(verbIds,tenseIds,subj){const items=[];
+  verbIds.forEach(vb=>{const v=VERBS.find(x=>x.b===vb);if(!v)return;
+    items.push({tag:'Verb: '+v.b,head:true,en:`The verb ${v.b}. ${v.b}, ${v.v2}, ${v.pp}.`,ar:'مقارنة الفعل '+v.ar+' في الأزمنة'});
+    tenseIds.forEach(id=>{const t=T(id);const S=subj||bs.subj||'He';
+      ['+','−','?'].forEach((f,i)=>items.push({tag:v.b+' · '+t.en,en:plain(build(id,f,S,v)),ar:i===0?t.ar:'',pre:i===0?t.en:''}))})});
+  return items}
+function openTenseIds(){return TENSES.filter(t=>isOpenG(t.g)).map(t=>t.id)}
+function itemsIrr(f){const items=[];IRR_GROUPS.forEach(G=>{const vs=IRRV.filter(v=>v.g===G.id&&(f!=='star'||v.s));if(!vs.length)return;items.push({tag:G.ar,head:true,en:'',ar:G.ar});vs.forEach(v=>items.push({tag:G.ar+' · '+G.p,en:`${v.a}, ${v.b.replace(' / ',' or ')}, ${v.c.replace(' / ',' or ')}`,ar:v.ar.replace(/ \(.*\)$/,'')}))});return items}
+const MIX_ORDER=['simple','cont','psimple','perf','pcont','will','goto','pc','pperf','ppc','fcont','fperf','fpc'];
+function itemsMix(){const ids=MIX_ORDER.filter(id=>isOpenG(T(id).g));const items=[];const gs=IRR_GROUPS.map(g=>g.id);
+  ids.forEach((id,i)=>{items.push(...itemsLesson(id,true));items.push(...itemsCompare([VERBS[i%VERBS.length].b],[id]));
+    if(i%2===1){const G=IRR_GROUPS[(i>>1)%IRR_GROUPS.length];const vs=IRRV.filter(v=>v.g===G.id);items.push({tag:G.ar,head:true,en:'',ar:'الأفعال الشاذة: '+G.ar});vs.forEach(v=>items.push({tag:G.ar,en:`${v.a}, ${v.b.replace(' / ',' or ')}, ${v.c.replace(' / ',' or ')}`,ar:v.ar.replace(/ \(.*\)$/,'')}))}});
+  return items}
 function buildItems(){
-  const items=[];
-  if(LS.src==='irr'){IRR_GROUPS.forEach(G=>{const vs=IRRV.filter(v=>v.g===G.id&&(LS.t!=='star'||v.s));if(!vs.length)return;items.push({tag:G.ar,head:true,en:'',ar:G.ar});vs.forEach(v=>items.push({tag:G.ar+' · '+G.p,en:`${v.a}, ${v.b.replace(' / ',' or ')}, ${v.c.replace(' / ',' or ')}`,ar:v.ar.replace(/ \(.*\)$/,'')}))});return items}
-  if(LS.src==='words'){const d=dict();Object.keys(d).sort((a,b)=>d[b].added-d[a].added).forEach(k=>items.push({tag:'كلماتي',en:k,ar:d[k].m!=='—'?d[k].m:'',en2:d[k].ex||''}));return items}
+  if(LS.src==='irr')return itemsIrr(LS.t);
+  if(LS.src==='words'){const items=[];const d=dict();Object.keys(d).sort((a,b)=>d[b].added-d[a].added).forEach(k=>items.push({tag:'كلماتي',en:k,ar:d[k].m!=='—'?d[k].m:'',en2:d[k].ex||''}));return items}
+  if(LS.src==='compare')return itemsCompare(LS.cv==='all'?VERBS.map(v=>v.b):[LS.cv||'drink'],openTenseIds());
+  if(LS.src==='stories'){return openTenseIds().flatMap(id=>itemsStory(id))}
+  if(LS.src==='mix')return itemsMix();
   const ts=TENSES.filter(t=>t.g===LS.src&&(LS.t==='all'||t.id===LS.t));
-  ts.forEach(t=>{
-    items.push({tag:t.en,head:true,en:t.en,ar:t.ar+'. '+plain(t.use)});
-    t.uses.forEach(u=>items.push({tag:t.en+' · الاستخدام',en:plain(u.x),ar:plain(u.u),arFirst:true}));
-    t.forms.forEach(f=>f.ex.forEach(x=>items.push({tag:t.en+' · '+f.l,en:plain(x[0]),ar:f.l,arFirst:true})));
-    (EXTRA[t.id]||[]).forEach(x=>items.push({tag:t.en+' · مثال',en:plain(x[0]),ar:x[1]}));
-  });
-  return items;
+  return ts.flatMap(t=>itemsLesson(t.id,true));
 }
+function estMin(items){let sec=0;items.forEach(it=>{const w=(it.en||'').split(/\s+/).length;const reps=it.head||it.story?1:LS.reps;sec+=w*0.42/LS.rate*reps+(LS.ar&&it.ar?it.ar.split(/\s+/).length*0.5:0)+(LS.shadow&&!it.head?Math.min(6,0.9+w*0.52/LS.rate):0)+1});return Math.max(1,Math.round(sec/60))}
 function showItem(){
   const it=PL.items[PL.i]; if(!it)return;
   $('#plTag').textContent=it.tag; $('#plPos').textContent=(PL.i+1)+' / '+PL.items.length;
   $('#plEn').textContent=it.en+(it.en2?'\n':''); if(it.en2){$('#plEn').innerHTML='';const a=document.createElement('div');a.textContent=it.en;a.style.fontWeight='700';const b=document.createElement('div');b.textContent=it.en2;b.style.fontSize='.85em';b.style.color='var(--muted)';$('#plEn').append(a,b)}
   $('#plAr').textContent=it.ar||''; $('#plBar').style.width=((PL.i+1)/PL.items.length*100)+'%';
+  if(!$('#car').hidden){$('#carSec').textContent=it.tag;$('#carPos').textContent=(PL.i+1)+' / '+PL.items.length;$('#carEn').textContent=it.en||'';$('#carEn2').textContent=it.en2||'';$('#carAr').textContent=(LS.ar&&it.ar)?it.ar:'';$('#carBar').style.width=((PL.i+1)/PL.items.length*100)+'%'}
 }
 async function playItem(it,tok){
-  const reps=it.head?1:LS.reps, arOn=LS.ar&&it.ar;
+  const reps=(it.head||it.story)?1:LS.reps, arOn=LS.ar&&it.ar;
+  if(it.pre){await speakP(it.pre,'en',tok);await wait(300,tok)}
   if(it.arFirst&&arOn){await speakP(it.ar,'ar',tok);await wait(350,tok)}
   for(let r=0;r<reps;r++){
     await speakP(it.en,'en',tok); if(tok!==PL.tok)return;
@@ -1712,17 +1772,18 @@ async function playItem(it,tok){
     if(r<reps-1)await wait(700,tok);
   }
   if(it.en2){await wait(400,tok);await speakP(it.en2,'en',tok)}
-  if(LS.shadow&&!it.head){await wait(Math.min(6000,900+it.en.split(' ').length*520/LS.rate),tok)}
+  if(LS.shadow&&!it.head&&!it.story){await wait(Math.min(6000,900+it.en.split(' ').length*520/LS.rate),tok)}
   await wait(it.head?900:600,tok);
 }
 async function runFrom(i){
   const tok=++PL.tok; try{speechSynthesis.cancel()}catch(e){}
   PL.playing=true; setPlayUI(); keepAwake(true);
   for(PL.i=i;PL.i<PL.items.length;PL.i++){if(tok!==PL.tok)return;showItem();await playItem(PL.items[PL.i],tok)}
-  if(tok!==PL.tok)return; PL.playing=false; PL.i=Math.max(0,PL.items.length-1); setPlayUI(); keepAwake(false); $('#plTag').textContent='انتهى ✓';
+  if(tok!==PL.tok)return; if(LS.loop&&PL.items.length){runFrom(0);return}
+  PL.playing=false; PL.i=Math.max(0,PL.items.length-1); setPlayUI(); keepAwake(false); $('#plTag').textContent='انتهى ✓';
 }
 function plStop(reset){PL.tok++;try{speechSynthesis.cancel()}catch(e){}PL.playing=false;setPlayUI();keepAwake(false);if(reset){PL.i=0;PL.items=[];$('#plEn').textContent='اختر ما تريد سماعه ثم اضغط ▶';$('#plAr').textContent='';$('#plTag').textContent='جاهز';$('#plPos').textContent='';$('#plBar').style.width='0'}}
-function setPlayUI(){$('#plPlay').textContent=PL.playing?'⏸':'▶';$('#plTag').classList.toggle('pl-now',PL.playing)}
+function setPlayUI(){$('#plPlay').textContent=PL.playing?'⏸':'▶';const cp=$('#carPlay');if(cp)cp.textContent=PL.playing?'⏸':'▶';$('#plTag').classList.toggle('pl-now',PL.playing)}
 async function keepAwake(on){try{if(on&&'wakeLock' in navigator&&!wakeLock){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{wakeLock=null})}if(!on&&wakeLock){await wakeLock.release();wakeLock=null}}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&PL.playing){plStop(false);toast('توقف الصوت لأن الشاشة أُغلقت')}});
 $('#plPlay').onclick=()=>{
@@ -1739,9 +1800,12 @@ $('#plRep').onclick=()=>{if(!PL.items.length)return;runFrom(PL.i)};
 function lseg(el,items,key){el.innerHTML=items.map(([v,l])=>`<button data-v="${v}" class="${String(LS[key])===String(v)?'on':''}">${l}</button>`).join('');
   el.onclick=e=>{const b=e.target.closest('button');if(!b)return;const v=b.dataset.v;LS[key]=isNaN(+v)?v:+v;if(key==='src')LS.t='all';store.set('listen',LS);if(['src','t'].includes(key))plStop(true);renderListen()}}
 function renderListen(){
-  if(!['words','irr'].includes(LS.src)&&!isOpenG(LS.src))LS.src='present';
-  lseg($('#lSrc'),[...GROUPS.filter(G=>isOpenG(G.g)).map(G=>[G.g,G.ar]),['irr','الشاذة'],['words','كلماتي']],'src');
-  $('#lTenseWrap').style.display=LS.src==='words'?'none':'';
+  if(!['words','irr','compare','stories','mix'].includes(LS.src)&&!isOpenG(LS.src))LS.src='present';
+  lseg($('#lSrc'),[['mix','🚗 جلسة طويلة'],...GROUPS.filter(G=>isOpenG(G.g)).map(G=>[G.g,G.ar]),['compare','مقارنة فعل'],['stories','القصص'],['irr','الشاذة'],['words','كلماتي']],'src');
+  $('#lTenseWrap').style.display=['words','stories','mix'].includes(LS.src)?'none':'';
+  if(LS.src==='compare'){$('#lTense').innerHTML=[['all','كل الأفعال'],...VERBS.map(v=>[v.b,`<span class="en">${v.b}</span>`])].map(([v,l])=>`<button class="chip ${(LS.cv||'drink')===v?'on':''}" data-v="${v}">${l}</button>`).join('');
+    $('#lTense').onclick=e=>{const b=e.target.closest('button');if(!b)return;LS.cv=b.dataset.v;store.set('listen',LS);plStop(true);renderListen()}}
+  else 
   if(LS.src==='irr'){if(!['star','all'].includes(LS.t))LS.t='star';
     $('#lTense').innerHTML=[['star','⭐ الأهم'],['all','كل الأفعال']].map(([v,l])=>`<button class="chip ${LS.t===v?'on':''}" data-v="${v}">${l}</button>`).join('');
     $('#lTense').onclick=e=>{const b=e.target.closest('button');if(!b)return;LS.t=b.dataset.v;store.set('listen',LS);plStop(true);renderListen()}}
@@ -1752,7 +1816,9 @@ function renderListen(){
   lseg($('#lRate'),[[0.7,'بطيء'],[0.85,'متوسط'],[1,'عادي']],'rate');
   lseg($('#lAr'),[[1,'نعم'],[0,'لا']],'ar');
   lseg($('#lShadow'),[[1,'نعم'],[0,'لا']],'shadow');
-  $('#lAr').style.gridTemplateColumns=$('#lShadow').style.gridTemplateColumns='1fr 1fr';
+  lseg($('#lLoop'),[[1,'نعم'],[0,'لا']],'loop');
+  $('#lAr').style.gridTemplateColumns=$('#lShadow').style.gridTemplateColumns=$('#lLoop').style.gridTemplateColumns='1fr 1fr';
+  const its=buildItems();$('#lEst').textContent=its.length?`${its.length} جملة · حوالي ${estMin(its)} دقيقة${LS.loop?' (ويتكرر)':''}`:'';
 }
 $('#dListen').onclick=()=>{LS.src='words';store.set('listen',LS);plStop(true);renderListen();go('listen')};
 
@@ -1799,7 +1865,7 @@ $('#iList').addEventListener('click',e=>{
 });
 $('#iFilter').onclick=e=>{const b=e.target.closest('button');if(!b)return;IF.f=b.dataset.v;store.set('irrf',IF);iP=null;$('#iPractice').innerHTML='';renderIrr()};
 $('#iSearch').addEventListener('input',renderSearch);
-$('#iListen').onclick=()=>{LS.src='irr';LS.t=IF.f;store.set('listen',LS);plStop(true);renderListen();go('listen')};
+$('#iListen').onclick=()=>{LS.src='irr';LS.t=IF.f;store.set('listen',LS);renderListen();openCar(itemsIrr(IF.f))};
 
 let iP=null;
 function regForm(a){if(a.endsWith('e'))return a+'d';if(/[^aeiou]y$/.test(a))return a.slice(0,-1)+'ied';return a+'ed'}
@@ -2020,6 +2086,33 @@ document.addEventListener('click',e=>{
 },true);
 $('#arBtn').onclick=()=>setEnFirst(!document.body.classList.contains('enfirst'),true);
 setEnFirst(store.get('enfirst',true),false);
+
+/* ================= CAR MODE ================= */
+const RATES=[[0.7,'بطيء'],[0.85,'متوسط'],[1,'عادي']];
+function carOpts(){$('#carRate').textContent='السرعة: '+(RATES.find(r=>r[0]===LS.rate)||RATES[1])[1];$('#carArT').textContent='العربي: '+(LS.ar?'نعم':'لا');$('#carLoop').textContent='التكرار: '+(LS.loop?'نعم':'لا')}
+function openCar(items,start=0){
+  if(!('speechSynthesis' in window)){toast('الصوت غير مدعوم في هذا المتصفح');return}
+  if(!items||!items.length){toast('لا يوجد محتوى للاستماع');return}
+  PL.items=items;PL.i=start;$('#car').hidden=false;document.body.style.overflow='hidden';carOpts();
+  if(LS.ar&&!pickVoice('ar'))toast('لا يوجد صوت عربي على جهازك — الترجمة تظهر مكتوبة');
+  runFrom(start);
+}
+function closeCar(){plStop(false);$('#car').hidden=true;document.body.style.overflow=''}
+$('#carExit').onclick=closeCar;
+$('#carPlay').onclick=()=>{if(PL.playing)plStop(false);else runFrom(PL.i)};
+$('#carNext').onclick=()=>{PL.i=Math.min(PL.i+1,PL.items.length-1);runFrom(PL.i)};
+$('#carPrev').onclick=()=>{PL.i=Math.max(PL.i-1,0);runFrom(PL.i)};
+$('#carRep').onclick=()=>runFrom(PL.i);
+$('#carSkip').onclick=()=>{let j=PL.i+1;while(j<PL.items.length&&!PL.items[j].head)j++;if(j>=PL.items.length){toast('هذا آخر قسم');return}runFrom(j)};
+$('#carRate').onclick=()=>{const i=RATES.findIndex(r=>r[0]===LS.rate);LS.rate=RATES[(i+1)%RATES.length][0];store.set('listen',LS);carOpts();renderListen();runFrom(PL.i)};
+$('#carArT').onclick=()=>{LS.ar=LS.ar?0:1;store.set('listen',LS);carOpts();renderListen();showItem()};
+$('#carLoop').onclick=()=>{LS.loop=LS.loop?0:1;store.set('listen',LS);carOpts();renderListen()};
+$('#carOpen').onclick=()=>{plStop(true);openCar(buildItems())};
+function fillVoices(){const sel=$('#voiceSel');const vs=enVoices();const cur=(pickVoice('en')||{}).name;
+  sel.innerHTML=vs.length?vs.slice(0,25).map(v=>`<option value="${v.name.replace(/"/g,'&quot;')}"${v.name===cur?' selected':''}>${v.name} (${v.lang})</option>`).join(''):'<option>لا توجد أصوات</option>'}
+$('#voiceSel').onchange=e=>{store.set('voiceEn',e.target.value);say('Hello. This is your English voice.')};
+$('#voiceTest').onclick=()=>say('Hello. This is your English voice.');
+try{speechSynthesis.onvoiceschanged=()=>{if(!$('#setPop').hidden)fillVoices()}}catch(e){}
 
 /* ================= BIDI FIX (Arabic + English) ================= */
 const LAT_RE=/\(?[-‑]?[A-Za-z][A-Za-z0-9'’()]*(?:(?:\s*[\/+–,]\s*|[\-\s])\(?[-‑]?[A-Za-z0-9][A-Za-z0-9'’()]*)*(?:\.\.\.|…)?/g;
