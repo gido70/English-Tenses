@@ -283,6 +283,22 @@ td.en,th.en{font-family:var(--en)}
 .cb{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:8px 10px 8px 40px;display:flex;flex-direction:column;gap:2px;position:relative}
 .cb b{font-family:var(--en);color:var(--accent);direction:ltr;text-align:left;font-size:1rem}
 .cb .mini{position:absolute;top:6px;left:6px;width:28px;height:28px;font-size:.8rem}
+.core-intro{margin:0 0 10px;font-size:.95rem;line-height:1.8}
+.cr{border:1px solid var(--line);border-radius:14px;margin-bottom:8px;background:var(--surface2);overflow:hidden}
+.cr-h{width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;text-align:right}
+.cr-ic{width:64px;height:48px;flex:none;color:var(--accent)}
+.cr-t{flex:1;display:flex;flex-direction:column;min-width:0}
+.cr-t b{font-size:1.35rem;color:var(--accent);text-align:left;line-height:1.1}
+.cr-core{font-weight:700;font-size:.95rem}
+.cr-en{font-size:.82rem;color:var(--muted);text-align:left}
+.cr.open .chev{transform:rotate(180deg)} .cr.open .acc{grid-template-rows:1fr} .cr.open .acc>div>*{transform:none;opacity:1}
+.cr-in{padding:0 12px 12px}
+.lay{border-top:1px dashed var(--line);padding:8px 0}
+.lay-h{font-size:.82rem;font-weight:700;color:var(--accent2);margin-bottom:5px}
+.lay-ex{display:flex;flex-wrap:wrap;gap:6px;direction:ltr}
+.lay-ex>span{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px 9px;font-size:.95rem}
+.lay-ex>span.ok{border-color:var(--ok);color:var(--ok);font-weight:700}
+.lay-why{font-size:.92rem;line-height:1.7;margin-top:5px}
 /* ===== Calm color layer ===== */
 .car{position:fixed;inset:0;z-index:95;background:#0a1420;color:#efe6d6;display:flex;flex-direction:column;padding:calc(12px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
 .car[hidden]{display:none}
@@ -727,9 +743,10 @@ body:not([data-page="home"]) #topSub{display:none}
 
   <!-- PREPOSITIONS -->
   <section class="page" id="p-prep">
-    <p class="page-sub">حروف الجر بالصورة والقاعدة والمثال، مع أكثر أخطاء المتحدثين بالعربية.</p>
+    <p class="page-sub">ابدأ بالصور العشر: كل حرف جر صورة واحدة تفسّر استخداماته كلها. بعدها القواعد والعبارات والأخطاء الشائعة.</p>
     <div class="irr-tools"><button id="pQuiz"><b>✔︎</b>اختبار سريع</button><button id="pMisBtn"><b>⚠︎</b>الأخطاء الشائعة</button><button id="pListen"><b>🎧</b>استمع</button></div>
     <div id="pPractice"></div>
+    <div id="pCore"></div>
     <div class="block pyr-wrap"><h3>القاعدة الذهبية: من العام إلى الدقيق</h3><div class="pyrs" id="pyrs"></div></div>
     <div id="pSecs"></div>
     <div class="rule-acc" id="pCombo"><button><span>أفعال وصفات مع حرف جر ثابت<small>احفظها كعبارة كاملة — 31 عبارة</small></span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="acc"><div><div class="acc-in"><div class="cbs" id="cbs"></div></div></div></div></div>
@@ -863,7 +880,7 @@ body:not([data-page="home"]) #topSub{display:none}
 </div>
 
 <script>
-const APP_VERSION='2.7';
+const APP_VERSION='2.8';
 /* ================= DATA ================= */
 const GLYPH = {
   simple:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><g fill="currentColor"><circle cx="14" cy="20" r="3.5"/><circle cx="36" cy="20" r="3.5"/><circle cx="58" cy="20" r="3.5"/><circle cx="80" cy="20" r="3.5"/><circle cx="102" cy="20" r="3.5"/></g></svg>',
@@ -1195,6 +1212,7 @@ O3K.forEach(o=>{if(!GLOSS[o.w])GLOSS[o.w]=o.ar});
 Object.entries({"above": "فوق", "achievement": "إنجاز", "across": "عبر، على الجانب الآخر", "address": "عنوان", "adjective": "صفة", "adverb": "ظرف", "advice": "نصيحة", "afraid": "خائف", "age": "عُمر", "agent": "الفاعل، وكيل", "ahead": "أمام، للأمام", "among": "وسط، بين (مجموعة)", "any": "أي", "app": "تطبيق", "apply": "يتقدّم بطلب", "area": "منطقة", "artist": "فنان", "bad": "سيئ", "based": "مبني على", "basis": "أساس", "beard": "لحية", "beautiful": "جميل", "belong": "ينتمي، ملك لـ", "beside": "بجانب", "bravery": "شجاعة", "cat": "قطة", "cause": "سبب", "century": "قرن", "comparison": "مقارنة", "computer": "حاسوب", "concerning": "بخصوص", "consist": "يتكوّن", "context": "سياق", "countable": "معدود", "courageous": "شجاع", "creation": "إنشاء، إبداع", "creative": "مبدع", "dangerous": "خطير", "deadline": "موعد نهائي", "decrease": "ينقص / نقص", "deep": "عميق", "depend": "يعتمد", "development": "تطوير", "direction": "اتجاه", "disagree": "لا يوافق", "discovery": "اكتشاف", "discuss": "يناقش", "emotional": "عاطفي", "enter": "يدخل", "event": "حدث، مناسبة", "evidence": "دليل", "exact": "دقيق، محدد", "exercise": "رياضة، تمرين", "experience": "خبرة، تجربة", "feature": "ميزة، صفة", "file": "ملف", "financial": "مالي", "firefighter": "رجل إطفاء", "floor": "طابق، أرضية", "food": "طعام", "free": "متفرّغ، مجاني", "goal": "هدف", "health": "صحة", "high": "عالٍ", "history": "تاريخ", "improvement": "تحسّن", "inside": "داخل", "interested": "مهتم", "invaluable": "لا يُقدّر بثمن", "invent": "يخترع", "keyboard": "لوحة المفاتيح", "knife": "سكين", "lake": "بحيرة", "latest": "الأحدث (at the latest: كحد أقصى)", "length": "طول", "low": "منخفض", "married": "متزوج", "media": "وسائل الإعلام", "method": "طريقة", "mine": "ملكي، لي", "more": "أكثر", "music": "موسيقى", "must": "يجب", "mystery": "لغز، غموض", "noun": "اسم (في القواعد)", "verb": "فعل", "number": "عدد", "office": "مكتب", "opposite": "مقابل / عكس", "origin": "أصل، مصدر", "painting": "لوحة، رسم", "patience": "صبر", "permission": "إذن", "pharmacy": "صيدلية", "photo": "صورة", "picture": "صورة", "point": "نقطة", "poor": "ضعيف، فقير", "preference": "تفضيل", "proud": "فخور", "public": "عام", "purpose": "غرض، هدف", "puzzle": "لغز", "realise": "يدرك", "reason": "سبب", "recently": "مؤخراً", "reduction": "تخفيض", "relation": "علاقة", "relationship": "علاقة", "responsible": "مسؤول", "safety": "سلامة", "scientist": "عالِم", "season": "فصل من السنة", "second": "ثانٍ", "separate": "منفصل", "shirt": "قميص", "short": "قصير", "side": "جانب", "sign": "لافتة، إشارة", "social": "اجتماعي", "sofa": "أريكة", "solution": "حلّ", "space": "مساحة، فضاء", "special": "خاص، مميّز", "subject": "موضوع، مادة", "success": "نجاح", "successful": "ناجح", "surface": "سطح", "surround": "يحيط", "talk": "يتحدث", "tall": "طويل القامة", "taxi": "سيارة أجرة", "teenager": "مراهق", "thing": "شيء", "third": "ثالث", "tool": "أداة", "topic": "موضوع", "towards": "باتجاه، نحو", "traffic": "زحام المرور", "transport": "مواصلات", "trustworthy": "جدير بالثقة", "tunnel": "نفق", "uncountable": "غير معدود", "under": "تحت", "unfamiliar": "غير مألوف", "unsafe": "غير آمن", "until": "حتى", "unwilling": "غير راغب", "waste": "هدر / يهدر", "way": "طريقة، طريق", "thursday": "الخميس", "may": "مايو / قد", "please": "من فضلك", "uk": "المملكة المتحدة"}).forEach(([k,v])=>{if(!GLOSS[k])GLOSS[k]=v});
 Object.assign(IRR,{higher:"high",lower:"low",knowledges:"knowledge"});
 ["egypt","hussein","king","oman","taha"].forEach(x=>PROPER.add(x));
+const CORE=[{"p": "in", "img": "box", "core": "داخل حدود، كأنه داخل صندوق", "en": "inside a container", "eq": "في", "place": ["in the room", "in Dubai", "in the car"], "time": ["in July", "in 2024", "in the morning"], "tw": "الشهر والسنة وجزء اليوم «صندوق» كبير فيه وقت كثير، فنحن داخله.", "abs": ["interested in", "believe in", "in love"], "aw": "تكون «داخل» الموضوع أو الشعور، منغمساً فيه.", "dAr": "تشبه العربي غالباً، لكن انتبه: «في الليل» تصبح بحرف آخر:", "dEn": "at night"}, {"p": "on", "img": "surface", "core": "فوق سطح وملامس له", "en": "touching a surface", "eq": "على", "place": ["on the table", "on the wall", "on the bus"], "time": ["on Friday", "on 5 May", "on my birthday"], "tw": "اليوم مربع على صفحة التقويم، تضع إصبعك «على» مربعه.", "abs": ["depend on", "focus on", "impact on"], "aw": "تضع ثقلك أو انتباهك «فوق» شيء: تعتمد عليه، وتركّز عليه.", "dAr": "العربي يقول «في يوم الجمعة»، والإنجليزي يقول «على الجمعة»:", "dEn": "on Friday"}, {"p": "at", "img": "point", "core": "نقطة واحدة محددة", "en": "one exact point", "eq": "عند", "place": ["at the door", "at the bus stop", "at 25 King Street"], "time": ["at 7:30", "at noon", "at night"], "tw": "الساعة نقطة صغيرة دقيقة على خط الوقت.", "abs": ["look at", "good at", "laugh at"], "aw": "تصوّب نحو هدف كأنه نقطة: تنظر إليه، وتتقنه، وتضحك عليه.", "dAr": "العربي يقول «في الساعة السابعة»، والإنجليزي يستخدم النقطة:", "dEn": "at 7 o'clock"}, {"p": "to", "img": "arrow", "core": "سهم يتحرك ويصل إلى هدف", "en": "movement that reaches a goal", "eq": "إلى", "place": ["go to school", "from Dubai to Muscat"], "time": ["from 9 to 5"], "tw": "نهاية الفترة هي الهدف الذي يصل إليه السهم.", "abs": ["listen to", "talk to", "belong to", "married to"], "aw": "شيء يتجه ويصل: الصوت يصل إلى أذنك، والزواج يربطك بشخص.", "dAr": "العربي يقول «متزوج من»، والإنجليزي يقول «متزوج إلى»:", "dEn": "married to"}, {"p": "from", "img": "source", "core": "نقطة الانطلاق، المصدر", "en": "the starting point", "eq": "من", "place": ["from Oman", "an email from my bank"], "time": ["from Monday", "from 2019"], "tw": "بداية الفترة التي تنطلق منها.", "abs": ["borrow from", "benefit from", "suffer from"], "aw": "الشيء يخرج من مصدر ويأتي إليك: تستعير من شخص، وتستفيد من شيء.", "dAr": "يشبه العربي كثيراً، لكن «خائف من» ليست بهذا الحرف:", "dEn": "afraid of"}, {"p": "for", "img": "gift", "core": "لأجل، لصالح، مقابل", "en": "purpose · for someone · in exchange", "eq": "لـ / لأجل", "place": ["a gift for you", "the bus for Muscat"], "time": ["for two hours", "for a week"], "tw": "المدة التي «تُخصَّص» للفعل.", "abs": ["wait for", "look for", "pay for", "apply for"], "aw": "تفعل شيئاً لأجل هدف: تنتظر لأجل الحافلة، وتدفع مقابل شيء.", "dAr": "العربي يقول «ينتظر الحافلة» بلا حرف، والإنجليزي يحتاجه:", "dEn": "wait for the bus"}, {"p": "of", "img": "part", "core": "جزء من كل، أو ينتمي إليه", "en": "part of · belongs to", "eq": "من / لـ", "place": ["the door of the car", "a cup of tea"], "time": ["the end of the week"], "tw": "جزء من فترة أكبر.", "abs": ["afraid of", "proud of", "consist of"], "aw": "الشعور أو المكوّن صادر من الشيء أو جزء منه.", "dAr": "العربي يقول «يتكون من»، والإنجليزي يستخدم حرف الجزء:", "dEn": "consist of"}, {"p": "with", "img": "together", "core": "مع، مصاحبة، أو أداة في يدك", "en": "together · using a tool", "eq": "مع / بـ", "place": ["with my brother", "a man with a beard"], "time": ["with time"], "tw": "نادراً للوقت، ومعناه «مع مرور الوقت».", "abs": ["agree with", "share with", "deal with"], "aw": "فعل يحتاج طرفاً آخر معك: توافق شخصاً، وتتقاسم مع شخص.", "dAr": "العربي يقول «متزوج بـ»، لكن الإنجليزي لا يستخدم هذا الحرف هنا:", "dEn": "married to (not with)"}, {"p": "about", "img": "around", "core": "يدور حول شيء", "en": "around a topic", "eq": "عن / حول", "place": ["walk about the town"], "time": ["about 7 o'clock"], "tw": "«حوالي» الساعة: قريب منها ويدور حولها.", "abs": ["talk about", "worry about", "think about"], "aw": "الكلام أو التفكير يدور حول موضوع.", "dAr": "العربي يقول «ناقش عن»، والإنجليزي لا يضع حرفاً بعد هذا الفعل:", "dEn": "discuss the plan"}, {"p": "by", "img": "beside", "core": "بجانب، بواسطة، أو قبل موعد", "en": "next to · by means of · not later than", "eq": "بجانب / بواسطة", "place": ["by the window", "by car"], "time": ["by Friday"], "tw": "تصل إلى جانب الموعد ولا تتجاوزه، أي عنده أو قبله.", "abs": ["a book by Taha Hussein", "learn by doing"], "aw": "الوسيلة أو الفاعل الذي يقف بجانب الحدث ويسببه.", "dAr": "العربي يقول «بالسيارة»، والإنجليزي بلا أداة التعريف:", "dEn": "by car (not by the car)"}];
 function lemma(raw){
   let w=raw.toLowerCase().replace(/[’]/g,"'");
   if(IRR[w])return IRR[w];
@@ -2190,11 +2208,38 @@ function renderVF(){const box=$('#vPractice'),close='<button class="all-btn" id=
   $('#vfBad').onclick=()=>fin(false);$('#vfGood').onclick=()=>fin(true);
 }
 
+/* ================= PREPOSITIONS: CORE PICTURES (understanding, not memorising) ================= */
+const ICON={
+ box:'<rect x="14" y="10" width="52" height="40" rx="4" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="40" cy="32" r="8" fill="var(--pc)"/>',
+ surface:'<rect x="8" y="38" width="64" height="6" rx="3" fill="currentColor"/><circle cx="40" cy="28" r="9" fill="var(--pc)"/>',
+ point:'<circle cx="40" cy="30" r="22" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 4"/><circle cx="40" cy="30" r="12" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="40" cy="30" r="5" fill="var(--pc)"/>',
+ arrow:'<circle cx="14" cy="30" r="7" fill="var(--pc)"/><path d="M24 30 H62" stroke="currentColor" stroke-width="3"/><path d="M54 22 l9 8 -9 8" fill="none" stroke="currentColor" stroke-width="3"/><path d="M68 14 V46" stroke="currentColor" stroke-width="3"/>',
+ source:'<rect x="6" y="14" width="26" height="32" rx="4" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="58" cy="30" r="7" fill="var(--pc)"/><path d="M32 30 H48" stroke="currentColor" stroke-width="3" stroke-dasharray="4 3"/>',
+ gift:'<rect x="22" y="24" width="36" height="26" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><rect x="18" y="16" width="44" height="9" rx="2" fill="currentColor"/><path d="M40 16 V50" stroke="var(--pc)" stroke-width="4"/>',
+ part:'<circle cx="40" cy="30" r="21" fill="none" stroke="currentColor" stroke-width="3"/><path d="M40 30 L40 9 A21 21 0 0 1 61 30 Z" fill="var(--pc)"/>',
+ together:'<circle cx="28" cy="30" r="10" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="52" cy="30" r="10" fill="var(--pc)"/><path d="M38 30 H42" stroke="currentColor" stroke-width="3"/>',
+ around:'<circle cx="40" cy="30" r="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="5 4"/><circle cx="40" cy="30" r="7" fill="currentColor"/><circle cx="62" cy="30" r="5" fill="var(--pc)"/>',
+ beside:'<rect x="44" y="8" width="16" height="44" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="28" cy="38" r="8" fill="var(--pc)"/>'};
+function coreHTML(){return `<div class="block core"><h3>🧠 افهم الصورة بدل الحفظ</h3>
+ <p class="core-intro">لكل حرف جر <b>صورة واحدة في المكان</b>. ومن هذه الصورة نفسها يأتي معناه في <b>الوقت</b> وفي <b>العبارات الثابتة</b>. افهم الصورة، وستفهم الباقي بالمنطق بدل الحفظ.</p>
+ ${CORE.map((c,i)=>`<div class="cr" data-cr="${i}"><button class="cr-h"><svg class="cr-ic" viewBox="0 0 80 60">${ICON[c.img]}</svg><span class="cr-t"><b class="en">${c.p}</b><span class="cr-core">${c.core}</span><span class="cr-en en">${c.en}</span></span>${CHEV_SVG}</button>
+  <div class="acc"><div><div class="cr-in">
+   <div class="lay"><div class="lay-h">📍 في المكان — الصورة الأصلية</div><div class="lay-ex en">${c.place.map(x=>`<span>${x}</span>`).join('')}</div></div>
+   <div class="lay"><div class="lay-h">🕐 في الوقت</div><div class="lay-ex en">${c.time.map(x=>`<span>${x}</span>`).join('')}</div><div class="lay-why">${c.tw}</div></div>
+   <div class="lay"><div class="lay-h">💭 في العبارات الثابتة — لماذا هذا الحرف؟</div><div class="lay-ex en">${c.abs.map(x=>`<span>${x}</span>`).join('')}</div><div class="lay-why">${c.aw}</div></div>
+   <div class="lay cmp"><div class="lay-h">🔁 مقارنة بالعربي: أقرب حرف «${c.eq}»</div><div class="lay-why">${c.dAr}</div><div class="lay-ex en"><span class="ok">${c.dEn}</span></div></div>
+   <button class="ghost" data-crsay="${i}" style="margin-top:6px;padding:6px 12px;font-size:.82rem">🔊 استمع للأمثلة</button>
+  </div></div></div></div>`).join('')}</div>`}
+function itemsCore(){const items=[{tag:'Core pictures',head:true,en:'Prepositions: the core pictures',ar:'افهم الصورة بدل الحفظ'}];
+  CORE.forEach(c=>{items.push({tag:'Core · '+c.p,pre:c.p,en:c.en+'. '+c.place.join('. ')+'.',ar:c.core});
+    items.push({tag:'Core · '+c.p,en:c.time.join('. ')+'.',ar:c.tw});items.push({tag:'Core · '+c.p,en:c.abs.join('. ')+'.',ar:c.aw})});return items}
+
 /* ================= PREPOSITIONS ================= */
 function pyrSVG(title,rows){const cols=['var(--cont)','var(--perf)','var(--pc)'];const W=320;
   return `<div class="pyr"><h4>${title}</h4><svg viewBox="0 0 ${W} 206">${rows.map((r,i)=>{const top=i*68,inset=i*46;return `<path d="M${inset} ${top} H${W-inset} L${W-inset-46} ${top+64} H${inset+46} Z" fill="${cols[i]}" opacity=".92"/><text x="${W/2}" y="${top+27}" text-anchor="middle" font-family="Literata,serif" font-weight="700" font-size="20" fill="#fff">${r[0]}</text><text x="${W/2}" y="${top+48}" text-anchor="middle" font-family="Literata,serif" font-size="12.5" fill="#fff">${r[1]}</text>`}).join('')}</svg></div>`}
 const CHEV_SVG='<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>';
 function renderPrep(){
+  $('#pCore').innerHTML=coreHTML();
   $('#pyrs').innerHTML=pyrSVG('TIME',[['IN','months · years · seasons'],['ON','days · dates'],['AT','7:30 · night']])+pyrSVG('PLACE',[['IN','country · city · room'],['ON','street · floor · bus'],['AT','address · point']]);
   $('#pSecs').innerHTML=PREP.map((S,i)=>`<div class="rule-acc${i===0?' open':''}" data-ps="${S.id}"><button><span>${S.t}<small class="en" style="text-align:right">${S.en}</small></span>${CHEV_SVG}</button><div class="acc"><div><div class="acc-in">
     ${S.rows.map((r,ri)=>`<div class="pr-row"><div class="pr-top"><b class="pr-p en">${r.p}</b><span class="pr-u en">${r.u}</span><button class="mini" data-psay="${S.id}:${ri}" aria-label="استمع">🔊</button></div><div class="pr-ex en">${r.ex.map(x=>`<span>${x}</span>`).join('')}</div><div class="pr-ar">${r.ar}</div></div>`).join('')}</div></div></div></div>`).join('');
@@ -2210,12 +2255,14 @@ function renderPrep(){
 }
 document.addEventListener('click',e=>{
   if(!e.target.closest('#p-prep'))return;
+  const ch=e.target.closest('.cr-h');if(ch){ch.parentElement.classList.toggle('open');return}
+  const cy=e.target.closest('[data-crsay]');if(cy){const c=CORE[+cy.dataset.crsay];say([...c.place,...c.time,...c.abs].join('. '));return}
   const ps=e.target.closest('[data-psay]');if(ps){const [sid,ri]=ps.dataset.psay.split(':');const r=PREP.find(x=>x.id===sid).rows[+ri];say(r.ex.join('. '));return}
   const cs=e.target.closest('[data-csay]');if(cs){say(cs.dataset.csay);return}
   const ra=e.target.closest('.rule-acc>button');if(ra){ra.parentElement.classList.toggle('open');return}
   const mb=e.target.closest('.mis-btn');if(mb){const a=mb.nextElementSibling;a.classList.toggle('open');mb.querySelector('.chev').style.transform=a.classList.contains('open')?'rotate(180deg)':''}
 });
-function itemsPrep(){const items=[];PREP.forEach(S=>{items.push({tag:'Prepositions · '+S.en,head:true,en:S.en,ar:S.t});S.rows.forEach(r=>items.push({tag:S.en+' · '+r.p,pre:r.p,en:r.ex.join('. ')+'.',ar:r.ar}))});
+function itemsPrep(){const items=[...itemsCore()];PREP.forEach(S=>{items.push({tag:'Prepositions · '+S.en,head:true,en:S.en,ar:S.t});S.rows.forEach(r=>items.push({tag:S.en+' · '+r.p,pre:r.p,en:r.ex.join('. ')+'.',ar:r.ar}))});
   items.push({tag:'Fixed phrases',head:true,en:'Fixed phrases',ar:'عبارات ثابتة'});COMBO.forEach(c=>items.push({tag:'Fixed phrases',en:c[0],ar:c[1]}));
   items.push({tag:'Correct sentences',head:true,en:'Correct sentences',ar:'جمل صحيحة'});PMIS.forEach(m=>items.push({tag:'Correct sentences',en:plain(m[1]),ar:m[2]}));return items}
 $('#pListen').onclick=()=>openCar(itemsPrep());
@@ -2236,7 +2283,7 @@ function renderPP(){const box=$('#pPractice');if(!pP){box.innerHTML='';return}
 }
 
 /* ================= SEPARATE ARABIC / ENGLISH ================= */
-const MX_EXCL='.vc-top,.pr-top,.cb,.rlinks,.itip,table,.rule-acc>button,.dec-opt b,.top,.nav,.seg,.chip,.pat,.tcard,.vhead,.rl,.stat,.isearch,.ex-head,.form-btn,.sheet-head,.gname,.pl-label,.qmeta,.irr-q,.rv-word,.wp-top,.wp-base,.legend,.cta,h2,h3,label,.swipe,.hint-card,.grp-head,.ntag,.sign,.lp-badge,.upd-bar,.mx,.qopt,.dict-item .dw,.sentence,.pl-en';
+const MX_EXCL='.cr-h,.lay,.vc-top,.pr-top,.cb,.rlinks,.itip,table,.rule-acc>button,.dec-opt b,.top,.nav,.seg,.chip,.pat,.tcard,.vhead,.rl,.stat,.isearch,.ex-head,.form-btn,.sheet-head,.gname,.pl-label,.qmeta,.irr-q,.rv-word,.wp-top,.wp-base,.legend,.cta,h2,h3,label,.swipe,.hint-card,.grp-head,.ntag,.sign,.lp-badge,.upd-bar,.mx,.qopt,.dict-item .dw,.sentence,.pl-en';
 const CIRC='①②③④⑤⑥⑦⑧⑨⑩⑪⑫';
 const isInline=el=>{const d=getComputedStyle(el).display;return d==='inline'};
 function blockOf(el){let c=el.parentElement;while(c&&c!==document.body&&isInline(c))c=c.parentElement;return c}
