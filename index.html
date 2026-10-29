@@ -315,6 +315,30 @@ td.en,th.en{font-family:var(--en)}
 .vb-top{display:flex;align-items:center;gap:10px}
 .vb-top b{background:var(--accent);color:#fff;border-radius:8px;padding:1px 9px;direction:ltr}
 #p-vocab .irr-tools{grid-template-columns:1fr 1fr}
+.plan{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.plan-intro{margin:0 0 10px;font-size:.93rem;line-height:1.8}
+.plan-day{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.pd{background:var(--surface2);border-radius:12px;padding:8px;text-align:center}
+.pd b{display:block;font-family:var(--en);color:var(--accent2);font-size:1.1rem;direction:rtl}
+.pd span{font-size:.8rem;color:var(--muted)}
+.pw{border:1px solid var(--line);border-radius:14px;margin-bottom:7px;background:var(--surface2);overflow:hidden}
+.pw.cur{border-color:var(--accent)}
+.pw-h{width:100%;display:flex;align-items:center;gap:10px;padding:10px 12px;text-align:right}
+.pw-n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:1px solid var(--line);font-family:var(--en);font-weight:700;color:var(--muted);flex:none}
+.pw.cur .pw-n{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.pw-t{flex:1;display:flex;flex-direction:column}
+.pw-t small{color:var(--accent);font-weight:700;font-size:.78rem}
+.pw.open .chev{transform:rotate(180deg)} .pw.open .acc{grid-template-rows:1fr} .pw.open .acc>div>*{transform:none;opacity:1}
+.pw-in{padding:0 12px 10px}
+.pw-r{display:flex;gap:8px;font-size:.92rem;padding:5px 0;border-top:1px dashed var(--line)}
+.pw-k{flex:none;width:96px;white-space:nowrap;font-weight:700;color:var(--accent2);font-size:.85rem}
+.pw-en{direction:ltr;text-align:left;color:var(--accent);font-size:.9rem;padding:0 0 4px}
+.how{margin:0;padding-inline-start:20px}
+.how li{margin-bottom:8px}
+.how li b{display:block;font-size:.95rem}
+.how li span{font-size:.88rem;color:var(--muted)}
+.rd{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px dashed var(--line)}
+.rd b{background:var(--simple-bg);color:var(--simple);border-radius:8px;padding:2px 9px;white-space:nowrap}
 /* ===== Calm color layer ===== */
 .car{position:fixed;inset:0;z-index:95;background:#0a1420;color:#efe6d6;display:flex;flex-direction:column;padding:calc(12px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
 .car[hidden]{display:none}
@@ -776,6 +800,7 @@ body:not([data-page="home"]) #topSub{display:none}
   <!-- LEARNING PATH -->
   <section class="page" id="p-path">
     <div class="path-hero" id="pathHero"></div>
+    <div id="planWrap"></div>
     <div class="block routine"><h3>⏱ روتين 15 دقيقة يومياً</h3>
       <div class="rt"><b>3 د</b><span>راجع ما حان وقته</span><button class="ghost" id="rtReview">ابدأ</button></div>
       <div class="rt"><b>7 د</b><span>مهمة واحدة جديدة من المسار</span><button class="ghost" id="rtNext">التالية</button></div>
@@ -898,7 +923,7 @@ body:not([data-page="home"]) #topSub{display:none}
 </div>
 
 <script>
-const APP_VERSION='2.9';
+const APP_VERSION='3.0';
 /* ================= DATA ================= */
 const GLYPH = {
   simple:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><g fill="currentColor"><circle cx="14" cy="20" r="3.5"/><circle cx="36" cy="20" r="3.5"/><circle cx="58" cy="20" r="3.5"/><circle cx="80" cy="20" r="3.5"/><circle cx="102" cy="20" r="3.5"/></g></svg>',
@@ -2127,6 +2152,7 @@ function renderPathCard(){const {tot,dn,cur,ps}=pathStats();const ix=PATH.indexO
   const nt=cur.tasks.findIndex((t,i)=>!taskDone(cur,i,ps));
   $('#homePath').innerHTML=`<span class="pc-top"><span>🧭 مسار التعلّم</span><span class="en">${dn}/${tot}</span></span><b>المرحلة ${ix+1}: ${cur.t}</b><span class="pc-task">التالي: ${nt>=0?cur.tasks[nt].l:'المرحلة مكتملة ✓'}</span><span class="pbar"><i style="width:${dn/tot*100}%"></i></span>`}
 function renderPath(){
+  if($('#planWrap'))$('#planWrap').innerHTML=planHTML();
   const {tot,dn,cur,ps}=pathStats(); const exp=store.get('pexp',{});
   $('#pathHero').innerHTML=`<div style="font-weight:700">أنت في المرحلة ${PATH.indexOf(cur)+1} من ${PATH.length}</div><div class="pbar"><i style="width:${dn/tot*100}%"></i></div>
     <div class="ph-row"><div><b>${dn}</b><span>مهمة أنجزتها</span></div><div><b>${ps.days.length}</b><span>يوم تعلّم</span></div><div><b>${Math.max(0,tot-dn)}</b><span>مهمة متبقية</span></div></div>`;
@@ -2357,8 +2383,46 @@ function renderVFam(){const box=$('#vPractice');if(!vF){box.innerHTML='';return}
     $('#vfmNext').onclick=()=>{vF.i++;renderVFam()}});
 }
 
+/* ================= STUDY PLAN (8 weeks) ================= */
+const PLAN=[
+ {w:1,t:'البداية: الحاضر',g:['المرحلتان 1 و 2'],e:'Present Simple · Present Continuous',v:'الكلمات 1–10 وقصتها',p:'صور حروف الجر: الأولى والثانية والثالثة',pe:'in · on · at',i:'«شاذة جداً» و«لا يتغيّر»'},
+ {w:2,t:'الماضي البسيط',g:['المرحلة 3'],e:'Past Simple',v:'الكلمات 11–20 وقصتها',p:'صور حروف الجر: الحركة والمصدر والهدف',pe:'to · from · for',i:'4 مجموعات قصيرة من الأفعال الشاذة'},
+ {w:3,t:'التام مقابل الماضي',g:['المرحلة 4'],e:'Present Perfect vs Past Simple',v:'الكلمات 21–30 وقصتها',p:'بقية الصور وهرم الوقت',pe:'of · with · about · by',i:'مجموعتان'},
+ {w:4,t:'الماضي المستمر',g:['المرحلة 5'],e:'Past Continuous + when',v:'الكلمات 31–40 وقصتها',p:'هرم المكان، والحركة والمواضع',pe:'into · across · between',i:'مجموعتان'},
+ {w:5,t:'المستقبل',g:['المرحلة 6'],e:'will vs going to',v:'الكلمات 41–50 وقصتها',p:'10 عبارات ثابتة',pe:'depend on · interested in …',i:'مجموعتان'},
+ {w:6,t:'التام المستمر',g:['المرحلة 7'],e:'Present Perfect Continuous',v:'مراجعة الكلمات 1–25 بالبطاقات والعائلات',p:'أخطاء المتحدثين بالعربية',pe:'married to · wait for …',i:'مجموعتان'},
+ {w:7,t:'الماضي التام',g:['المرحلة 8'],e:'Past Perfect',v:'مراجعة الكلمات 26–50',p:'الاختبار حتى 8 من 10',pe:'',i:'آخر المجموعات'},
+ {w:8,t:'الفهم والمراجعة الشاملة',g:['المرحلتان 9 و 10'],e:'Future Continuous · Future Perfect · Mixed review',v:'كل القصص في الاستماع',p:'الاختبار الشامل',pe:'',i:'اختبار «الكل»'}];
+const HOWTO=[
+ ['اقرأ العنوان الإنجليزي وانظر إلى رسم خط الزمن','قبل أي شرح، حاول أن تفهم الفكرة من الصورة.'],
+ ['اقرأ الاستخدامات بالإنجليزي وقل كل مثال بصوتك','ولا تفتح «عربي ▾» إلا إذا توقّف فهمك.'],
+ ['انظر إلى الصيغ الثلاث: إثبات ونفي وسؤال','لاحظ أين يذهب الفعل المساعد، وأين تأتي كلمة النفي.'],
+ ['افتح «قصة الدرس»','اقرأها مرة كاملة بلا توقف، ثم مرة ثانية واحفظ الكلمات التي أوقفتك فقط.'],
+ ['حلّ «تدرّب على هذا الدرس»','إذا حصلت على 5 من 6 فأنت جاهز للدرس التالي.'],
+ ['اكتب جملتين عن حياتك في المسار، واستمع لهما','هذه أهم خطوة: أن تستخدم الزمن في كلامك أنت.'],
+ ['في السيارة أو الانتظار: اضغط 🎧','لتسمع الدرس نفسه مرة أخرى دون جهد.']];
+const READY=[['5 من 6','في «تدرّب على هذا الدرس»'],['3 جمل','تكتبها عن حياتك دون أن تنظر إلى الأمثلة'],['8 من 10','في الاختبار العام، قبل الانتقال إلى المجموعة التالية']];
+function planWeek(){const {cur}=pathStats();const m={s0:1,s1:1,s2:2,s3:3,s4:4,s5:5,s6:6,s7:7,s8:8,s9:8,s10:5};return m[cur.id]||1}
+function planHTML(){const cw=planWeek();return `<div class="block plan" id="planBlk">
+ <h3>🧭 ابدأ من هنا: خطة 8 أسابيع</h3>
+ <p class="plan-intro"><b>20 دقيقة يومياً، 5 أيام في الأسبوع.</b> اليوم السادس للمراجعة والاختبارات، والسابع للراحة أو الاستماع فقط في السيارة. وإذا سبقك الكورس إلى موضوع، افتحه مباشرة من المسار ولا تنتظر الأسبوع.</p>
+ <div class="plan-day"><div class="pd"><b>3 د</b><span>مراجعة ما حان وقته</span></div><div class="pd"><b>12 د</b><span>شيء واحد جديد</span></div><div class="pd"><b>5 د</b><span>تكتب وتتكلم</span></div></div>
+ ${PLAN.map(p=>`<div class="pw${p.w===cw?' cur open':''}" data-pw="${p.w}"><button class="pw-h"><span class="pw-n">${p.w===cw?'◉':p.w}</span><span class="pw-t"><b>الأسبوع ${p.w}: ${p.t}</b>${p.w===cw?'<small>أنت هنا الآن</small>':''}</span>${CHEV_SVG}</button>
+  <div class="acc"><div><div class="pw-in">
+   <div class="pw-r"><span class="pw-k">⏱ الأزمنة</span><span>${p.g.join('')}</span></div><div class="pw-en en">${p.e}</div>
+   <div class="pw-r"><span class="pw-k">📘 الكلمات</span><span>${p.v}</span></div>
+   <div class="pw-r"><span class="pw-k">📍 حروف الجر</span><span>${p.p}</span></div>${p.pe?`<div class="pw-en en">${p.pe}</div>`:''}
+   <div class="pw-r"><span class="pw-k">📚 الأفعال الشاذة</span><span>${p.i}</span></div>
+  </div></div></div></div>`).join('')}
+ <div class="rule-acc" id="howAcc" style="margin-top:10px"><button><span>📖 كيف تدرس بطاقة الدرس؟<small>7 خطوات بالترتيب</small></span>${CHEV_SVG}</button><div class="acc"><div><div class="acc-in"><ol class="how">${HOWTO.map(h=>`<li><b>${h[0]}</b><span>${h[1]}</span></li>`).join('')}</ol></div></div></div></div>
+ <div class="rule-acc" id="readyAcc"><button><span>✅ متى أنتقل إلى الدرس التالي؟<small>3 علامات بسيطة</small></span>${CHEV_SVG}</button><div class="acc"><div><div class="acc-in">${READY.map(r=>`<div class="rd"><b class="en">${r[0]}</b><span>${r[1]}</span></div>`).join('')}<p style="margin:8px 0 0;font-size:.9rem;color:var(--muted)">إذا لم تصل إليها، لا بأس: أعد الدرس غداً. التكرار على أيام أقوى من الإطالة في يوم واحد.</p></div></div></div></div>
+</div>`}
+document.addEventListener('click',e=>{if(!e.target.closest('#planBlk'))return;
+  const h=e.target.closest('.pw-h');if(h){h.parentElement.classList.toggle('open');return}
+  const a=e.target.closest('#howAcc>button,#readyAcc>button');if(a)a.parentElement.classList.toggle('open')});
+
 /* ================= SEPARATE ARABIC / ENGLISH ================= */
-const MX_EXCL='.vx,.vb,.cr-h,.lay,.vc-top,.pr-top,.cb,.rlinks,.itip,table,.rule-acc>button,.dec-opt b,.top,.nav,.seg,.chip,.pat,.tcard,.vhead,.rl,.stat,.isearch,.ex-head,.form-btn,.sheet-head,.gname,.pl-label,.qmeta,.irr-q,.rv-word,.wp-top,.wp-base,.legend,.cta,h2,h3,label,.swipe,.hint-card,.grp-head,.ntag,.sign,.lp-badge,.upd-bar,.mx,.qopt,.dict-item .dw,.sentence,.pl-en';
+const MX_EXCL='.plan,.vx,.vb,.cr-h,.lay,.vc-top,.pr-top,.cb,.rlinks,.itip,table,.rule-acc>button,.dec-opt b,.top,.nav,.seg,.chip,.pat,.tcard,.vhead,.rl,.stat,.isearch,.ex-head,.form-btn,.sheet-head,.gname,.pl-label,.qmeta,.irr-q,.rv-word,.wp-top,.wp-base,.legend,.cta,h2,h3,label,.swipe,.hint-card,.grp-head,.ntag,.sign,.lp-badge,.upd-bar,.mx,.qopt,.dict-item .dw,.sentence,.pl-en';
 const CIRC='①②③④⑤⑥⑦⑧⑨⑩⑪⑫';
 const isInline=el=>{const d=getComputedStyle(el).display;return d==='inline'};
 function blockOf(el){let c=el.parentElement;while(c&&c!==document.body&&isInline(c))c=c.parentElement;return c}
