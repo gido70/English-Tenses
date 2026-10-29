@@ -762,6 +762,7 @@ body:not([data-page="home"]) #topSub{display:none}
     <h2 class="page-title">أخطاء وقواعد</h2>
     <p class="page-sub">أكثر ما يكسر الجملة عند الكلام — وكيف تصلحه.</p>
     <p class="tap-note">اضغط على الجملة الخاطئة لترى التصحيح</p>
+    <button class="all-btn" id="misListen" style="margin-bottom:12px">🎧 استمع للجمل الصحيحة متتالية</button>
     <div id="misList"></div>
     <div style="display:flex;justify-content:space-between;align-items:center"><h3 class="section-h">قواعد سريعة</h3><button class="chip" id="rulesAll">فتح الكل</button></div>
     <div id="rulesList"></div>
@@ -809,7 +810,7 @@ body:not([data-page="home"]) #topSub{display:none}
 </div>
 
 <script>
-const APP_VERSION='2.6';
+const APP_VERSION='2.6.1';
 /* ================= DATA ================= */
 const GLYPH = {
   simple:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><g fill="currentColor"><circle cx="14" cy="20" r="3.5"/><circle cx="36" cy="20" r="3.5"/><circle cx="58" cy="20" r="3.5"/><circle cx="80" cy="20" r="3.5"/><circle cx="102" cy="20" r="3.5"/></g></svg>',
@@ -1268,7 +1269,7 @@ const READ_LINKS=[
 function linksHTML(){return `<div class="rlinks"><div class="rl-h">🔗 قراءات حقيقية متدرّجة</div><div class="rl-sub">تفتح في المتصفح، وتحتاج إنترنت.</div>${READ_LINKS.map(l=>`<a class="rlink" href="${l.u}" target="_blank" rel="noopener"><span class="rl-top"><b class="en">${l.n}</b><span class="rl-lv en">${l.lv}</span><span class="rl-go">↗</span></span><span class="rl-ar">${l.ar}</span></a>`).join('')}</div>`}
 function storyHTML(t){const S=STORIES[t.id];return `<div class="block story" id="storyBlk"><button class="story-btn" data-story="1"><span class="sb-t"><span class="sb-ar">📖 قصة الدرس — للقراءة والمفردات</span><span class="sb-en en">${S.title}</span></span>${chevSVG}</button>
  <div class="acc"><div><div class="story-in">
-  <div class="story-tools"><button class="ghost" data-splay="1">🔊 استمع للقصة</button><span class="story-key en"><mark>verb</mark> = ${t.en}</span></div>
+  <div class="story-tools"><button class="ghost" data-splay="1">🔊 استمع للقصة</button><button class="ghost" data-sall="${t.id}">🚗 كل القصص متتالية</button><span class="story-key en"><mark>verb</mark> = ${t.en}</span></div>
   <div class="story-text en">${S.text.map(p=>`<p>${p}</p>`).join('')}</div>
   <div class="story-sum">${S.ar}</div>
   <div class="story-q"><div class="sq-h en">Check your understanding</div>${S.q.map((q,qi)=>`<div class="sq" data-q="${qi}"><div class="sq-t en">${qi+1}. ${q[0]}</div><div class="sq-opts">${shuffle(q[1].map((o,oi)=>[o,oi])).map(([o,oi])=>`<button class="sq-o en" data-ok="${oi===0?1:0}">${o}</button>`).join('')}</div></div>`).join('')}</div>
@@ -1321,6 +1322,7 @@ $('#shBody').addEventListener('click',e=>{
   if(tr){bs.tense=tr.dataset.try;bs.group=T(bs.tense).g;renderBuilder();hideSheetUI();history.replaceState({page:'build'},'');show('build')}
   const sb=e.target.closest('[data-story]'); if(sb){const b=sb.parentElement;b.classList.toggle('open');if(!b.classList.contains('open'))storyStop();return}
   const sp=e.target.closest('[data-splay]'); if(sp){storyPlay(sp);return}
+  const sa=e.target.closest('[data-sall]'); if(sa){storyStop();openCar(itemsAllStories(sa.dataset.sall));return}
   const so=e.target.closest('.sq-o'); if(so){const q=so.closest('.sq');if(q.dataset.done)return;q.dataset.done=1;q.querySelectorAll('.sq-o').forEach(x=>{if(x.dataset.ok==='1')x.classList.add('right');else if(x===so)x.classList.add('wrong')});return}
   const gd=e.target.closest('[data-grid]'); if(gd){openGrid(gd.dataset.grid);return}
   if(e.target.closest('[data-irrgo]')){hideSheetUI();history.replaceState({page:'irr'},'');show('irr');return}
@@ -1572,6 +1574,7 @@ function renderQ(){
 function renderLists(){
 $('#misList').innerHTML=MISTAKES.filter(m=>isOpenG(m[3]||'present')).map(m=>`<div class="mis"><button class="mis-btn"><span class="x-badge">✕</span><span class="en">${m[0]}</span>${chevSVG}</button>
   <div class="acc"><div><div class="fix"><span class="x-badge ok-badge">✓</span><span class="en">${m[1]}</span></div><div class="why">${m[2]}</div></div></div></div>`).join('');
+$('#misListen').onclick=()=>openCar(itemsMistakes());
 $('#misList').addEventListener('click',e=>{const b=e.target.closest('.mis-btn');if(!b)return;const a=b.nextElementSibling;a.classList.toggle('open');b.querySelector('.chev').style.transform=a.classList.contains('open')?'rotate(180deg)':''});
 tokenize($('#misList'));
 $('#rulesList').innerHTML=RULES.filter(r=>isOpenG(r.g)).map(r=>`<div class="rule-acc"><button><span>${r.t}<small>${r.d}</small></span>${chevSVG}</button><div class="acc"><div><div class="acc-in">${r.h}</div></div></div></div>`).join('');
@@ -1738,6 +1741,8 @@ function itemsCompare(verbIds,tenseIds,subj){const items=[];
     tenseIds.forEach(id=>{const t=T(id);const S=subj||bs.subj||'He';
       ['+','−','?'].forEach((f,i)=>items.push({tag:v.b+' · '+t.en,en:plain(build(id,f,S,v)),ar:i===0?t.ar:'',pre:i===0?t.en:''}))})});
   return items}
+function itemsAllStories(from){let ids=MIX_ORDER.filter(id=>isOpenG(T(id).g));if(from&&ids.includes(from))ids=ids.slice(ids.indexOf(from));return ids.flatMap(id=>itemsStory(id))}
+function itemsMistakes(){return MISTAKES.filter(m=>isOpenG(m[3]||'present')).map(m=>({tag:'✓ '+plain(m[0]).slice(0,40),en:plain(m[1]),ar:plain(m[2]),arFirst:false}))}
 function openTenseIds(){return TENSES.filter(t=>isOpenG(t.g)).map(t=>t.id)}
 function itemsIrr(f){const items=[];IRR_GROUPS.forEach(G=>{const vs=IRRV.filter(v=>v.g===G.id&&(f!=='star'||v.s));if(!vs.length)return;items.push({tag:G.ar,head:true,en:'',ar:G.ar});vs.forEach(v=>items.push({tag:G.ar+' · '+G.p,en:`${v.a}, ${v.b.replace(' / ',' or ')}, ${v.c.replace(' / ',' or ')}`,ar:v.ar.replace(/ \(.*\)$/,'')}))});return items}
 const MIX_ORDER=['simple','cont','psimple','perf','pcont','will','goto','pc','pperf','ppc','fcont','fperf','fpc'];
@@ -1749,8 +1754,9 @@ function buildItems(){
   if(LS.src==='irr')return itemsIrr(LS.t);
   if(LS.src==='words'){const items=[];const d=dict();Object.keys(d).sort((a,b)=>d[b].added-d[a].added).forEach(k=>items.push({tag:'كلماتي',en:k,ar:d[k].m!=='—'?d[k].m:'',en2:d[k].ex||''}));return items}
   if(LS.src==='compare')return itemsCompare(LS.cv==='all'?VERBS.map(v=>v.b):[LS.cv||'drink'],openTenseIds());
-  if(LS.src==='stories'){return openTenseIds().flatMap(id=>itemsStory(id))}
+  if(LS.src==='stories')return itemsAllStories();
   if(LS.src==='mix')return itemsMix();
+  if(LS.src==='mis')return itemsMistakes();
   const ts=TENSES.filter(t=>t.g===LS.src&&(LS.t==='all'||t.id===LS.t));
   return ts.flatMap(t=>itemsLesson(t.id,true));
 }
@@ -1800,9 +1806,9 @@ $('#plRep').onclick=()=>{if(!PL.items.length)return;runFrom(PL.i)};
 function lseg(el,items,key){el.innerHTML=items.map(([v,l])=>`<button data-v="${v}" class="${String(LS[key])===String(v)?'on':''}">${l}</button>`).join('');
   el.onclick=e=>{const b=e.target.closest('button');if(!b)return;const v=b.dataset.v;LS[key]=isNaN(+v)?v:+v;if(key==='src')LS.t='all';store.set('listen',LS);if(['src','t'].includes(key))plStop(true);renderListen()}}
 function renderListen(){
-  if(!['words','irr','compare','stories','mix'].includes(LS.src)&&!isOpenG(LS.src))LS.src='present';
-  lseg($('#lSrc'),[['mix','🚗 جلسة طويلة'],...GROUPS.filter(G=>isOpenG(G.g)).map(G=>[G.g,G.ar]),['compare','مقارنة فعل'],['stories','القصص'],['irr','الشاذة'],['words','كلماتي']],'src');
-  $('#lTenseWrap').style.display=['words','stories','mix'].includes(LS.src)?'none':'';
+  if(!['words','irr','compare','stories','mix','mis'].includes(LS.src)&&!isOpenG(LS.src))LS.src='present';
+  lseg($('#lSrc'),[['mix','🚗 جلسة طويلة'],...GROUPS.filter(G=>isOpenG(G.g)).map(G=>[G.g,G.ar]),['compare','مقارنة فعل'],['stories','القصص'],['irr','الشاذة'],['mis','الأخطاء'],['words','كلماتي']],'src');
+  $('#lTenseWrap').style.display=['words','stories','mix','mis'].includes(LS.src)?'none':'';
   if(LS.src==='compare'){$('#lTense').innerHTML=[['all','كل الأفعال'],...VERBS.map(v=>[v.b,`<span class="en">${v.b}</span>`])].map(([v,l])=>`<button class="chip ${(LS.cv||'drink')===v?'on':''}" data-v="${v}">${l}</button>`).join('');
     $('#lTense').onclick=e=>{const b=e.target.closest('button');if(!b)return;LS.cv=b.dataset.v;store.set('listen',LS);plStop(true);renderListen()}}
   else 
@@ -1820,7 +1826,7 @@ function renderListen(){
   $('#lAr').style.gridTemplateColumns=$('#lShadow').style.gridTemplateColumns=$('#lLoop').style.gridTemplateColumns='1fr 1fr';
   const its=buildItems();$('#lEst').textContent=its.length?`${its.length} جملة · حوالي ${estMin(its)} دقيقة${LS.loop?' (ويتكرر)':''}`:'';
 }
-$('#dListen').onclick=()=>{LS.src='words';store.set('listen',LS);plStop(true);renderListen();go('listen')};
+$('#dListen').onclick=()=>{LS.src='words';store.set('listen',LS);renderListen();const d=dict();if(!Object.keys(d).length){toast('قاموسك فارغ');return}openCar(buildItems())};
 
 /* ================= IRREGULAR VERBS ================= */
 const IF=Object.assign({f:'star'},store.get('irrf',{}));
