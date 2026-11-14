@@ -351,6 +351,30 @@ td.en,th.en{font-family:var(--en)}
 .lv-list span.lv-ready{border-color:var(--accent);color:var(--accent)}
 .lv-list button.lv-go{background:var(--accent);border:1px solid var(--accent);color:var(--on-accent);border-radius:10px;padding:6px 12px;font:inherit;font-size:.92rem;font-weight:600}
 .lv.open small{color:var(--accent)}
+.find-bar{display:flex;align-items:center;gap:10px;width:100%;margin:6px 0 4px;padding:11px 14px;background:var(--surface);border:1.5px solid color-mix(in srgb,var(--accent) 45%,var(--line));border-radius:16px;color:var(--muted);font:inherit;font-size:1rem;text-align:right}
+.find-bar svg{flex:none;color:var(--accent)}
+.find{position:fixed;inset:0;z-index:90;background:var(--bg);display:flex;flex-direction:column;padding:calc(10px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 0 max(12px,env(safe-area-inset-left,0px))}
+.find[hidden]{display:none}
+.find-top{display:flex;align-items:center;gap:8px;max-width:760px;width:100%;margin:0 auto 8px}
+.find-box{flex:1;display:flex;align-items:center;gap:8px;background:var(--surface);border:2px solid var(--accent);border-radius:16px;padding:2px 10px;min-width:0}
+.find-box svg{flex:none;color:var(--accent)}
+.find-box input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:1.05rem;color:var(--ink);padding:9px 0}
+.find-box input::-webkit-search-cancel-button{display:none}
+#findClr{flex:none;width:30px;height:30px;border-radius:50%;background:var(--surface2);border:1px solid var(--line);color:var(--muted)}
+#findClr[hidden]{display:none}
+.find-x{flex:none;padding:9px 12px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font:inherit;font-size:.92rem;color:var(--ink)}
+.find-res{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;max-width:760px;width:100%;margin:0 auto;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+.find-h{font-size:.82rem;color:var(--accent2);font-weight:700;margin:10px 4px 6px}
+.fr{display:flex;align-items:center;gap:10px;width:100%;text-align:right;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:9px 12px;margin-bottom:6px;font:inherit;color:var(--ink)}
+.fr-ic{flex:none;width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--surface2);font-size:1.05rem}
+.fr-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.fr-t b{font-size:1.02rem;font-weight:700;overflow-wrap:anywhere}
+.fr-t b.fr-en{font-family:var(--en);direction:ltr;text-align:left}
+.fr-t small{font-size:.8rem;color:var(--muted)}
+.fr-lv{flex:none;font-family:var(--en);font-weight:700;font-size:.78rem;color:var(--accent);border:1px solid var(--accent);border-radius:8px;padding:1px 6px}
+.fr-go{flex:none;color:var(--muted)}
+.find-empty{background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:14px;margin-top:8px;font-size:.95rem}
+@media (min-width:700px){.find-res.cols{display:grid;grid-template-columns:1fr 1fr;gap:0 8px;align-content:start}.find-res.cols .find-h,.find-res.cols .find-empty{grid-column:1/-1}}
 .cg-sec{font-size:.8rem;font-weight:700;color:var(--accent2);margin:12px 2px 6px}
 .cc{width:100%;display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:11px 14px;margin-bottom:8px;text-align:right}
 .cc:active{transform:scale(.99)}
@@ -741,6 +765,7 @@ body:not([data-page="home"]) #topSub{display:none}
       <div class="brand"><img src="icon-192.png" alt="" id="topLogo"><div><h1 id="topTitle">English Tense</h1><small id="topSub">دليلي اليومي للكلام الصحيح</small></div></div>
     </div>
     <div class="top-actions">
+    <button class="icon-btn" id="findBtn" aria-label="بحث في كل التطبيق"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg></button>
     <button class="fs-btn" id="arBtn" aria-label="إظهار أو إخفاء العربي">EN</button>
     <div style="position:relative"><button class="icon-btn" id="setBtn" aria-label="الإعدادات"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
       <div class="set-pop" id="setPop" hidden>
@@ -754,6 +779,7 @@ body:not([data-page="home"]) #topSub{display:none}
 
   <!-- HOME -->
   <section class="page active" id="p-home">
+    <button class="find-bar" id="findBar"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg><span>ابحث عن أي قسم أو درس أو كلمة…</span></button>
     <button class="path-card" data-go="path" id="homePath" style="margin-top:6px"></button>
     <div class="hero">
       <h2>كل زمن له شكل على خط الوقت</h2>
@@ -968,6 +994,7 @@ body:not([data-page="home"]) #topSub{display:none}
   </div>
 </nav>
 
+<div class="find" id="find" hidden><div class="find-top"><div class="find-box"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg><input id="findInp" type="search" enterkeyhint="search" placeholder="ابحث: زمن، درس، كلمة…" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"><button id="findClr" aria-label="مسح" hidden>✕</button></div><button class="find-x" id="findX">إغلاق</button></div><div class="find-res" id="findRes"></div></div>
 <div class="scrim" id="scrim"></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true">
   <div class="sheet-head" id="sheetHead">
@@ -998,7 +1025,7 @@ body:not([data-page="home"]) #topSub{display:none}
 </div>
 
 <script>
-const APP_VERSION='3.2.1';
+const APP_VERSION='3.3';
 /* ================= DATA ================= */
 const GLYPH = {
   simple:'<svg class="glyph" viewBox="0 0 112 44" fill="none" stroke-linecap="round"><line x1="4" y1="34" x2="108" y2="34" stroke="var(--line)" stroke-width="2"/><line x1="80" y1="6" x2="80" y2="40" stroke="var(--muted)" stroke-dasharray="2 3"/><g fill="currentColor"><circle cx="14" cy="20" r="3.5"/><circle cx="36" cy="20" r="3.5"/><circle cx="58" cy="20" r="3.5"/><circle cx="80" cy="20" r="3.5"/><circle cx="102" cy="20" r="3.5"/></g></svg>',
@@ -1528,6 +1555,7 @@ function closeSheet(fromPop){
   if(!fromPop && history.state && history.state.sheet) history.back();
 }
 window.addEventListener('popstate',e=>{
+  if(typeof findPop==='function'&&findPop())return;
   if(!$('#car').hidden){closeCar()}
   if(sheet.classList.contains('show')){hideSheetUI();return}
   show((e.state&&e.state.page)||'home');
@@ -2633,7 +2661,7 @@ document.addEventListener('click',e=>{
 });
 
 /* ================= SEPARATE ARABIC / ENGLISH ================= */
-const MX_EXCL='.cg-sec,.cu-h,.cu-fx,.cv-top,.cm-w,.cm-r,.ck,.cc,.lv,.lvs,.pn-ex,.cg-rule,.ck-sum,.plan,.vx,.vb,.cr-h,.lay,.vc-top,.pr-top,.cb,.rlinks,.itip,table,.rule-acc>button,.dec-opt b,.top,.nav,.seg,.chip,.pat,.tcard,.vhead,.rl,.stat,.isearch,.ex-head,.form-btn,.sheet-head,.gname,.pl-label,.qmeta,.irr-q,.rv-word,.wp-top,.wp-base,.legend,.cta,h2,h3,label,.swipe,.hint-card,.grp-head,.ntag,.sign,.lp-badge,.upd-bar,.mx,.qopt,.dict-item .dw,.sentence,.pl-en';
+const MX_EXCL='.find,.find-bar,.cg-sec,.cu-h,.cu-fx,.cv-top,.cm-w,.cm-r,.ck,.cc,.lv,.lvs,.pn-ex,.cg-rule,.ck-sum,.plan,.vx,.vb,.cr-h,.lay,.vc-top,.pr-top,.cb,.rlinks,.itip,table,.rule-acc>button,.dec-opt b,.top,.nav,.seg,.chip,.pat,.tcard,.vhead,.rl,.stat,.isearch,.ex-head,.form-btn,.sheet-head,.gname,.pl-label,.qmeta,.irr-q,.rv-word,.wp-top,.wp-base,.legend,.cta,h2,h3,label,.swipe,.hint-card,.grp-head,.ntag,.sign,.lp-badge,.upd-bar,.mx,.qopt,.dict-item .dw,.sentence,.pl-en';
 const CIRC='①②③④⑤⑥⑦⑧⑨⑩⑪⑫';
 const isInline=el=>{const d=getComputedStyle(el).display;return d==='inline'};
 function blockOf(el){let c=el.parentElement;while(c&&c!==document.body&&isInline(c))c=c.parentElement;return c}
@@ -2752,6 +2780,64 @@ $('#cCheck').onclick=()=>{CTAB='c';store.set('ctab',CTAB);renderCourse()}; rende
 if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(()=>{})}
 history.replaceState({page:'home'},'');
 const lastPage=store.get('page','home'); if(ORDER.includes(lastPage)&&lastPage!=='home')go(lastPage);
+
+/* ================= GLOBAL SEARCH ================= */
+let FIDX=[],findPending=null;
+const fUnlock=g=>{if(!isOpenG(g)){const u=store.get('unlocked',{});u[g]=true;store.set('unlocked',u);renderHome();renderBuilder();renderLists();renderListen()}};
+const fLater=(f,ms=350)=>setTimeout(f,ms);
+function findBuild(){
+  const A=[],add=(o)=>A.push(o);
+  const PK={home:'الرئيسية الازمنه tenses home خط الزمن',path:'مسار خطة plan path اسابيع روتين دفتر جمل',course:'كورس مستويات course levels قواعد مفردات grammar vocabulary',vocab:'كلمات مفردات اكسفورد oxford words vocabulary',prep:'حروف الجر prepositions in on at',irr:'افعال شاذه irregular verbs تصريف ثاني ثالث v2 v3',listen:'استماع listen listening صوت audio سياره car',dict:'قاموسي قاموس dictionary كلماتي مراجعه نسخه احتياطيه backup',build:'مركب الجمل builder sentence بناء جمله',decide:'القرار اي زمن استخدم decide which tense',quiz:'تمرن اختبار quiz تمرين practice اسئله',fix:'اخطاء قواعد mistakes rules تصحيح'};
+  const PI={home:'🏠',path:'🧭',course:'📗',vocab:'📘',prep:'📍',irr:'📚',listen:'🎧',dict:'⭐',build:'🧩',decide:'❓',quiz:'✔︎',fix:'⚠︎'};
+  const PS={home:'الأزمنة الثلاثة عشر وخط الزمن',path:'عشر مراحل، وخطة ثمانية أسابيع، وروتين يومي',course:'قواعد ومفردات ونطق من المتوسط إلى الإتقان',vocab:'الكلمات الخمسون الأساسية بطريقة الفهم',prep:'عشر صور تشرح حروف الجر كلها',irr:'التصريف الثاني والثالث بالأنماط',listen:'اسمع الدروس وردّد الجمل',dict:'كلماتك المحفوظة ومراجعتها',build:'ابنِ الجملة وراقب التغيير',decide:'سؤالان يحسمان اختيار الزمن',quiz:'عشرة أسئلة في كل جولة',fix:'الأخطاء الشائعة والقواعد السريعة'};
+  ['home','path','course','vocab','prep','irr','listen','dict','build','decide','quiz','fix'].forEach(p=>add({c:0,ic:PI[p],t:p==='home'?'الرئيسية: الأزمنة':({vocab:'كلمات أكسفورد',prep:'حروف الجر'}[p]||TITLES[p][0]),s:'قسم · '+PS[p],k:PK[p]+' '+TITLES[p].join(' '),f:()=>go(p)}));
+  add({c:0,ic:'🚗',t:'وضع السيارة',s:'قسم · استماع متواصل ملء الشاشة',k:'car mode سياره قياده استماع',f:()=>go('listen')});
+  add({c:0,ic:'🗣',t:'النطق',s:'قسم في كورس المستويات',k:'pronunciation نطق لفظ stress intonation',f:()=>{CTAB='p';store.set('ctab','p');go('course');renderCourse()}});
+  add({c:0,ic:'✅',t:'اعرف مستواك',s:'قسم في كورس المستويات · تقييم ذاتي',k:'checklist level تقييم مستوى مستواك',f:()=>{CTAB='c';store.set('ctab','c');go('course');renderCourse()}});
+  [['present','الحاضر','Present'],['past','الماضي','Past'],['future','المستقبل','Future']].forEach(([g,ar,en])=>add({c:1,ic:'▦',t:'جدول '+ar+' الشامل',s:'جدول · إثبات ونفي وسؤال لكل الأزمنة',k:en+' tenses table grid A N Q سبوره '+ar,f:()=>{fUnlock(g);openGrid(g)}}));
+  TENSES.forEach(t=>{add({c:1,ic:'⏱',en:1,t:t.en,s:'زمن · '+t.ar,k:t.ar+' '+t.use+' '+t.formula+' '+(t.enUse||''),f:()=>{fUnlock(t.g);openSheet(t.id)}});
+    if(STORIES[t.id])add({c:5,ic:'📖',en:1,t:STORIES[t.id].title,s:'قصة درس · '+t.ar,k:'story قصه '+t.en,f:()=>{fUnlock(t.g);openSheet(t.id);fLater(()=>{const b=$('#storyBlk');if(b){b.classList.add('open');b.scrollIntoView({block:'start'})}})}})});
+  [...CG.map(L=>[L,'B1']),...CG2.map(L=>[L,L.lv])].forEach(([L,lv])=>add({c:2,ic:'📗',en:1,lv,t:L.en,s:'درس قواعد · '+L.ar,k:L.uses.map(u=>u.h+' '+u.fx).join(' ')+' grammar قواعد',f:()=>{go('course');openCourse('g',L.id)}}));
+  CV.forEach(T=>{add({c:2,ic:T.icon,en:1,lv:'B1',t:T.en,s:'موضوع مفردات · '+T.ar,k:'vocabulary مفردات '+T.story.title,f:()=>{go('course');openCourse('v',T.id)}});
+    T.words.forEach(w=>add({c:6,ic:'🔤',en:1,t:w[0],s:'كلمة في موضوع «'+T.ar+'» · '+w[2],k:'',f:()=>{go('course');openCourse('v',T.id)}}));
+    [...T.phr,T.idiom].forEach(x=>add({c:6,ic:'🔗',en:1,t:x[0],s:'تعبير في موضوع «'+T.ar+'» · '+x[1],k:'',f:()=>{go('course');openCourse('v',T.id)}}))});
+  CROAD.forEach(r=>{const openLv=()=>{go('course');fLater(()=>{$('#cLv').hidden=false;cLvPaint(r.lv);$('#cRoad').scrollIntoView({block:'start'})},60)};
+    add({c:3,ic:'🗺',lv:r.lv,t:'مستوى '+r.ar,s:'خريطة المستوى · فتح وإغلاق القفل',k:r.lv+' level مستوى قفل lock',f:openLv});
+    r.g.filter(x=>!CG2.some(l=>l.lv===r.lv&&l.road===x)).forEach(x=>add({c:7,ic:'🗺',en:1,lv:r.lv,t:x,s:'عنوان في خريطة المستوى · لم يُبنَ درسه بعد',k:'grammar',f:openLv}));
+    r.v.forEach(x=>add({c:7,ic:'🗺',en:1,lv:r.lv,t:x,s:'عنوان مفردات في خريطة المستوى · لم يُبنَ بعد',k:'vocabulary',f:openLv}))});
+  CORE.forEach((c,i)=>add({c:4,ic:'📍',en:1,t:c.p,s:'حرف جر بالصورة · '+c.core,k:c.en+' '+c.eq+' preposition حرف جر',f:()=>{go('prep');fLater(()=>{const el=document.querySelector('#pCore [data-cr="'+i+'"]');if(el){el.classList.add('open');el.scrollIntoView({block:'start'})}},120)}}));
+  COMBO.forEach(c=>add({c:6,ic:'🔗',en:1,t:c[0],s:'عبارة ثابتة مع حرف جر · '+c[1],k:'',f:()=>go('prep')}));
+  O3K.forEach(o=>add({c:6,ic:'📘',en:1,t:o.w,s:'كلمة من الخمسين · '+o.ar,k:o.pat||'',f:()=>{go('vocab');$('#vSearch').value=o.w;renderVocab();fLater(()=>$('#vSearch').scrollIntoView({block:'start'}),120)}}));
+  IRRV.forEach(v=>add({c:6,ic:'📚',en:1,t:v.a,s:'فعل شاذ · '+v.ar,k:v.b+' '+v.c,f:()=>{go('irr');$('#iSearch').value=v.a;renderSearch()}}));
+  PATH.forEach((S,i)=>add({c:5,ic:'🧭',t:S.t,s:'مرحلة '+(i+1)+' في مسار التعلّم',k:(S.en||'')+' stage مرحله',f:()=>go('path')}));
+  [['حجم الخط','font size تكبير تصغير خط'],['الوضع الليلي والنهاري','night dark mode ليلي نهاري theme لون'],['الصوت الإنجليزي','voice صوت نطق speech'],['تحديث التطبيق','update تحديث نسخه version اصدار']].forEach(([t,k])=>add({c:8,ic:'⚙︎',t,s:'إعداد',k,f:()=>{window.scrollTo({top:0});fLater(()=>{if($('#setPop').hidden)$('#setBtn').click()},80)}}));
+  Object.entries(dict()).forEach(([w,o])=>add({c:9,ic:'⭐',en:1,t:w,s:'في قاموسي · '+(o.m||''),k:'',f:()=>{go('dict');$('#dSearch').value=w;renderDictList()}}));
+  A.forEach(o=>{const sub=o.s.includes(' · ')?o.s.split(' · ').slice(1).join(' '):'';o.nt=fNorm(o.t);o.n2=fNorm(sub);o.na=' '+fNorm(o.t+' '+o.s+' '+o.k+' '+(o.lv||''))});
+  FIDX=A;
+}
+const fNorm=t=>normAr(t).replace(/[«»:،,.()\/·—–-]+/g,' ').replace(/(^|\s)(و|ب|ل)?ال(?=[\u0621-\u064A]{2})/g,'$1').replace(/\s+/g,' ').trim();
+function findRow(o,i){return `<button class="fr" data-fi="${i}"><span class="fr-ic">${o.ic}</span><span class="fr-t"><b${o.en?' class="fr-en"':''}>${o.t}</b><small>${o.s}</small></span>${o.lv?`<span class="fr-lv">${o.lv}</span>`:''}<span class="fr-go">‹</span></button>`}
+function findRender(){
+  const raw=$('#findInp').value||'',q=fNorm(raw),box=$('#findRes');$('#findClr').hidden=!raw;box.classList.add('cols');
+  if(!q){box.innerHTML=`<div class="find-h">كل الأقسام — اضغط للانتقال، أو اكتب للبحث</div>`+FIDX.map((o,i)=>o.c===0?findRow(o,i):'').join('')+`<div class="find-h">مستويات الكورس</div>`+FIDX.map((o,i)=>o.c===3?findRow(o,i):'').join('');box.scrollTop=0;return}
+  const toks=q.split(/\s+/).filter(Boolean);
+  const rk=n=>!n?9:n===q?0:n.startsWith(q)?1:(' '+n).includes(' '+q)?2:(' '+n).includes(' '+toks[0])?3:n.includes(toks[0])?4:9;
+  const scan=word=>{const out=[];FIDX.forEach((o,i)=>{if(!toks.every(t=>o.na.includes(word?' '+t:t)))return;out.push([Math.min(rk(o.nt),rk(o.n2),5),o.c,i])});return out};
+  let hits=scan(true);if(!hits.length)hits=scan(false);
+  hits.sort((a,b)=>a[0]-b[0]||a[1]-b[1]||FIDX[a[2]].nt.length-FIDX[b[2]].nt.length);
+  const top=hits.slice(0,40);
+  box.innerHTML=top.length?`<div class="find-h">النتائج: ${hits.length}${hits.length>40?' — المعروض أقرب 40، أكمل الكتابة للتضييق':''}</div>`+top.map(h=>findRow(FIDX[h[2]],h[2])).join('')
+    :`<div class="find-empty">لا توجد نتيجة لهذا البحث. جرّب كلمة أقصر، أو اسم الزمن أو الدرس بالعربي أو بالإنجليزي.</div>`;
+  box.scrollTop=0;
+}
+function openFind(){if(!$('#find').hidden)return;findBuild();$('#setPop').hidden=true;$('#find').hidden=false;document.body.style.overflow='hidden';$('#findInp').value='';findRender();history.pushState({find:1,page:cur},'');setTimeout(()=>$('#findInp').focus(),60)}
+function closeFind(act){if($('#find').hidden)return;findPending=act||null;history.back()}
+function findPop(){if($('#find').hidden)return false;$('#find').hidden=true;$('#findInp').blur();document.body.style.overflow='';const a=findPending;findPending=null;if(a)setTimeout(a,30);return true}
+$('#findBtn').onclick=openFind;$('#findBar').onclick=openFind;$('#findX').onclick=()=>closeFind();
+$('#findClr').onclick=()=>{$('#findInp').value='';findRender();$('#findInp').focus()};
+$('#findInp').addEventListener('input',findRender);
+$('#findInp').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();const b=$('#findRes .fr');if(b&&$('#findInp').value.trim())b.click();else $('#findInp').blur()}else if(e.key==='Escape')closeFind()});
+$('#findRes').addEventListener('click',e=>{const b=e.target.closest('[data-fi]');if(!b)return;const o=FIDX[+b.dataset.fi];closeFind(o.f)});
 </script>
 </body>
 </html>
